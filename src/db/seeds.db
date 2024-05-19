@@ -1,0 +1,22 @@
+CREATE TABLE services (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    url VARCHAR(255) NOT NULL,
+    icon VARCHAR(255) NOT NULL,
+    `order` INT NOT NULL
+);
+INSERT INTO services (title, url, icon, `order`)
+VALUES
+  ('Observatorio estadístico del sector inmobiliario', '/matriculados/servicios/observatorioEstadistico', 'observatorio', 1),
+  ('Calculadora de actualización de montos de alquiler', '/matriculados/servicios/calculadoraDeAlquiler', 'calculadora', 2),
+  ('Servicio consultas de RENAPER', '/matriculados/servicios/renaper', 'renaper', 3),
+  ('Revista CUCICBA', '/matriculados/servicios/revistaCucicba', 'revista', 4),
+  ('Requisitos de matriculación', '/matriculados/servicios/matriculacion', 'matriculacion', 5),
+  ('Preguntas frecuentes', '/matriculados/servicios/preguntasFrecuentes', 'faq', 6),
+  ('Biblioteca digital', '/matriculados/servicios/bibliotecaDigital', 'biblioteca', 7),
+  ('Listado de inmobiliarias ilegales con inicio de causa penal', '/matriculados/servicios/ilegalesPenal', 'forbidden', 8),
+  ('Listado de inmobiliarias ilegales', '/matriculados/servicios/ilegales', 'forbiddentwo', 9),
+  ('Sanciones del tribunal', '/matriculados/servicios/sanciones', 'sanciones', 10),
+  ('Listado de infractores', '/matriculados/servicios/infractores', 'infractores', 11),
+  ('Denuncias', '/matriculados/servicios/denuncias', 'denuncias', 12);
+  
