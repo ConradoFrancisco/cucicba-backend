@@ -25,5 +25,14 @@ class PreguntasFrecuentesController {
       res.status(500).send("error interno del servidor");
     }
   }
+  public async getCategorys(req: Request, res: Response) {
+    try {
+      const results = await PreguntasFrecuentesModel.getCategorys();
+      res.json(results);
+    } catch (e) {
+      console.error("Error al obtener las categorias, intentelo mas tarde");
+      res.status(500).send("arror intero del servidor");
+    }
+  }
 }
 export default new PreguntasFrecuentesController();

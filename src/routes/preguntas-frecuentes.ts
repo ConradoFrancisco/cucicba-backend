@@ -3,4 +3,5 @@ import PreguntasFrecuentesController from "../controllers/matriculados/servicios
 
 export const faqRoutes = Router();
 
-faqRoutes.get('/',PreguntasFrecuentesController.getPreguntas)
+faqRoutes.get("/", PreguntasFrecuentesController.getPreguntas);
+faqRoutes.get("/categorias", PreguntasFrecuentesController.getCategorys);

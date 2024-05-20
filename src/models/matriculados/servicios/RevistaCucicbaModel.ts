@@ -8,25 +8,21 @@ class RevistaCucicbaModel {
     offset?: number;
     limit?: number;
   }) {
+    console.log(offset);
     const conn = await db.getConnection();
     try {
-      if (offset) {
-        const [data, info] = await conn.query(
-          "SELECT * FROM revista LIMIT ? OFFSET ?",
-          [limit, offset]
-        );
-
-        return data;
-      } else {
-        const [data, info] = await conn.query("SELECT * FROM revista LIMIT ?", [
-          limit,
-        ]);
-
-        return data;
-      }
+      const [data] = await conn.query(
+        "SELECT * FROM revista LIMIT ? OFFSET ?",
+        [limit, offset]
+      );
+      const [countResult] = await conn.query(
+        "SELECT COUNT(*) AS total FROM revista"
+      );
+      const total = countResult;
+      return { data, total };
     } catch (e) {
       throw new Error(
-        "No se pudieron obtener las revistas, intente de nuevo mas tarde"
+        "No se pudieron obtener las revistas, intente de nuevo más tarde"
       );
     } finally {
       conn.release();

@@ -7,12 +7,23 @@ const express_1 = __importDefault(require("express"));
 const autoridades_1 = __importDefault(require("./routes/autoridades"));
 const biblioteca_digital_1 = __importDefault(require("./routes/biblioteca-digital"));
 const revista_cucicba_1 = require("./routes/revista-cucicba");
+const preguntas_frecuentes_1 = require("./routes/preguntas-frecuentes");
+const servicios_1 = require("./routes/servicios");
+const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-app.use('/servicios/revista-cucicba', revista_cucicba_1.revistaRoutes);
-app.use('/autoridades', autoridades_1.default);
-app.use('/servicios/biblioteca-digital', biblioteca_digital_1.default);
-const PORT = 3000;
+app.use((0, cors_1.default)());
+app.get("/", (_req, res) => {
+    res.send("hola mundo");
+});
+//Enrutado de servicios
+app.use("/servicios", servicios_1.serviciosRoutes);
+app.use("/servicios/preguntas-frecuentes", preguntas_frecuentes_1.faqRoutes);
+app.use("/servicios/revista-cucicba", revista_cucicba_1.revistaRoutes);
+app.use("/servicios/biblioteca-digital", biblioteca_digital_1.default);
+//Enrutado Institucional
+app.use("/autoridades", autoridades_1.default);
+const PORT = 8080;
 app.listen(PORT, () => {
-    console.log("servidor escuchando en el puerto" + PORT);
+    console.log(`Server listening on port: ${PORT}`);
 });

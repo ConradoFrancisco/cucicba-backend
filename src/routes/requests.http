@@ -2,7 +2,12 @@ GET http://localhost:3000/servicios/biblioteca-digital
 
 ###
 
-GET http://localhost:3000/servicios/revista-cucicba?offset=4
+GET http://localhost:8080/servicios/revista-cucicba
 
 ###
-GET http://localhost:3000/servicios/preguntas-frecuentes?category=2&limit=0
+GET http://localhost:8080/servicios/preguntas-frecuentes?category=1
+###
+GET http://localhost:8080/servicios
+
+###
+GET http://localhost:8080/servicios/preguntas-frecuentes/categorias

@@ -6,9 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const RevistaCucicbaModel_1 = __importDefault(require("../../../models/matriculados/servicios/RevistaCucicbaModel"));
 class RevistaCucicbaController {
     async getAll(_req, res) {
-        console.log("Este es el body de la request: ", _req.body);
+        const offset = parseInt(_req.query.offset);
+        const limit = parseInt(_req.query.limit);
         try {
-            const revistas = await RevistaCucicbaModel_1.default.getAll({ offset: 1, limit: 4 });
+            const revistas = await RevistaCucicbaModel_1.default.getAll({ offset, limit });
             res.json(revistas);
         }
         catch (error) {
