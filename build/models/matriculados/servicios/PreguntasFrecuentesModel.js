@@ -9,45 +9,47 @@ class PreguntasFrecuentesModel {
         let offsetTxt = "";
         let queryParamsCount = [];
         let queryParams = [];
-        if (input) {
-            console.log('hay input');
-        }
         if (category && input) {
-            inputTxt = `WHERE pregunta like ${input}`;
+            inputTxt = `WHERE pregunta like ?`;
             queryParams.push(input);
-            categorytxt = `AND categoria_id = ${category}`;
+            queryParamsCount.push(input);
+            categorytxt = `AND categoria_id = ?`;
             queryParams.push(category);
+            queryParamsCount.push(category);
         }
         else if (category) {
-            categorytxt = `WHERE categoria_id = ${category}`;
+            categorytxt = `WHERE categoria_id = ?`;
             queryParams.push(category);
             queryParamsCount.push(category);
         }
         else if (input) {
-            inputTxt = `WHERE pregunta like ${input}`;
+            inputTxt = `WHERE pregunta like ?`;
             queryParams.push(input);
             queryParamsCount.push(input);
         }
         if (limit) {
             limitTxt = "LIMIT ?";
             queryParams.push(limit);
+            queryParamsCount.push(limit);
             if (offset) {
                 offsetTxt = "OFFSET ?";
                 queryParams.push(offset);
             }
         }
         const conn = await Database_1.db.getConnection();
-        const queryCount = `SELECT COUNT(*) AS total FROM preguntas_frecuentes ${categorytxt}`;
+        const queryCount = `SELECT COUNT(*) AS total FROM preguntas_frecuentes ${inputTxt} ${categorytxt} `;
         const query = `SELECT * FROM preguntas_frecuentes ${inputTxt} ${categorytxt} ${limitTxt} ${offsetTxt}`;
-        console.log(query);
-        console.log(queryParams);
+        console.log("queryresults:", query);
+        console.log("queryparamsresults:", queryParams);
+        console.log("querycant:", queryCount);
+        console.log("queryparamscant:", queryParamsCount);
         try {
             const [data] = await conn.query(query, queryParams);
-            const [total] = await conn.query(queryCount);
+            const [total] = await conn.query(queryCount, queryParamsCount);
             return { data, total };
         }
         catch (e) {
-            throw new Error("No se pudieron obtener las preguntas frecuentes, intente de nuevo mas tarde");
+            throw new Error("No se pudieron obtener las preguntas frecuentes, intente de nuevo mas tarde: "), e;
         }
         finally {
             conn.release();

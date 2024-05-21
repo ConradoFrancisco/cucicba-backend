@@ -5,6 +5,7 @@ import { revistaRoutes } from "./routes/revista-cucicba";
 import { faqRoutes } from "./routes/preguntas-frecuentes";
 import { serviciosRoutes } from "./routes/servicios";
 import cors from "cors";
+import { areasRoutes } from "./routes/institucional/areas";
 
 const app = express();
 app.use(express.json());
@@ -20,6 +21,7 @@ app.use("/servicios/revista-cucicba", revistaRoutes);
 app.use("/servicios/biblioteca-digital", bibliotecaDigitalRoutes);
 //Enrutado Institucional
 app.use("/autoridades", autoridadesRoutes);
+app.use("/areas", areasRoutes);
 
 const PORT = 8080;
 

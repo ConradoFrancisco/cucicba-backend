@@ -11,3 +11,15 @@ GET http://localhost:8080/servicios
 
 ###
 GET http://localhost:8080/servicios/preguntas-frecuentes/categorias
+###
+GET  http://localhost:8080/areas
+
+###
+
+POST http://localhost:8080/areas
+Content-Type: application/json
+
+{
+    "order": 3,
+    "title":"Nueva area de prueba"
+}
