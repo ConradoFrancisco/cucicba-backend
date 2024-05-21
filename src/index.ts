@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.get("/", (_req: Request, res) => {
-  res.send("hola mundo");
+  res.send("cuciba backend");
 });
 
 //Enrutado de servicios

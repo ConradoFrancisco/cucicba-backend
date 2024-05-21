@@ -7,16 +7,20 @@ class PreguntasFrecuentesController {
     const offset = parseInt(req.query.offset as string);
     const limit = parseInt(req.query.limit as string);
     const category = parseInt(req.query.category as string);
+    const input = req.query.input as string;
+    if (input) {
+      params = Object.assign({ input }, params);
+    }
+    if (category) {
+      params = Object.assign({ category }, params);
+    }
     if (offset) {
       params = Object.assign({ offset }, params);
     }
     if (limit) {
       params = Object.assign({ limit }, params);
     }
-    if (category) {
-      params = Object.assign({ category }, params);
-    }
-    console.log(params);
+    
     try {
       const results = await PreguntasFrecuentesModel.getPreguntas(params);
       res.json(results);

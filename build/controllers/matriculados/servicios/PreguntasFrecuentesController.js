@@ -10,6 +10,7 @@ class PreguntasFrecuentesController {
         const offset = parseInt(req.query.offset);
         const limit = parseInt(req.query.limit);
         const category = parseInt(req.query.category);
+        const input = parseInt(req.query.input);
         if (offset) {
             params = Object.assign({ offset }, params);
         }
@@ -18,6 +19,9 @@ class PreguntasFrecuentesController {
         }
         if (category) {
             params = Object.assign({ category }, params);
+        }
+        if (input) {
+            params = Object.assign({ input }, params);
         }
         console.log(params);
         try {

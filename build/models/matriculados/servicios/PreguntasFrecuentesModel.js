@@ -9,10 +9,24 @@ class PreguntasFrecuentesModel {
         let offsetTxt = "";
         let queryParamsCount = [];
         let queryParams = [];
-        if (category) {
-            categorytxt = "WHERE categoria_id = ?";
+        if (input) {
+            console.log('hay input');
+        }
+        if (category && input) {
+            inputTxt = `WHERE pregunta like ${input}`;
+            queryParams.push(input);
+            categorytxt = `AND categoria_id = ${category}`;
+            queryParams.push(category);
+        }
+        else if (category) {
+            categorytxt = `WHERE categoria_id = ${category}`;
             queryParams.push(category);
             queryParamsCount.push(category);
+        }
+        else if (input) {
+            inputTxt = `WHERE pregunta like ${input}`;
+            queryParams.push(input);
+            queryParamsCount.push(input);
         }
         if (limit) {
             limitTxt = "LIMIT ?";
@@ -24,7 +38,7 @@ class PreguntasFrecuentesModel {
         }
         const conn = await Database_1.db.getConnection();
         const queryCount = `SELECT COUNT(*) AS total FROM preguntas_frecuentes ${categorytxt}`;
-        const query = `SELECT * FROM preguntas_frecuentes ${categorytxt} ${limitTxt} ${offsetTxt}`;
+        const query = `SELECT * FROM preguntas_frecuentes ${inputTxt} ${categorytxt} ${limitTxt} ${offsetTxt}`;
         console.log(query);
         console.log(queryParams);
         try {
@@ -40,13 +54,16 @@ class PreguntasFrecuentesModel {
         }
     }
     async getCategorys() {
+        const conn = await Database_1.db.getConnection();
         try {
-            const conn = await Database_1.db.getConnection();
             const [data] = await conn.query("SELECT * FROM preguntas_frecuentes_categorias");
             return data;
         }
         catch (e) {
             console.error("error al obtener las categorias: ", e);
+        }
+        finally {
+            conn.release();
         }
     }
 }

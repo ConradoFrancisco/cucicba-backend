@@ -5,7 +5,7 @@ GET http://localhost:3000/servicios/biblioteca-digital
 GET http://localhost:8080/servicios/revista-cucicba
 
 ###
-GET http://localhost:8080/servicios/preguntas-frecuentes?category=1
+GET http://localhost:8080/servicios/preguntas-frecuentes?offset=8&input=&limit=8
 ###
 GET http://localhost:8080/servicios
 
