@@ -23,3 +23,8 @@ Content-Type: application/json
     "order": 3,
     "title":"Nueva area de prueba"
 }
+
+###
+PATCH http://localhost:8080/areas/14
+###
+DELETE  http://localhost:8080/areas/15

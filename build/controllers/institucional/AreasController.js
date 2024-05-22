@@ -44,11 +44,16 @@ class AreasController {
         }
     }
     async create(req, res) {
-        const body = req.body;
+        const { title, order } = req.body;
         try {
-            console.log(body);
+            const validation = await areaSchema.isValid({ title, order });
+            if (validation) {
+                await AreasModel_1.default.create({ order, title });
+                res.status(201).send("Registro creado satisfactoriamente!");
+            }
         }
         catch (e) {
+            res.status(422);
             console.error(e);
         }
         //console.log("aca busco: ", areaSchema.isValid(title, order));

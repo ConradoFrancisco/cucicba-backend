@@ -3,7 +3,7 @@ import * as yup from "yup";
 import AreasModel from "../../models/institucional/AreasModel";
 const areaSchema = yup.object().shape({
   title: yup.string().required(),
-  order: yup.number().required().integer().positive(),
+  orden: yup.number().required().integer().positive(),
 });
 class AreasController {
   public async getAll(req: Request, res: Response) {
@@ -16,20 +16,49 @@ class AreasController {
     }
   }
   public async create(req: Request, res: Response) {
-    const { title, order } = req.body;
+    const { title } = req.body;
+    const orden = parseInt(req.body.orden as string)
     try {
-      const validation = await areaSchema.isValid({ title, order });
-
-      if (validation) {
-        await AreasModel.create({ order, title });
-        res.status(201).send("Registro creado satisfactoriamente!");
+      // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
+      await areaSchema.validate({ title, orden });
+  
+      // Si la validación pasa, crear el registro en la base de datos
+      await AreasModel.create({ title, orden });
+      res.status(201).send("Registro creado satisfactoriamente!");
+    } catch (e :any) {
+      // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
+      if (e.name === 'ValidationError') {
+        res.status(400).json({ error: e.errors });
+      } else {
+        res.status(500).json({ error: "Internal Server Error" });
       }
-    } catch (e) {
-      res.status(422);
       console.error(e);
     }
-
-    //console.log("aca busco: ", areaSchema.isValid(title, order));
   }
+  public async setActive(req: Request, res: Response) {
+    const id = parseInt(req.params.id as string)
+    const estado = req.body.estado
+    try {
+      const result = await AreasModel.setActive({id,estado})
+      res.status(200).send("Area publicada satisfactoriamente!");
+      return res.json(result)
+    } catch (e :any) {
+        res.status(500).json({ error: "Internal Server Error" });
+      console.error(e);
+    }
+  }
+  public async delete(req: Request, res: Response) {
+    const id = parseInt(req.params.id as string)
+    try {
+      const result = await AreasModel.delete({id})
+      res.status(200).send("Area eliminada satisfactoriamente!");
+      return res.json(result)
+    } catch (e :any) {
+        res.status(500).json({ error: "Internal Server Error" });
+      console.error(e);
+    }
+  }
+
+
 }
 export default new AreasController();

@@ -18,13 +18,14 @@ class AreasModel {
     async create({ title, order }) {
         const conn = await Database_1.db.getConnection();
         try {
-            await conn.query("INSERT INTO areas (title,order) VALUES (?,?)", [
+            await conn.query("INSERT INTO areas (title,orden) VALUES (?,?)", [
                 title,
                 order,
             ]);
+            console.log("ingresado a la db");
         }
         catch (e) {
-            throw new Error("Error al crear el área");
+            throw (new Error("Error al crear el área"), e);
         }
         finally {
             conn.release();
