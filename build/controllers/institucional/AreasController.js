@@ -30,7 +30,7 @@ const yup = __importStar(require("yup"));
 const AreasModel_1 = __importDefault(require("../../models/institucional/AreasModel"));
 const areaSchema = yup.object().shape({
     title: yup.string().required(),
-    order: yup.number().required().integer().positive(),
+    orden: yup.number().required().integer().positive(),
 });
 class AreasController {
     async getAll(req, res) {
@@ -44,19 +44,50 @@ class AreasController {
         }
     }
     async create(req, res) {
-        const { title, order } = req.body;
+        const { title } = req.body;
+        const orden = parseInt(req.body.orden);
         try {
-            const validation = await areaSchema.isValid({ title, order });
-            if (validation) {
-                await AreasModel_1.default.create({ order, title });
-                res.status(201).send("Registro creado satisfactoriamente!");
-            }
+            // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
+            await areaSchema.validate({ title, orden });
+            // Si la validación pasa, crear el registro en la base de datos
+            await AreasModel_1.default.create({ title, orden });
+            res.status(201).send("Registro creado satisfactoriamente!");
         }
         catch (e) {
-            res.status(422);
+            // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
+            if (e.name === 'ValidationError') {
+                res.status(400).json({ error: e.errors });
+            }
+            else {
+                res.status(500).json({ error: "Internal Server Error" });
+            }
             console.error(e);
         }
-        //console.log("aca busco: ", areaSchema.isValid(title, order));
+    }
+    async setActive(req, res) {
+        const id = parseInt(req.params.id);
+        const estado = req.body.estado;
+        try {
+            const result = await AreasModel_1.default.setActive({ id, estado });
+            res.status(200).send("Area publicada satisfactoriamente!");
+            return res.json(result);
+        }
+        catch (e) {
+            res.status(500).json({ error: "Internal Server Error" });
+            console.error(e);
+        }
+    }
+    async delete(req, res) {
+        const id = parseInt(req.params.id);
+        try {
+            const result = await AreasModel_1.default.delete({ id });
+            res.status(200).send("Area eliminada satisfactoriamente!");
+            return res.json(result);
+        }
+        catch (e) {
+            res.status(500).json({ error: "Internal Server Error" });
+            console.error(e);
+        }
     }
 }
 exports.default = new AreasController();

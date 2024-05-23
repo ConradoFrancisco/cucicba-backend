@@ -6,4 +6,5 @@ export const areasRoutes = Router();
 areasRoutes.get("/", AreasController.getAll);
 areasRoutes.post("/", AreasController.create);
 areasRoutes.patch("/:id", AreasController.setActive);
+areasRoutes.patch("/modificar/:id", AreasController.update);
 areasRoutes.delete("/:id", AreasController.delete);

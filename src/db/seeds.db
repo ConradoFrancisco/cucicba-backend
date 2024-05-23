@@ -5,7 +5,8 @@ CREATE TABLE services (
     title VARCHAR(255) NOT NULL,
     url VARCHAR(255) NOT NULL,
     icon VARCHAR(255) NOT NULL,
-    `order` INT NOT NULL
+    `order` INT NOT NULL,
+    activo tinyint(1) not null default 0 
 );
 INSERT INTO services (title, url, icon, `order`)
 VALUES
@@ -120,3 +121,89 @@ INSERT INTO posts_biblioteca (id, categoria_id, descripcion, fecha, archivo) VAL
 (8, 2, 'Nueva Res. 43/2024  de la UIF para los Sujetos Obligados Corredores Inmobiliarios', '2023-11-22', 'document (1).pdf'),
 (9, 3, '2024 - CONTRATO DE LOCACION VIVIENDA (DNU 70-2023)', '2023-11-01', '2024-contrato-locacion-vivienda-dnu-70-2023.docx'),
 (10, 1, 'Guía para contrato de Alquiler con DNU', '2023-10-26', 'presentacion-guia-para-contrato-alquiler-dnu.pptx');
+
+CREATE TABLE areas (
+  id INT PRIMARY KEY,
+  orden INT NOT NULL,
+  estado tinyint(1) NOT NULL,
+  title VARCHAR(255) NOT NULL
+);
+
+INSERT INTO areas (id, orden, estado, title) VALUES 
+(1, 1, 1, 'RECEPCIÓN'),
+(2, 2, 1, 'SECRETARÍA DE CONSEJO DIRECTIVO'),
+(3, 3, 1, 'MATRICULADOS'),
+(4, 4, 1, 'FISCALIZACIÓN'),
+(5, 5, 1, 'FISCALIZACIÓN E INSPECCIONES ADMINISTRACION DE FISCALIZACION - INFRACTORES'),
+(6, 6, 1, 'ADMINISTRACIÓN DE FISCALIZACIÓN ILEGALES E INFRACTORES DE EXTRAÑA JURISDICCIÓN'),
+(7, 7, 1, 'CUERPO DE INSPECTORES / NOTIFICADORES'),
+(8, 8, 1, 'LEGALES'),
+(9, 9, 1, 'COMUNICACIÓN,WEB,CABAPROP,REVISTA CUCICBA'),
+(10, 10, 1, 'ACTIVIDADES ACADEMICAS'),
+(11, 11, 1, 'REDES SOCIALES'),
+(12, 12, 1, 'ADMINISTRACIÓN Y FINANZAS'),
+(13, 13, 1, 'CONTROLLER Y RESP. RRHH');
+CREATE TABLE personal (
+  id INT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  lastname VARCHAR(255) NOT NULL,
+  phone VARCHAR(20),
+  email VARCHAR(255),
+  position VARCHAR(255),
+  area INT,
+  FOREIGN KEY (area) REFERENCES areas(id)
+);
+
+INSERT INTO personal (id, name, lastname, phone, email, position, area) VALUES
+-- RECEPCIÓN
+(1, 'María Elisa', 'Alvarez', '4124-6060', 'recepcion@colegioinmobiliario.org.ar', NULL, 1),
+
+-- SECRETARÍA DE CONSEJO DIRECTIVO
+(2, 'Dra. Adriana', 'Campero', NULL, 'acampero@colegioinmobiliario.org.ar', NULL, 2),
+
+-- MATRICULADOS
+(3, 'Sr. Federico', 'Conte', NULL, NULL, 'JEFE DE SERVICIOS AL MATRICULADO', 3),
+(4, 'Jorgelina', 'González', '4124-6083', 'jgonzalez@colegioinmobiliario.org.ar', 'ATENCIÓN AL MATRICULADO', 3),
+
+-- FISCALIZACIÓN
+(5, 'Mart. Samuel Roberto', 'Kotlar', NULL, NULL, 'JEFE DE FISCALIZACION, INSPECCIONES Y CONTROL DEL EJERCICIO PROFESIONAL', 4),
+(6, 'Mariano', 'Marino', '4124-6093', 'mmarino@colegioinmobiliario.org.ar', 'Sub-Jefe Administración de Infractores e Ilegales', 4),
+
+-- FISCALIZACIÓN E INSPECCIONES ADMINISTRACIÓN DE FISCALIZACIÓN - INFRACTORES
+(7, 'Facundo', 'Clemente', '4124-6091', 'fclemente@colegioinmobiliario.org.ar', 'Supervisor', 5),
+(8, 'Pablo Sebastián', 'Miguelez', '4124-6095', 'pmiguelez@colegioinmobiliario.org.ar', 'Supervisor', 5),
+
+-- ADMINISTRACIÓN DE FISCALIZACIÓN ILEGALES E INFRACTORES DE EXTRAÑA JURISDICCIÓN
+(9, 'Julieta', 'Maggi', '4124-6086', 'jamaggi@colegioinmobiliario.org.ar', 'Administración', 6),
+
+-- CUERPO DE INSPECTORES / NOTIFICADORES
+(10, 'Martín Sosa', 'Hernandéz', NULL, NULL, 'Supervisor/Inspector/Notificador', 7),
+(11, 'Estanislao', 'Zabala', NULL, NULL, 'Inspector/Notificador', 7),
+(12, 'Carlos Federico', 'Jauretche', NULL, NULL, 'Inspector/Notificador', 7),
+(13, 'Néstor Aníbal Luquez', 'Videla', NULL, NULL, 'Inspector/Notificador', 7),
+(14, 'Luciano', 'Mocchia', NULL, NULL, 'Inspector/Notificador', 7),
+
+-- LEGALES
+(15, 'Dra. Carina', 'Migale', NULL, NULL, 'JEFE DE ASUNTOS LEGALES', 8),
+(16, 'Federico', 'Agüero', '4124-6078', 'faguero@colegioinmobiliario.org.ar', 'Asesoria Legal', 8),
+(17, 'Sebastian', 'Elcano', '4124-6077', 'selcano@colegioinmobiliario.org.ar', 'Asesoria Legal', 8),
+(18, 'Dra. Melina', 'Acosta', '4124-6076', 'macosta@colegioinmobiliario.org.ar', 'Senior Asuntos Legales', 8),
+
+-- TRIBUNAL DE ETICA Y DISCIPLINA
+(19, '', '', 'Para tener contacto y/o acceso al Tribunal se le puede enviar un mail a', 'denuncias@colegioinmobiliario.org.ar', NULL, NULL),
+
+-- COMUNICACIÓN, WEB, CABAPROP, REVISTA CUCICBA
+(20, 'Salvador', 'Curutchet', '4124-6059', 'scurutchet@colegioinmobiliario.org.ar', NULL, 9),
+
+-- ACTIVIDADES ACADÉMICAS
+(21, 'Claudia', 'Carral', '4124-6085', 'ccarral@colegioinmobiliario.org.ar', NULL, 10),
+
+-- REDES SOCIALES
+(22, 'Franco', 'Duarte', '4124-6054', 'fduarte@colegioinmobiliario.org.ar', NULL, 11),
+
+-- ADMINISTRACIÓN Y FINANZAS
+(23, 'María Laura', 'Moyano', NULL, NULL, 'JEFE DE ADMINISTRACION Y FINANZAS', 12),
+(24, 'Paula', 'Amoroso', '4124-6050', 'cobranzas@colegioinmobiliario.org.ar', 'COBRANZAS', 12),
+
+-- CONTROLLER Y RESP. RRHH
+(25, 'Lic. Jessica', 'Massa', NULL, NULL, NULL, 13);

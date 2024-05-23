@@ -15,17 +15,41 @@ class AreasModel {
             conn.release();
         }
     }
-    async create({ title, order }) {
+    async create({ title, orden }) {
         const conn = await Database_1.db.getConnection();
         try {
             await conn.query("INSERT INTO areas (title,orden) VALUES (?,?)", [
                 title,
-                order,
+                orden,
             ]);
             console.log("ingresado a la db");
         }
         catch (e) {
             throw (new Error("Error al crear el área"), e);
+        }
+        finally {
+            conn.release();
+        }
+    }
+    async setActive({ id, estado }) {
+        const conn = await Database_1.db.getConnection();
+        try {
+            await conn.query("UPDATE areas SET estado = ? WHERE id = ?", [estado, id]);
+        }
+        catch (e) {
+            throw (new Error("Error al crear el área"), e);
+        }
+        finally {
+            conn.release();
+        }
+    }
+    async delete({ id }) {
+        const conn = await Database_1.db.getConnection();
+        try {
+            const result = await conn.query("DELETE FROM areas WHERE id = ?", [id]);
+        }
+        catch (e) {
+            throw (new Error("Error al eliminar el área"), e);
         }
         finally {
             conn.release();

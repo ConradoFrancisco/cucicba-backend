@@ -6,6 +6,7 @@ import { faqRoutes } from "./routes/preguntas-frecuentes";
 import { serviciosRoutes } from "./routes/servicios";
 import cors from "cors";
 import { areasRoutes } from "./routes/institucional/areas";
+import { personalRoutes } from "./routes/institucional/personal";
 
 const app = express();
 app.use(express.json());
@@ -22,6 +23,7 @@ app.use("/servicios/biblioteca-digital", bibliotecaDigitalRoutes);
 //Enrutado Institucional
 app.use("/autoridades", autoridadesRoutes);
 app.use("/areas", areasRoutes);
+app.use("/personal", personalRoutes);
 
 const PORT = 8080;
 

@@ -28,7 +28,6 @@ class PreguntasFrecuentesModel {
         categorytxt = `AND categoria_id = ?`;
         queryParams.push(category)
         queryParamsCount.push(category);
-
       }else if(category){
         categorytxt = `WHERE categoria_id = ?`;
         queryParams.push(category);
