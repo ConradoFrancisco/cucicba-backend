@@ -11,6 +11,7 @@ const preguntas_frecuentes_1 = require("./routes/preguntas-frecuentes");
 const servicios_1 = require("./routes/servicios");
 const cors_1 = __importDefault(require("cors"));
 const areas_1 = require("./routes/institucional/areas");
+const personal_1 = require("./routes/institucional/personal");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
@@ -25,6 +26,7 @@ app.use("/servicios/biblioteca-digital", biblioteca_digital_1.default);
 //Enrutado Institucional
 app.use("/autoridades", autoridades_1.default);
 app.use("/areas", areas_1.areasRoutes);
+app.use("/personal", personal_1.personalRoutes);
 const PORT = 8080;
 app.listen(PORT, () => {
     console.log(`Server listening on port: ${PORT}`);

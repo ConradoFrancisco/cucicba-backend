@@ -34,8 +34,25 @@ const areaSchema = yup.object().shape({
 });
 class AreasController {
     async getAll(req, res) {
+        let params = {};
+        const input = req.query.input;
+        const offset = parseInt(req.query.offset);
+        const limit = parseInt(req.query.limit);
+        const active = parseInt(req.query.active);
+        if (input) {
+            params = Object.assign({ input }, params);
+        }
+        if (active) {
+            params = Object.assign({ active }, params);
+        }
+        if (offset) {
+            params = Object.assign({ offset }, params);
+        }
+        if (limit) {
+            params = Object.assign({ limit }, params);
+        }
         try {
-            const results = await AreasModel_1.default.getAll();
+            const results = await AreasModel_1.default.getAll(params);
             res.json(results);
         }
         catch (e) {
@@ -74,6 +91,27 @@ class AreasController {
         }
         catch (e) {
             res.status(500).json({ error: "Internal Server Error" });
+            console.error(e);
+        }
+    }
+    async update(req, res) {
+        const id = parseInt(req.params.id);
+        const title = req.body.title;
+        const orden = parseInt(req.body.orden);
+        await areaSchema.validate({ title, orden });
+        try {
+            const result = await AreasModel_1.default.update({ id, title, orden });
+            res.status(200).send("Area modificada satisfactoriamente!");
+            return res.json(result);
+        }
+        catch (e) {
+            // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
+            if (e.name === 'ValidationError') {
+                res.status(400).json({ error: e.errors });
+            }
+            else {
+                res.status(500).json({ error: "Internal Server Error" });
+            }
             console.error(e);
         }
     }

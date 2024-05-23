@@ -8,7 +8,7 @@ const areaSchema = yup.object().shape({
 class AreasController {
   public async getAll(req: Request, res: Response) {
     let params = {};
-    const input = req.query.input as string;
+    const input = `%${req.query.input as string}%`;
     const offset = parseInt(req.query.offset as string)
     const limit = parseInt(req.query.limit as string)
     const active = parseInt(req.query.active as string)
