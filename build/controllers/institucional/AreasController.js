@@ -35,21 +35,35 @@ const areaSchema = yup.object().shape({
 class AreasController {
     async getAll(req, res) {
         let params = {};
-        const input = `%${req.query.input}%`;
+        const input = req.query.input;
+        const estado = parseInt(req.query.estado);
+        const orderDirection = req.query.orderDirection || 'ASC';
+        const orden = parseInt(req.query.orden);
         const offset = parseInt(req.query.offset);
+        const orderBy = req.query.orderBy || 'id';
+        console.log(orderBy);
+        console.log(orderDirection);
         const limit = parseInt(req.query.limit);
-        const active = parseInt(req.query.active);
         if (input) {
             params = Object.assign({ input }, params);
         }
-        if (active) {
-            params = Object.assign({ active }, params);
+        if (estado || estado === 0) {
+            params = Object.assign({ estado }, params);
+        }
+        if (orden) {
+            params = Object.assign({ orden }, params);
         }
         if (offset) {
             params = Object.assign({ offset }, params);
         }
         if (limit) {
             params = Object.assign({ limit }, params);
+        }
+        if (orderBy) {
+            params = Object.assign({ orderBy }, params);
+        }
+        if (orderDirection) {
+            params = Object.assign({ orderDirection }, params);
         }
         try {
             const results = await AreasModel_1.default.getAll(params);

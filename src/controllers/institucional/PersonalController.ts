@@ -6,8 +6,12 @@ class PersonalController{
     public async getAll(req:Request,res:Response){
         let params = {}
         const limit = parseInt(req.query.limit as string)
+        const offset = parseInt(req.query.offset as string)
         if(limit){
             params = Object.assign({limit},params)
+        }
+        if(offset){
+            params = Object.assign({offset},params)
         }
         try{
             const result = await PersonalModel.getAll(params);
