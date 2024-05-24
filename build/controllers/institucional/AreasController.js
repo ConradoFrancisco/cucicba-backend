@@ -35,7 +35,7 @@ const areaSchema = yup.object().shape({
 class AreasController {
     async getAll(req, res) {
         let params = {};
-        const input = req.query.input;
+        const input = `%${req.query.input}%`;
         const offset = parseInt(req.query.offset);
         const limit = parseInt(req.query.limit);
         const active = parseInt(req.query.active);
