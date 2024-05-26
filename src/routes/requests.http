@@ -12,9 +12,9 @@ GET http://localhost:8080/servicios
 ###
 GET http://localhost:8080/servicios/preguntas-frecuentes/categorias
 ###
-GET  http://localhost:8080/areas?active=1&input=%CU%
+GET  http://localhost:8080/areas?estado=0
 ###
-GET  http://localhost:8080/personal
+GET  http://localhost:8080/autoridades/cargos
 ###
 
 POST http://localhost:8080/areas
@@ -29,3 +29,16 @@ Content-Type: application/json
 PATCH http://localhost:8080/areas/14
 ###
 DELETE  http://localhost:8080/areas/15
+
+###
+POST http://localhost:8080/personal
+Content-Type: application/json
+
+{
+    "nombre" : "conrado",
+    "apellido" : "llanos",
+    "telefono" : 1124098377,
+    "email": "conradofrancisco96@gmail.com",
+    "cargo":"cargo prueba",
+    "area": "2"
+}

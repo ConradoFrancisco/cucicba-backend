@@ -116,5 +116,18 @@ class AreasModel {
             conn.release();
         }
     }
+    async getAreasNames() {
+        const conn = await Database_1.db.getConnection();
+        try {
+            const [data] = await conn.query("select id,title from areas");
+            return data;
+        }
+        catch (e) {
+            throw (new Error("Error al conseguir las areas"));
+        }
+        finally {
+            conn.release();
+        }
+    }
 }
 exports.default = new AreasModel();

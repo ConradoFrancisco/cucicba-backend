@@ -137,6 +137,17 @@ class AreasModel {
       conn.release();
     }
   }
+  public async getAreasNames(){
+    const conn = await db.getConnection();
+    try{
+      const [data] = await conn.query("select id,title from areas");
+      return data;
+    }catch(e){
+      throw (new Error("Error al conseguir las areas"))
+    }finally{
+      conn.release();
+    }
+  }
 }
 
 export default new AreasModel();

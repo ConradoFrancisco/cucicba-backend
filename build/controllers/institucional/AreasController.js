@@ -141,5 +141,14 @@ class AreasController {
             console.error(e);
         }
     }
+    async getAreasNames(req, res) {
+        try {
+            const result = await AreasModel_1.default.getAreasNames();
+            res.json(result);
+        }
+        catch (e) {
+            console.log(e);
+        }
+    }
 }
 exports.default = new AreasController();

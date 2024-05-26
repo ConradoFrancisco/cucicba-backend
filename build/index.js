@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const autoridades_1 = __importDefault(require("./routes/autoridades"));
+const autoridades_1 = __importDefault(require("./routes/institucional/autoridades"));
 const biblioteca_digital_1 = __importDefault(require("./routes/biblioteca-digital"));
 const revista_cucicba_1 = require("./routes/revista-cucicba");
 const preguntas_frecuentes_1 = require("./routes/preguntas-frecuentes");
@@ -12,11 +12,31 @@ const servicios_1 = require("./routes/servicios");
 const cors_1 = __importDefault(require("cors"));
 const areas_1 = require("./routes/institucional/areas");
 const personal_1 = require("./routes/institucional/personal");
+const multer_1 = __importDefault(require("multer"));
+const path_1 = __importDefault(require("path"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
+app.use('/uploads', express_1.default.static(path_1.default.resolve(__dirname, '../uploads')));
 app.use((0, cors_1.default)());
+const storage = multer_1.default.diskStorage({
+    destination: 'uploads/',
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix);
+    }
+});
+const upload = (0, multer_1.default)({ storage });
 app.get("/", (_req, res) => {
+    console.log(path_1.default.resolve('uploads'));
     res.send("cuciba backend");
+});
+app.post('/upload', upload.single('file'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+    }
+    const ext = req.file.originalname ? path_1.default.extname(req.file.originalname) : '';
+    const filePathWithExt = req.file.path + ext;
+    return res.json({ message: 'Upload success', filePath: filePathWithExt });
 });
 //Enrutado de servicios
 app.use("/servicios", servicios_1.serviciosRoutes);

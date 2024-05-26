@@ -112,6 +112,14 @@ class AreasController {
     }
   }
 
+  public async getAreasNames(req:Request,res:Response){
+    try{
+      const result = await AreasModel.getAreasNames();
+      res.json(result);
+    }catch(e){
+      console.log(e)
+    }
+  }
 
 }
 export default new AreasController();

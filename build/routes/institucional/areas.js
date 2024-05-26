@@ -8,6 +8,7 @@ const express_1 = require("express");
 const AreasController_1 = __importDefault(require("../../controllers/institucional/AreasController"));
 exports.areasRoutes = (0, express_1.Router)();
 exports.areasRoutes.get("/", AreasController_1.default.getAll);
+exports.areasRoutes.get("/select", AreasController_1.default.getAreasNames);
 exports.areasRoutes.post("/", AreasController_1.default.create);
 exports.areasRoutes.patch("/:id", AreasController_1.default.setActive);
 exports.areasRoutes.patch("/modificar/:id", AreasController_1.default.update);
