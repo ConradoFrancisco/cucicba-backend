@@ -12,7 +12,9 @@ class AutoridadesController {
   public async getAll(req: Request, res: Response) {
     let params = {};
     const input = req.query.input;
-    const orden = parseInt(req.query.orden as string);
+    const orden = parseInt(req.query.orden as string)
+    const puesto = parseInt(req.query.puesto as string)
+    console.log(orden);
     const orderDirection =
     (req.query.orderDirection as "ASC" | "DESC") || "ASC";
     const orderBy = (req.query.orderBy as string) || "id";
@@ -28,6 +30,9 @@ class AutoridadesController {
     }
     if (orden) {
       params = Object.assign({ orden }, params);
+    }
+    if (puesto) {
+      params = Object.assign({ puesto_id:puesto }, params);
     }
     if (input) {
       params = Object.assign({ input }, params);
