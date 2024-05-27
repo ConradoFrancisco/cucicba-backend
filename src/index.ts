@@ -9,6 +9,7 @@ import { areasRoutes } from "./routes/institucional/areas";
 import { personalRoutes } from "./routes/institucional/personal";
 import multer from 'multer'
 import path from "path";
+import { tribunal_etica_routes } from "./routes/institucional/tribunalEtica";
 const app = express();
 app.use(express.json());
 app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
@@ -44,6 +45,7 @@ app.use("/servicios/biblioteca-digital", bibliotecaDigitalRoutes);
 app.use("/autoridades", autoridadesRoutes);
 app.use("/areas", areasRoutes);
 app.use("/personal", personalRoutes);
+app.use("/tribunal", tribunal_etica_routes);
 
 const PORT = 8080;
 

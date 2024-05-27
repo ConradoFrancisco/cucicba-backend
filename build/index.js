@@ -22,21 +22,22 @@ const storage = multer_1.default.diskStorage({
     destination: 'uploads/',
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix);
+        const ext = path_1.default.extname(file.originalname); // Obtener la extensión del archivo original
+        const fileName = file.fieldname + '-' + uniqueSuffix + ext; // Concatenar la extensión al nombre del archivo
+        cb(null, fileName);
     }
 });
 const upload = (0, multer_1.default)({ storage });
 app.get("/", (_req, res) => {
-    console.log(path_1.default.resolve('uploads'));
+    console.log(path_1.default.resolve(__dirname, '../uploads'));
     res.send("cuciba backend");
 });
 app.post('/upload', upload.single('file'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded' });
     }
-    const ext = req.file.originalname ? path_1.default.extname(req.file.originalname) : '';
-    const filePathWithExt = req.file.path + ext;
-    return res.json({ message: 'Upload success', filePath: filePathWithExt });
+    const filePath = req.file.path;
+    return res.json({ message: 'Upload success', filePath: filePath });
 });
 //Enrutado de servicios
 app.use("/servicios", servicios_1.serviciosRoutes);
