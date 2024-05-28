@@ -1,6 +1,6 @@
 import { db } from "../db/Database";
 
-class TribunalModel {
+class ComisionRevisadoraModel {
     public async getAll({
         limit = undefined,
         offset = 0,
@@ -22,12 +22,12 @@ class TribunalModel {
         orderDirection?: "ASC" | "DESC";
     }) {
         const conn = await db.getConnection()
-        let query = ("SELECT * FROM tribunal_etica")
+        let query = ("SELECT * FROM comision_revisadora")
         let queryParams: any[] = []
         let queryParamsCount: any[] = []
         let whereClauses = [];
 
-        let queryCount = ("SELECT COUNT(*) as total FROM tribunal_etica");
+        let queryCount = ("SELECT COUNT(*) as total FROM comision_revisadora");
         if (input) {
             whereClauses.push(`(nombre LIKE ? OR apellido LIKE ?)`);
             const searchPattern = `%${input}%`;
@@ -95,7 +95,7 @@ class TribunalModel {
         const conn = await db.getConnection();
         try {
             const result = await conn.query(
-                "INSERT INTO tribunal_etica (nombre,apellido,orden,posicion) VALUES (?,?,?,?)",
+                "INSERT INTO comision_revisadora (nombre,apellido,orden,posicion) VALUES (?,?,?,?)",
                 [nombre, apellido, orden, posicion]
             );
             return result;
@@ -109,7 +109,7 @@ class TribunalModel {
     public async setActive({ id, estado }: { id: number; estado: number }) {
         const conn = await db.getConnection();
         try {
-            await conn.query("UPDATE tribunal_etica SET estado = ? WHERE id = ?", [
+            await conn.query("UPDATE comision_revisadora SET estado = ? WHERE id = ?", [
                 estado,
                 id,
             ]);
@@ -122,7 +122,7 @@ class TribunalModel {
     public async delete({ id }: { id: number }) {
         const conn = await db.getConnection();
         try {
-            await conn.query("DELETE FROM tribunal_etica WHERE id = ?", [
+            await conn.query("DELETE FROM comision_revisadora WHERE id = ?", [
                 id,
             ]);
         } catch (e) {
@@ -154,7 +154,7 @@ class TribunalModel {
                 queryParams.push(value);
             }
         });
-        const query = `UPDATE tribunal_etica SET ${queryFragments.join(
+        const query = `UPDATE comision_revisadora SET ${queryFragments.join(
             ", "
         )} WHERE id = ?`;
         console.log(query);
@@ -168,4 +168,4 @@ class TribunalModel {
         }
     }
 }
-export default new TribunalModel();
+export default new ComisionRevisadoraModel();

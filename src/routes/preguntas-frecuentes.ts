@@ -5,3 +5,4 @@ export const faqRoutes = Router();
 
 faqRoutes.get("/", PreguntasFrecuentesController.getPreguntas);
 faqRoutes.get("/categorias", PreguntasFrecuentesController.getCategorys);
+faqRoutes.post("/", PreguntasFrecuentesController.create);

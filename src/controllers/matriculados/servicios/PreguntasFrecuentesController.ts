@@ -38,5 +38,21 @@ class PreguntasFrecuentesController {
       res.status(500).send("arror intero del servidor");
     }
   }
+  public async create(req: Request, res: Response) {
+    const {pregunta,respuesta} = req.body
+    const categoria = parseInt(req.body.categoria)
+    try {
+      await PreguntasFrecuentesModel.create({pregunta,respuesta,categoria});
+      res.status(201).send("Registro creado satisfactoriamente!");
+    } catch (e: any) {
+      // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
+      if (e.name === "ValidationError") {
+        res.status(400).json({ error: e.errors });
+      } else {
+        res.status(500).json({ error: "Error del servidor" });
+      }
+      console.error(e);
+    }
+  }
 }
 export default new PreguntasFrecuentesController();
