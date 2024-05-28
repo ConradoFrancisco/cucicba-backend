@@ -198,8 +198,7 @@ class PersonalModel {
     const query = `UPDATE personal (${fields.join(", ")}) VALUES (${values.join(
       ", "
     )}) where id = ?`;
-    console.log(query);
-    console.log(queryParams);
+    
     const conn = await db.getConnection();
     try {
       const result = await conn.query(query, queryParams);

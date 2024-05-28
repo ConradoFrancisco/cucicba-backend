@@ -4,68 +4,85 @@ class PreguntasFrecuentesModel {
   public async getPreguntas({
     limit = undefined,
     offset = 0,
+    estado = undefined,
     category = undefined,
     input = undefined,
+    orderBy = "id", // Campo por defecto para ordenar
+    orderDirection = "ASC", // Dirección por defecto para ordenar
   }: {
+    estado?: number;
     limit?: number;
     offset?: number;
     category?: number;
     input?: string;
+    orderBy?: string;
+    orderDirection?: "ASC" | "DESC";
   }) {
-    let categorytxt = "";
-    let inputTxt = "";
-    let limitTxt = "";
-    let offsetTxt = "";
-    let queryParamsCount = [];
-    let queryParams = [];
-    if (category && input) {
-      inputTxt = `WHERE pregunta like ?`;
-      queryParams.push(input);
-      queryParamsCount.push(input);
-
-      categorytxt = `AND categoria_id = ?`;
-      queryParams.push(category);
-      queryParamsCount.push(category);
-    } else if (category) {
-      categorytxt = `WHERE categoria_id = ?`;
-      queryParams.push(category);
-      queryParamsCount.push(category);
-    } else if (input) {
-      inputTxt = `WHERE pregunta like ?`;
-      queryParams.push(input);
-      queryParamsCount.push(input);
+    let query = `SELECT pf.id as id, pf.pregunta, pf.estado, pf.respuesta, pfc.titulo AS categoria, pfc.id as categoria_id
+    FROM preguntas_frecuentes pf
+    INNER JOIN preguntas_frecuentes_categorias pfc ON pf.categoria_id = pfc.id`;
+    let queryCount = `SELECT COUNT(*) AS total, pf.pregunta AS pregunta 
+    FROM preguntas_frecuentes pf 
+    JOIN preguntas_frecuentes_categorias pfc ON pf.categoria_id = pfc.id `;
+    let whereClauses = [];
+    let queryParams: any = [];
+    let queryParamsCount: any = [];
+    if (input) {
+      whereClauses.push(
+        `pf.pregunta LIKE ?`
+      );
+      const searchPattern = `%${input}%`;
+      queryParams.push(
+        searchPattern,
+      );
+      queryParamsCount.push(
+        searchPattern,
+      );
     }
 
+    if (estado !== undefined) {
+      whereClauses.push(`pf.estado = ?`);
+      queryParams.push(estado);
+      queryParamsCount.push(estado);
+    }
+    if (category !== undefined) {
+      whereClauses.push(`pf.categoria_id = ?`);
+      queryParams.push(category);
+      queryParamsCount.push(category);
+    }
+
+    if (whereClauses.length > 0) {
+      const whereString = whereClauses.join(" AND ");
+      query += ` WHERE ${whereString}`;
+      queryCount += ` WHERE ${whereString}`;
+    }
+    if (orderBy) {
+      query += ` ORDER BY ${orderBy} ${orderDirection}`;
+    }
     if (limit) {
-      limitTxt = "LIMIT ?";
+      query += ` LIMIT ?`;
       queryParams.push(limit);
-      queryParamsCount.push(limit);
       if (offset) {
-        offsetTxt = "OFFSET ?";
+        query += ` OFFSET ?`;
         queryParams.push(offset);
       }
     }
-
     const conn = await db.getConnection();
 
-    const query = `SELECT pf.id as pregunta_id, pf.pregunta, pf.estado, pf.respuesta, pfc.titulo AS categoria, pfc.id as categoria_id
-    FROM preguntas_frecuentes pf
-    INNER JOIN preguntas_frecuentes_categorias pfc ON pf.categoria_id = pfc.id ${inputTxt} ${categorytxt} ${limitTxt} ${offsetTxt}`;
-    const queryCount = `SELECT COUNT(*) AS total FROM preguntas_frecuentes ${inputTxt} ${categorytxt} `;
-    console.log("queryresults:", query);
-    console.log("queryparamsresults:", queryParams);
-    console.log("querycant:", queryCount);
-    console.log("queryparamscant:", queryParamsCount);
+
     try {
       const [data] = await conn.query(query, queryParams);
       const [total] = await conn.query(queryCount, queryParamsCount);
+      console.log('estoy aca: ')
+      console.log(query),
+        console.log(queryParams)
       return { data, total };
     } catch (e) {
       throw (
         (new Error(
           "No se pudieron obtener las preguntas frecuentes, intente de nuevo mas tarde: "
         ),
-        e)
+          e)
       );
     } finally {
       conn.release();
@@ -95,11 +112,59 @@ class PreguntasFrecuentesModel {
     categoria: number;
   }) {
     const conn = await db.getConnection();
-    try{
-      await conn.query("INSERT INTO preguntas_frecuentes (pregunta,respuesta,categoria_id) VALUES (?,?,?)",[pregunta,respuesta,categoria])
-    }catch(e){
+    try {
+      await conn.query("INSERT INTO preguntas_frecuentes (pregunta,respuesta,categoria_id) VALUES (?,?,?)", [pregunta, respuesta, categoria])
+    } catch (e) {
       console.log(e)
       throw new Error("Error en la db al ingresar la pregunta frecuente")
+    }
+  }
+  public async update({
+    id,
+    pregunta,
+    respuesta,
+    categoria,
+  }: {
+    id: number
+    pregunta: string;
+    respuesta: string;
+    categoria: number;
+  }) {
+    const query = "UPDATE preguntas_frecuentes set pregunta = ? , respuesta = ?, categoria_id = ? WHERE id = ?";
+    const queryParams = [pregunta, respuesta, categoria, id]
+    const conn = await db.getConnection();
+    try {
+      await conn.query(query, queryParams)
+    } catch (e) {
+      console.log(e)
+      throw new Error("Error en la db al ingresar la pregunta frecuente")
+    } finally {
+      conn.release();
+    }
+  }
+  public async setActive({ id, estado }: { id: number; estado: number }) {
+    const conn = await db.getConnection();
+    try {
+      await conn.query("UPDATE preguntas_frecuentes SET estado = ? WHERE id = ?", [
+        estado,
+        id,
+      ]);
+    } catch (e) {
+      throw (new Error("Error al activar la pregunta frecuente"));
+    } finally {
+      conn.release();
+    }
+  }
+  public async delete({ id }: { id: number }) {
+    const conn = await db.getConnection();
+    try {
+      const result = await conn.query("DELETE FROM preguntas_frecuentes WHERE id = ?", [
+        id,
+      ]);
+    } catch (e) {
+      throw (new Error("Error al eliminar el la pregunta"), e);
+    } finally {
+      conn.release();
     }
   }
 }

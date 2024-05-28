@@ -5,14 +5,27 @@ class PreguntasFrecuentesController {
   public async getPreguntas(req: Request, res: Response): Promise<void> {
     let params = {};
     const offset = parseInt(req.query.offset as string);
+    const estado = parseInt(req.query.estado as string);
     const limit = parseInt(req.query.limit as string);
-    const category = parseInt(req.query.category as string);
+    const orderDirection =
+    (req.query.orderDirection as "ASC" | "DESC") || "ASC";
+    const orderBy = (req.query.orderBy as string) || "id";
+    const puesto = parseInt(req.query.puesto as string);
     const input = req.query.input as string;
+    if (orderBy) {
+      params = Object.assign({ orderBy }, params);
+    }
+    if (orderDirection) {
+      params = Object.assign({ orderDirection }, params);
+    }
+    if(estado || estado === 0){
+      params = Object.assign({estado},params)
+    }
     if (input) {
       params = Object.assign({ input }, params);
     }
-    if (category) {
-      params = Object.assign({ category }, params);
+    if (puesto) {
+      params = Object.assign({ category:puesto }, params);
     }
     if (offset) {
       params = Object.assign({ offset }, params);
@@ -44,6 +57,46 @@ class PreguntasFrecuentesController {
     try {
       await PreguntasFrecuentesModel.create({pregunta,respuesta,categoria});
       res.status(201).send("Registro creado satisfactoriamente!");
+    } catch (e: any) {
+      // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
+      if (e.name === "ValidationError") {
+        res.status(400).json({ error: e.errors });
+      } else {
+        res.status(500).json({ error: "Error del servidor" });
+      }
+      console.error(e);
+    }
+  }
+  public async setActive(req: Request, res: Response) {
+    const id = parseInt(req.params.id as string)
+    const estado = req.body.estado
+    try {
+      const result = await PreguntasFrecuentesModel.setActive({id,estado})
+      res.status(200).send("Pregunta Frecuente Publicada dada de alta!");
+      return res.json(result)
+    } catch (e :any) {
+        res.status(500).json({ error: "Error del servidor" });
+      console.error(e);
+    }
+  }
+  public async delete(req: Request, res: Response) {
+    const id = parseInt(req.params.id as string)
+    try {
+      const result = await PreguntasFrecuentesModel.delete({id})
+      res.status(200).send("Pregunta eliminada satisfactoriamente!");
+      return res.json(result)
+    } catch (e :any) {
+        res.status(500).json({ error: "Error del servidor" });
+      console.error(e);
+    }
+  }
+  public async update(req: Request, res: Response) {
+    const {pregunta,respuesta} = req.body
+    const categoria = parseInt(req.body.categoria)
+    const id = parseInt(req.params.id as string)
+    try {
+      await PreguntasFrecuentesModel.update({ id,categoria,pregunta,respuesta});
+      res.status(201).send("Registro Modificado correctamente!");
     } catch (e: any) {
       // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
       if (e.name === "ValidationError") {
