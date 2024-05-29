@@ -1,0 +1,164 @@
+import { db } from "../../../db/Database";
+
+class SancionesModel {
+    public async getAll({
+        limit = undefined,
+        offset = 0,
+        input = "",
+        estado = undefined,
+        fecha = undefined,
+        orderBy = "id", // Campo por defecto para ordenar
+        orderDirection = "ASC", // Dirección por defecto para ordenar
+    }: {
+        limit?: number;
+        offset?: number;
+        input?: string;
+        fecha?: string;
+        estado?: string;
+        orderBy?: string;
+        orderDirection?: "ASC" | "DESC";
+    }) {
+        let queryParams: any = [];
+        let queryParamsCount: any = [];
+
+        let query = "SELECT st.id as id, cs.nombre as nombre,st.fecha as fecha, st.descripcion as descripcion, st.pdf as pdf,st.estado as estado FROM sanciones_tribunal st JOIN categoria_sanciones ct on st.categoria_sancion_id = cs.id"
+        let queryCount = "SELECT COUNT(*) AS total FROM sanciones_tribunal join categoria_sanciones st on categoria_sancion_id = id where causa = 1";
+        let whereClauses: any = [];
+
+        if (input) {
+            whereClauses.push(`(st.descripcion LIKE ?)`);
+            const searchPattern = `%${input}%`;
+            queryParams.push(searchPattern);
+            queryParamsCount.push(searchPattern);
+        }
+
+        if (estado !== undefined) {
+            whereClauses.push(`a.estado = ?`);
+            queryParams.push(estado);
+            queryParamsCount.push(estado);
+        }
+        if (whereClauses.length > 0) {
+            const whereString = whereClauses.join(" AND ");
+            query += ` WHERE ${whereString}`;
+            queryCount += ` WHERE ${whereString}`;
+        }
+        if (orderBy) {
+            query += ` ORDER BY ${orderBy} ${orderDirection}`;
+        }
+        if (limit) {
+            query += ` LIMIT ?`;
+            queryParams.push(limit);
+            if (offset) {
+                query += ` OFFSET ?`;
+                queryParams.push(offset);
+            }
+        }
+        const conn = await db.getConnection();
+        console.log(query);
+        try {
+            const [data] = await conn.query(query, queryParams);
+            const [total] = await conn.query(queryCount, queryParamsCount);
+            /* console.log(data, total);
+            console.log("model",estado) */
+            return { data, total };
+        } catch (e) {
+            console.log(e);
+            throw new Error("Hubo un error con la db");
+        } finally {
+            conn.release();
+        }
+    }
+    
+    public async create({
+        categoria,
+        descripcion,
+        fecha,
+        pdf = '',
+
+    }: {
+        categoria: number;
+        descripcion: string;
+        fecha: string;
+        pdf: string;
+
+    }) {
+        const conn = await db.getConnection();
+        try {
+            const result = await conn.query(
+                "INSERT INTO sanciones_tribunal (categoria_sancion_id,descripcion,fecha,pdf) VALUES (?,?,?,?)",
+                [categoria, descripcion, fecha, pdf]
+            );
+            return result;
+        } catch (e) {
+            console.error(e);
+            throw new Error("Hubo un error con la db");
+        } finally {
+            conn.release();
+        }
+    }
+    public async setActive({ id, estado }: { id: number; estado: number }) {
+        const conn = await db.getConnection();
+        try {
+            await conn.query("UPDATE sanciones_tribunal SET estado = ? WHERE id = ?", [
+                estado,
+                id,
+            ]);
+        } catch (e) {
+            throw (new Error("Error al publicar la sancion"), e);
+        } finally {
+            conn.release();
+        }
+    }
+    public async delete({ id }: { id: number }) {
+        const conn = await db.getConnection();
+        try {
+            const result = await conn.query("DELETE FROM sanciones_tribunal WHERE id = ?", [
+                id,
+            ]);
+        } catch (e) {
+            throw (new Error("Error al eliminar la sancion"), e);
+        } finally {
+            conn.release();
+        }
+    }
+    public async update({
+        id,
+        nombre,
+        direcion,
+        fecha,
+        causa = 1,
+
+    }: {
+        id: number;
+        nombre: string;
+        direcion: string;
+        fecha: string;
+        causa: number;
+
+    }) {
+        const conn = await db.getConnection();
+        let params = { nombre, direcion, fecha, causa };
+        let queryFragments: string[] = [];
+        let queryParams : any = [];
+        Object.entries(params).forEach(([key, value]) => {
+            if (value !== undefined) {
+                queryFragments.push(`${key} = ?`);
+                queryParams.push(value);
+            }
+        });
+        const query = `UPDATE InmobiliariasIlegales SET ${queryFragments.join(
+            ", "
+        )} WHERE id = ?`;
+        console.log(query);
+        // Agregar el id al final de los parámetros
+        queryParams.push(id);
+        try {
+            await conn.query(query, queryParams);
+        } catch (e) {
+            throw (new Error("Error al modificar el área"), e);
+        } finally {
+            conn.release();
+        }
+    }
+}
+export default new SancionesModel();

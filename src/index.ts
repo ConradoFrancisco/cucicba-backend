@@ -1,4 +1,4 @@
-import express, { Request } from "express";
+import express, { Request, Response } from "express";
 import autoridadesRoutes from "./routes/institucional/autoridades";
 import bibliotecaDigitalRoutes from "./routes/biblioteca-digital";
 import { revistaRoutes } from "./routes/revista-cucicba";
@@ -11,6 +11,7 @@ import multer from 'multer'
 import path from "path";
 import { tribunal_etica_routes } from "./routes/institucional/tribunalEtica";
 import { comisionRevisadoraRoutes } from "./routes/institucional/comisionRevisadora";
+import inmobiliariasPenalRoutes from "./routes/inmobiliarias-ilegales";
 const app = express();
 app.use(express.json());
 app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
@@ -24,11 +25,29 @@ const storage = multer.diskStorage({
     cb(null, fileName);
   }
 });
-
+app.use('/files', express.static(path.resolve(__dirname, '../files')));
+app.use(cors());
+const storageFiles = multer.diskStorage({
+  destination: 'files/',
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const ext = path.extname(file.originalname); // Obtener la extensión del archivo original
+    const fileName = file.fieldname + '-' + uniqueSuffix + ext; // Concatenar la extensión al nombre del archivo
+    cb(null, fileName);
+  }
+});
+const uploadFiles = multer ({storage:storageFiles})
 const upload = multer({ storage });
 app.get("/", (_req: Request, res) => {
   console.log(path.resolve(__dirname, '../uploads'));
   res.send("cuciba backend");
+});
+app.post('/files',uploadFiles.single,(req:Request,res:Response)=>{
+  if (!req.file) {
+    return res.status(400).json({ error: 'No se pudo subir el archivo' });
+  }
+  const filePath = req.file.path
+  return res.json({ message: 'Upload success', filePath: filePath });
 });
 app.post('/upload', upload.single('file'), (req:Request, res) => {
   if (!req.file) {
@@ -42,13 +61,13 @@ app.use("/servicios", serviciosRoutes);
 app.use("/servicios/preguntas-frecuentes", faqRoutes);
 app.use("/servicios/revista-cucicba", revistaRoutes);
 app.use("/servicios/biblioteca-digital", bibliotecaDigitalRoutes);
+app.use("/servicios/inmobiliarias-penal",inmobiliariasPenalRoutes)
 //Enrutado Institucional
 app.use("/autoridades", autoridadesRoutes);
 app.use("/areas", areasRoutes);
 app.use("/personal", personalRoutes);
 app.use("/tribunal", tribunal_etica_routes);
 app.use("/comision", comisionRevisadoraRoutes);
-
 const PORT = 8080;
 
 app.listen(PORT, () => {

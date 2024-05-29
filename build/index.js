@@ -14,6 +14,8 @@ const areas_1 = require("./routes/institucional/areas");
 const personal_1 = require("./routes/institucional/personal");
 const multer_1 = __importDefault(require("multer"));
 const path_1 = __importDefault(require("path"));
+const tribunalEtica_1 = require("./routes/institucional/tribunalEtica");
+const comisionRevisadora_1 = require("./routes/institucional/comisionRevisadora");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use('/uploads', express_1.default.static(path_1.default.resolve(__dirname, '../uploads')));
@@ -48,6 +50,8 @@ app.use("/servicios/biblioteca-digital", biblioteca_digital_1.default);
 app.use("/autoridades", autoridades_1.default);
 app.use("/areas", areas_1.areasRoutes);
 app.use("/personal", personal_1.personalRoutes);
+app.use("/tribunal", tribunalEtica_1.tribunal_etica_routes);
+app.use("/comision", comisionRevisadora_1.comisionRevisadoraRoutes);
 const PORT = 8080;
 app.listen(PORT, () => {
     console.log(`Server listening on port: ${PORT}`);

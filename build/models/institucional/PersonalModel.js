@@ -136,8 +136,6 @@ class PersonalModel {
             queryParams.push(email);
         }
         const query = `UPDATE personal (${fields.join(", ")}) VALUES (${values.join(", ")}) where id = ?`;
-        console.log(query);
-        console.log(queryParams);
         const conn = await Database_1.db.getConnection();
         try {
             const result = await conn.query(query, queryParams);
