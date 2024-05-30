@@ -7,12 +7,13 @@ import { serviciosRoutes } from "./routes/servicios";
 import cors from "cors";
 import { areasRoutes } from "./routes/institucional/areas";
 import { personalRoutes } from "./routes/institucional/personal";
-import multer from 'multer'
+import multer,{ MulterError } from 'multer'
 import path from "path";
 import { tribunal_etica_routes } from "./routes/institucional/tribunalEtica";
 import { comisionRevisadoraRoutes } from "./routes/institucional/comisionRevisadora";
 import inmobiliariasPenalRoutes from "./routes/inmobiliarias-ilegales";
 import { sancionesRouter } from "./routes/sanciones";
+import { noticiasRoutes } from "./routes/noticias/noticias";
 const app = express();
 app.use(express.json());
 app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
@@ -37,8 +38,16 @@ const storageFiles = multer.diskStorage({
     cb(null, fileName);
   }
 });
+
 const uploadFiles = multer ({storage:storageFiles})
 const upload = multer({ storage });
+app.post('/upload-multiple', upload.array('files', 10), (req, res) => {
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ error: 'No files uploaded' });
+  }
+  const filePaths = (req.files as Express.Multer.File[]).map(file => file.path);
+  return res.json({ message: 'Upload success', filePaths: filePaths });
+});
 app.get("/", (_req: Request, res) => {
   console.log(path.resolve(__dirname, '../uploads'));
   res.send("cuciba backend");
@@ -70,6 +79,9 @@ app.use("/areas", areasRoutes);
 app.use("/personal", personalRoutes);
 app.use("/tribunal", tribunal_etica_routes);
 app.use("/comision", comisionRevisadoraRoutes);
+
+//Enrutado de Noticias
+app.use('/noticias',noticiasRoutes);
 const PORT = 8080;
 
 app.listen(PORT, () => {
