@@ -12,6 +12,7 @@ import path from "path";
 import { tribunal_etica_routes } from "./routes/institucional/tribunalEtica";
 import { comisionRevisadoraRoutes } from "./routes/institucional/comisionRevisadora";
 import inmobiliariasPenalRoutes from "./routes/inmobiliarias-ilegales";
+import { sancionesRouter } from "./routes/sanciones";
 const app = express();
 app.use(express.json());
 app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
@@ -42,11 +43,11 @@ app.get("/", (_req: Request, res) => {
   console.log(path.resolve(__dirname, '../uploads'));
   res.send("cuciba backend");
 });
-app.post('/files',uploadFiles.single,(req:Request,res:Response)=>{
+app.post('/files', uploadFiles.single('file'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No se pudo subir el archivo' });
   }
-  const filePath = req.file.path
+  const filePath = req.file.path;
   return res.json({ message: 'Upload success', filePath: filePath });
 });
 app.post('/upload', upload.single('file'), (req:Request, res) => {
@@ -62,6 +63,7 @@ app.use("/servicios/preguntas-frecuentes", faqRoutes);
 app.use("/servicios/revista-cucicba", revistaRoutes);
 app.use("/servicios/biblioteca-digital", bibliotecaDigitalRoutes);
 app.use("/servicios/inmobiliarias-penal",inmobiliariasPenalRoutes)
+app.use("/servicios/sanciones",sancionesRouter)
 //Enrutado Institucional
 app.use("/autoridades", autoridadesRoutes);
 app.use("/areas", areasRoutes);

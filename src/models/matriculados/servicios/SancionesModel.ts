@@ -7,6 +7,7 @@ class SancionesModel {
         input = "",
         estado = undefined,
         fecha = undefined,
+        categoria= undefined,
         orderBy = "id", // Campo por defecto para ordenar
         orderDirection = "ASC", // Dirección por defecto para ordenar
     }: {
@@ -15,27 +16,33 @@ class SancionesModel {
         input?: string;
         fecha?: string;
         estado?: string;
+        categoria?:number;
         orderBy?: string;
         orderDirection?: "ASC" | "DESC";
     }) {
         let queryParams: any = [];
         let queryParamsCount: any = [];
 
-        let query = "SELECT st.id as id, cs.nombre as nombre,st.fecha as fecha, st.descripcion as descripcion, st.pdf as pdf,st.estado as estado FROM sanciones_tribunal st JOIN categoria_sanciones ct on st.categoria_sancion_id = cs.id"
-        let queryCount = "SELECT COUNT(*) AS total FROM sanciones_tribunal join categoria_sanciones st on categoria_sancion_id = id where causa = 1";
+        let query = "select st.id as id, cs.nombre as categoria,st.categoria_sancion_id as categoria_id, st.fecha as fecha, st.descripcion as descripcion,st.estado as estado, st.pdf as pdf from sanciones_tribunal st join categoria_sanciones cs on st.categoria_sancion_id = cs.id"
+        let queryCount = "SELECT COUNT(*) AS total FROM sanciones_tribunal join categoria_sanciones st on categoria_sancion_id = st.id";
         let whereClauses: any = [];
 
         if (input) {
-            whereClauses.push(`(st.descripcion LIKE ?)`);
+            whereClauses.push(`(descripcion LIKE ?)`);
             const searchPattern = `%${input}%`;
             queryParams.push(searchPattern);
             queryParamsCount.push(searchPattern);
         }
 
         if (estado !== undefined) {
-            whereClauses.push(`a.estado = ?`);
+            whereClauses.push(`estado = ?`);
             queryParams.push(estado);
             queryParamsCount.push(estado);
+        }
+        if (categoria) {
+            whereClauses.push(`categoria_sancion_id = ?`);
+            queryParams.push(categoria);
+            queryParamsCount.push(categoria);
         }
         if (whereClauses.length > 0) {
             const whereString = whereClauses.join(" AND ");
@@ -58,8 +65,6 @@ class SancionesModel {
         try {
             const [data] = await conn.query(query, queryParams);
             const [total] = await conn.query(queryCount, queryParamsCount);
-            /* console.log(data, total);
-            console.log("model",estado) */
             return { data, total };
         } catch (e) {
             console.log(e);
@@ -123,21 +128,21 @@ class SancionesModel {
     }
     public async update({
         id,
-        nombre,
-        direcion,
+        categoria_sancion_id,
+        descripcion,
         fecha,
-        causa = 1,
+        pdf = '',
 
     }: {
-        id: number;
-        nombre: string;
-        direcion: string;
+        id:number;
+        categoria_sancion_id: number;
+        descripcion: string;
         fecha: string;
-        causa: number;
+        pdf: string;
 
     }) {
         const conn = await db.getConnection();
-        let params = { nombre, direcion, fecha, causa };
+        let params = { categoria_sancion_id,descripcion,fecha,pdf };
         let queryFragments: string[] = [];
         let queryParams : any = [];
         Object.entries(params).forEach(([key, value]) => {
@@ -146,7 +151,7 @@ class SancionesModel {
                 queryParams.push(value);
             }
         });
-        const query = `UPDATE InmobiliariasIlegales SET ${queryFragments.join(
+        const query = `UPDATE sanciones_tribunal SET ${queryFragments.join(
             ", "
         )} WHERE id = ?`;
         console.log(query);
@@ -157,6 +162,17 @@ class SancionesModel {
         } catch (e) {
             throw (new Error("Error al modificar el área"), e);
         } finally {
+            conn.release();
+        }
+    }
+    public async getCategorys(){
+        const conn = await db.getConnection();
+        try{
+            const [data] = await conn.query("select * from categoria_sanciones")
+            return data;
+        }catch(e){
+            throw new Error("error en la db al obtener las categorias")
+        }finally{
             conn.release();
         }
     }
