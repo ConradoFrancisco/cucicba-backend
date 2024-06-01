@@ -22,21 +22,21 @@ class InmobiliariasIlegalesPenalModel {
         let queryParams: any = [];
         let queryParamsCount: any = [];
 
-        let query = "SELECT * FROM InmobiliariasIlegales where causa = 1"
+        let query = "SELECT id,nombre,direccion, DATE_FORMAT(fecha, '%d-%m-%Y') as fecha,DATE_FORMAT(fecha, '%Y-%m-%d') as fecha_edit,estado FROM InmobiliariasIlegales"
         let queryCount =
-            "SELECT COUNT(*) AS total FROM InmobiliariasIlegales where causa = 1";
+            "SELECT COUNT(*) AS total FROM InmobiliariasIlegales ";
 
-        let whereClauses = [];
+        let whereClauses = ["causa = 1"];
 
         if (input) {
-            whereClauses.push(`(a.nombre LIKE ? OR a.apellido LIKE ?)`);
+            whereClauses.push(`(nombre LIKE ? OR direccion LIKE ?)`);
             const searchPattern = `%${input}%`;
             queryParams.push(searchPattern, searchPattern);
             queryParamsCount.push(searchPattern, searchPattern);
         }
 
         if (estado !== undefined) {
-            whereClauses.push(`a.estado = ?`);
+            whereClauses.push(`estado = ?`);
             queryParams.push(estado);
             queryParamsCount.push(estado);
         }
@@ -91,19 +91,18 @@ class InmobiliariasIlegalesPenalModel {
         let queryParams: any = [];
         let queryParamsCount: any = [];
 
-        let query = "SELECT * FROM InmobiliariasIlegales where causa = 0"
+        let query = "SELECT id,nombre,direccion, DATE_FORMAT(fecha, '%d-%m-%Y') as fecha,DATE_FORMAT(fecha, '%Y-%m-%d') as fecha_edit,estado FROM InmobiliariasIlegales"
         let queryCount =
-            "SELECT COUNT(*) AS total FROM InmobiliariasIlegales where causa = 0";
+            "SELECT COUNT(*) AS total FROM InmobiliariasIlegales ";
 
-        let whereClauses = [];
+        let whereClauses = ["causa = 0"];
 
         if (input) {
-            whereClauses.push(`(a.nombre LIKE ? OR a.apellido LIKE ?)`);
+            whereClauses.push(`(nombre LIKE ? OR direccion LIKE ?)`);
             const searchPattern = `%${input}%`;
             queryParams.push(searchPattern, searchPattern);
             queryParamsCount.push(searchPattern, searchPattern);
         }
-
         if (estado !== undefined) {
             whereClauses.push(`a.estado = ?`);
             queryParams.push(estado);
@@ -130,8 +129,6 @@ class InmobiliariasIlegalesPenalModel {
         try {
             const [data] = await conn.query(query, queryParams);
             const [total] = await conn.query(queryCount, queryParamsCount);
-            /* console.log(data, total);
-            console.log("model",estado) */
             return { data, total };
         } catch (e) {
             console.log(e);
@@ -144,13 +141,13 @@ class InmobiliariasIlegalesPenalModel {
         nombre,
         direcion,
         fecha,
-        causa = 1,
+        causa = undefined,
 
     }: {
         nombre: string;
         direcion: string;
         fecha: string;
-        causa: number;
+        causa?: number;
 
     }) {
         const conn = await db.getConnection();

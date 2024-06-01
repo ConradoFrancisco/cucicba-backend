@@ -18,6 +18,7 @@ const tribunalEtica_1 = require("./routes/institucional/tribunalEtica");
 const comisionRevisadora_1 = require("./routes/institucional/comisionRevisadora");
 const inmobiliarias_ilegales_1 = __importDefault(require("./routes/inmobiliarias-ilegales"));
 const sanciones_1 = require("./routes/sanciones");
+const noticias_1 = require("./routes/noticias/noticias");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use('/uploads', express_1.default.static(path_1.default.resolve(__dirname, '../uploads')));
@@ -44,6 +45,13 @@ const storageFiles = multer_1.default.diskStorage({
 });
 const uploadFiles = (0, multer_1.default)({ storage: storageFiles });
 const upload = (0, multer_1.default)({ storage });
+app.post('/upload-multiple', upload.array('files', 10), (req, res) => {
+    if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ error: 'No files uploaded' });
+    }
+    const filePaths = req.files.map(file => file.path);
+    return res.json({ message: 'Upload success', filePaths: filePaths });
+});
 app.get("/", (_req, res) => {
     console.log(path_1.default.resolve(__dirname, '../uploads'));
     res.send("cuciba backend");
@@ -75,6 +83,8 @@ app.use("/areas", areas_1.areasRoutes);
 app.use("/personal", personal_1.personalRoutes);
 app.use("/tribunal", tribunalEtica_1.tribunal_etica_routes);
 app.use("/comision", comisionRevisadora_1.comisionRevisadoraRoutes);
+//Enrutado de Noticias
+app.use('/noticias', noticias_1.noticiasRoutes);
 const PORT = 8080;
 app.listen(PORT, () => {
     console.log(`Server listening on port: ${PORT}`);

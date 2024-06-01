@@ -5,7 +5,6 @@ const AutoridadSchema = yup.object().shape({
   nombre: yup.string().required(),
   fecha: yup.string().required(),
   direccion: yup.string().required(),
-  
 });
 class InmobiliariasIlegalesPenalController {
   public async getAll(req: Request, res: Response) {
@@ -93,13 +92,15 @@ class InmobiliariasIlegalesPenalController {
     }
   }
   public async create(req: Request, res: Response) {
-    const { nombre,fecha,direccion } = req.body;
+    const { nombre,fecha,direccion} = req.body;
+    const causa = parseInt(req.body.causa as string);
+    console.log("aca",req.body.causa)
     try {
       // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
-      await AutoridadSchema.validate({ nombre,fecha,direccion });
+      await AutoridadSchema.validate({ nombre,fecha,direccion,causa });
 
       // Si la validación pasa, crear el registro en la base de datos
-      await InmobiliariasIlegalesPenalModel.create({ nombre,fecha,direcion:direccion,causa:1});
+      await InmobiliariasIlegalesPenalModel.create({ nombre,fecha,direcion:direccion,causa});
       res.status(201).send("Registro creado satisfactoriamente!");
     } catch (e: any) {
       // Si hay un error de validación o cualquier otro error, enviar una respuesta de error

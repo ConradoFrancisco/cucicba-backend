@@ -17,7 +17,7 @@ class AutoridadesController {
     console.log(orden);
     const orderDirection =
     (req.query.orderDirection as "ASC" | "DESC") || "ASC";
-    const orderBy = (req.query.orderBy as string) || "id";
+    const orderBy = (req.query.orderBy as string) || "orden";
     const estado = parseInt(req.query.estado as string);
     const limit = parseInt(req.query.limit as string);
     const offset = parseInt(req.query.offset as string);

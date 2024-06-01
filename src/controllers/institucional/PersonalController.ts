@@ -49,6 +49,15 @@ class PersonalController{
             res.status(500).send("error en el servidor");
           }
     }
+    public async getAllByAreas(req:Request,res:Response){
+      try{
+        const response = await PersonalModel.getAllByAreas()
+        res.json(response);
+      }catch (e) {
+        console.error("error al obtener las areas", e);
+        res.status(500).send("error en el servidor");
+      }
+    }
     public async create(req:Request,res:Response){
         const {nombre,apellido,cargo} = req.body
         const area = parseInt(req.body.area);

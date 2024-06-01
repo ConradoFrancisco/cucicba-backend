@@ -21,6 +21,7 @@ class TribunalModel {
         puesto_id?: number
         orderDirection?: "ASC" | "DESC";
     }) {
+        
         const conn = await db.getConnection()
         let query = ("SELECT * FROM tribunal_etica")
         let queryParams: any[] = []
@@ -68,8 +69,7 @@ class TribunalModel {
                 }
             }
         }
-        console.log("aca", queryCount)
-        console.log("aca", queryParamsCount)
+        
         try {
             const [data] = await conn.query(query, queryParams);
             const [total] = await conn.query(queryCount,queryParamsCount)

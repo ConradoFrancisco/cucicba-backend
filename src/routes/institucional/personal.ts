@@ -4,6 +4,7 @@ import PersonalController from "../../controllers/institucional/PersonalControll
 export const personalRoutes = Router();
 
 personalRoutes.get('/',PersonalController.getAll)
+personalRoutes.get('/areas',PersonalController.getAllByAreas)
 personalRoutes.post('/',PersonalController.create)
 personalRoutes.patch("/:id", PersonalController.setActive);
 personalRoutes.patch("/modificar/:id", PersonalController.update);

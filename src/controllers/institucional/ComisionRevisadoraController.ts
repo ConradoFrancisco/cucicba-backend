@@ -13,7 +13,7 @@ class ComisionRevisadora {
     let params = {};
     const input = req.query.input;
     const orden = parseInt(req.query.orden as string)
-    const puesto = parseInt(req.query.puesto as string)
+    const posicion = req.query.posicion
     console.log(orden);
     const orderDirection =
     (req.query.orderDirection as "ASC" | "DESC") || "ASC";
@@ -31,8 +31,8 @@ class ComisionRevisadora {
     if (orden) {
       params = Object.assign({ orden }, params);
     }
-    if (puesto) {
-      params = Object.assign({ puesto_id:puesto }, params);
+    if (posicion) {
+      params = Object.assign({ posicion }, params);
     }
     if (input) {
       params = Object.assign({ input }, params);

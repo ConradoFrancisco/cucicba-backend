@@ -8,7 +8,7 @@ class AutoridadesModel {
     estado = undefined,
     orden = undefined,
     puesto_id = undefined,
-    orderBy = "a.nombre", // Campo por defecto para ordenar
+    orderBy = "orden", // Campo por defecto para ordenar
     orderDirection = "DESC", // Dirección por defecto para ordenar
   }: {
     limit?: number;
@@ -73,8 +73,6 @@ class AutoridadesModel {
     try {
       const [data] = await conn.query(query, queryParams);
       const [total] = await conn.query(queryCount, queryParamsCount);
-      /* console.log(data, total);
-      console.log("model",estado) */
       return { data, total };
     } catch (e) {
       console.log(e);

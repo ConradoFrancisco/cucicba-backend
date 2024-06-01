@@ -67,15 +67,13 @@ class PreguntasFrecuentesModel {
         queryParams.push(offset);
       }
     }
+    console.log(category)
     const conn = await db.getConnection();
 
 
     try {
       const [data] = await conn.query(query, queryParams);
       const [total] = await conn.query(queryCount, queryParamsCount);
-      console.log('estoy aca: ')
-      console.log(query),
-        console.log(queryParams)
       return { data, total };
     } catch (e) {
       throw (

@@ -157,7 +157,7 @@ class ComisionRevisadoraModel {
         const query = `UPDATE comision_revisadora SET ${queryFragments.join(
             ", "
         )} WHERE id = ?`;
-        console.log(query);
+       
         queryParams.push(id);
         try {
             await conn.query(query, queryParams);

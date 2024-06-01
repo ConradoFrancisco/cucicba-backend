@@ -198,7 +198,7 @@ class PersonalModel {
     const query = `UPDATE personal (${fields.join(", ")}) VALUES (${values.join(
       ", "
     )}) where id = ?`;
-    
+
     const conn = await db.getConnection();
     try {
       const result = await conn.query(query, queryParams);
@@ -206,6 +206,35 @@ class PersonalModel {
     } catch (e) {
       console.error(e);
       throw new Error("Hubo un error con la db");
+    } finally {
+      conn.release();
+    }
+  }
+  public async getAllByAreas() {
+    const conn = await db.getConnection();
+    try {
+      const [data] = await conn.query(`SELECT 
+      a.id AS area_id,
+      a.title AS area_title,
+      p.id AS worker_id,
+      p.nombre AS worker_name,
+      p.apellido AS worker_lastname,
+      p.telefono AS worker_phone,
+      p.email AS worker_email,
+      p.cargo AS worker_position
+  FROM 
+      areas a
+  LEFT JOIN 
+      personal p ON a.id = p.area
+  WHERE
+    a.estado != 0
+  AND
+    p.estado != 0
+  ORDER BY 
+      a.orden, p.id;`);
+      return { data };
+    } catch (e) {
+      console.log(e);
     } finally {
       conn.release();
     }

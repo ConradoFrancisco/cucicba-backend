@@ -33,7 +33,7 @@ class PreguntasFrecuentesController {
     if (limit) {
       params = Object.assign({ limit }, params);
     }
-    
+    console.log(puesto)
     try {
       const results = await PreguntasFrecuentesModel.getPreguntas(params);
       res.json(results);

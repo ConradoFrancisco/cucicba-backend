@@ -12,7 +12,7 @@ GET http://localhost:8080/servicios
 ###
 GET http://localhost:8080/servicios/preguntas-frecuentes/categorias
 ###
-GET  http://localhost:8080/noticias
+GET  http://localhost:8080/comision?estado=1&posicion=titular
 ###
 GET  http://localhost:8080/autoridades?orden=2
 ###
