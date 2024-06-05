@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import AutoridadesModel from "../../models/AutoridadesModel";
+import AutoridadesModel from "../../models/institucional/autoridad/AutoridadesModel";
 import * as yup from 'yup'
 import ComisionRevisadoraModel from "../../models/ComisionRevisadoraModel";
 const AutoridadSchema = yup.object().shape({
@@ -13,7 +13,7 @@ class ComisionRevisadora {
     let params = {};
     const input = req.query.input;
     const orden = parseInt(req.query.orden as string)
-    const posicion = req.query.posicion
+    const puesto = req.query.puesto
     console.log(orden);
     const orderDirection =
     (req.query.orderDirection as "ASC" | "DESC") || "ASC";
@@ -31,8 +31,8 @@ class ComisionRevisadora {
     if (orden) {
       params = Object.assign({ orden }, params);
     }
-    if (posicion) {
-      params = Object.assign({ posicion }, params);
+    if (puesto) {
+      params = Object.assign({ posicion:puesto }, params);
     }
     if (input) {
       params = Object.assign({ input }, params);
@@ -83,7 +83,6 @@ class ComisionRevisadora {
     try {
       const result = await ComisionRevisadoraModel.setActive({id,estado})
       res.status(200).send("Autoridad dada de alta!");
-      return res.json(result)
     } catch (e :any) {
         res.status(500).json({ error: "Error del servidor" });
       console.error(e);
@@ -94,7 +93,6 @@ class ComisionRevisadora {
     try {
       const result = await ComisionRevisadoraModel.delete({id})
       res.status(200).send("Autoridad eliminada satisfactoriamente!");
-      return res.json(result)
     } catch (e :any) {
         res.status(500).json({ error: "Error del servidor" });
       console.error(e);

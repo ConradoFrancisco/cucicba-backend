@@ -1,24 +1,22 @@
-import mysql, { Pool, PoolOptions, PoolConnection } from "mysql2/promise";
 
-const poolOptions: PoolOptions = {
-  user: "root",
-  database: "cucicbadb",
-  password: "",
-  host: "localhost",
-  port: 3306,
-  connectionLimit: 10, 
-};
-
-export class Database {
-  private pool: Pool;
-
-  constructor() {
-    this.pool = mysql.createPool(poolOptions);
+import { Sequelize,DataTypes } from "sequelize";
+export const sequelize = new Sequelize('cucicbadb', 'root', '', {
+  host: 'localhost',
+  dialect: 'mysql', // Cambia según tu base de datos (mysql, postgres, sqlite, etc.)
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
   }
+});
 
-  async getConnection(): Promise<PoolConnection> {
-    return await this.pool.getConnection();
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
   }
-}
+})();
 
-export const db = new Database();

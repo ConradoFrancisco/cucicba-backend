@@ -1,232 +1,179 @@
-import { db } from "../../../db/Database";
-
+import { Op } from 'sequelize';
+import { InmobiliariasIlegales } from './inmobiliarias_ilegales/InmobiliariasIlegales';
+import { sequelize } from '../../../db/Database';
 
 class InmobiliariasIlegalesPenalModel {
-    public async getAll({
-        limit = undefined,
-        offset = 0,
-        input = "",
-        estado = undefined,
-        fecha = undefined,
-        orderBy = "id", // Campo por defecto para ordenar
-        orderDirection = "ASC", // Dirección por defecto para ordenar
-    }: {
-        limit?: number;
-        offset?: number;
-        input?: string;
-        fecha?: string;
-        estado?: string;
-        orderBy?: string;
-        orderDirection?: "ASC" | "DESC";
-    }) {
-        let queryParams: any = [];
-        let queryParamsCount: any = [];
-
-        let query = "SELECT id,nombre,direccion, DATE_FORMAT(fecha, '%d-%m-%Y') as fecha,DATE_FORMAT(fecha, '%Y-%m-%d') as fecha_edit,estado FROM InmobiliariasIlegales"
-        let queryCount =
-            "SELECT COUNT(*) AS total FROM InmobiliariasIlegales ";
-
-        let whereClauses = ["causa = 1"];
-
-        if (input) {
-            whereClauses.push(`(nombre LIKE ? OR direccion LIKE ?)`);
-            const searchPattern = `%${input}%`;
-            queryParams.push(searchPattern, searchPattern);
-            queryParamsCount.push(searchPattern, searchPattern);
-        }
-
-        if (estado !== undefined) {
-            whereClauses.push(`estado = ?`);
-            queryParams.push(estado);
-            queryParamsCount.push(estado);
-        }
-        if (whereClauses.length > 0) {
-            const whereString = whereClauses.join(" AND ");
-            query += ` WHERE ${whereString}`;
-            queryCount += ` WHERE ${whereString}`;
-        }
-        if (orderBy) {
-            query += ` ORDER BY ${orderBy} ${orderDirection}`;
-        }
-        if (limit) {
-            query += ` LIMIT ?`;
-            queryParams.push(limit);
-            if (offset) {
-                query += ` OFFSET ?`;
-                queryParams.push(offset);
-            }
-        }
-        const conn = await db.getConnection();
-        console.log(query);
-        try {
-            const [data] = await conn.query(query, queryParams);
-            const [total] = await conn.query(queryCount, queryParamsCount);
-            /* console.log(data, total);
-            console.log("model",estado) */
-            return { data, total };
-        } catch (e) {
-            console.log(e);
-            throw new Error("Hubo un error con la db");
-        } finally {
-            conn.release();
-        }
+  public async getAll({
+    limit,
+    offset = 0,
+    input = "",
+    estado,
+    fecha,
+    orderBy = "id", // Campo por defecto para ordenar
+    orderDirection = "ASC", // Dirección por defecto para ordenar
+  }: {
+    limit?: number;
+    offset?: number;
+    input?: string;
+    fecha?: string;
+    estado?: string;
+    orderBy?: string;
+    orderDirection?: "ASC" | "DESC";
+  }) {
+    const where: any = { causa: 1 };
+    if (input) {
+      where[Op.or] = [
+        { nombre: { [Op.like]: `%${input}%` } },
+        { direccion: { [Op.like]: `%${input}%` } }
+      ];
     }
-    public async getAllNoCausa({
-        limit = undefined,
-        offset = 0,
-        input = "",
-        estado = undefined,
-        fecha = undefined,
-        orderBy = "id", // Campo por defecto para ordenar
-        orderDirection = "ASC", // Dirección por defecto para ordenar
-    }: {
-        limit?: number;
-        offset?: number;
-        input?: string;
-        fecha?: string;
-        estado?: string;
-        orderBy?: string;
-        orderDirection?: "ASC" | "DESC";
-    }) {
-        let queryParams: any = [];
-        let queryParamsCount: any = [];
+    if (estado !== undefined) where.estado = estado;
 
-        let query = "SELECT id,nombre,direccion, DATE_FORMAT(fecha, '%d-%m-%Y') as fecha,DATE_FORMAT(fecha, '%Y-%m-%d') as fecha_edit,estado FROM InmobiliariasIlegales"
-        let queryCount =
-            "SELECT COUNT(*) AS total FROM InmobiliariasIlegales ";
+    try {
+      const { rows: data, count: total } = await InmobiliariasIlegales.findAndCountAll({
+        where,
+        limit,
+        offset,
+        order: [[orderBy, orderDirection]],
+        attributes: [
+          'id',
+          'nombre',
+          'direccion',
+          [sequelize.fn('DATE_FORMAT', sequelize.col('fecha'), '%d-%m-%Y'), 'fecha'],
+          [sequelize.fn('DATE_FORMAT', sequelize.col('fecha'), '%Y-%m-%d'), 'fecha_edit'],
+          'estado',
+        ],
+      });
 
-        let whereClauses = ["causa = 0"];
-
-        if (input) {
-            whereClauses.push(`(nombre LIKE ? OR direccion LIKE ?)`);
-            const searchPattern = `%${input}%`;
-            queryParams.push(searchPattern, searchPattern);
-            queryParamsCount.push(searchPattern, searchPattern);
-        }
-        if (estado !== undefined) {
-            whereClauses.push(`a.estado = ?`);
-            queryParams.push(estado);
-            queryParamsCount.push(estado);
-        }
-        if (whereClauses.length > 0) {
-            const whereString = whereClauses.join(" AND ");
-            query += ` WHERE ${whereString}`;
-            queryCount += ` WHERE ${whereString}`;
-        }
-        if (orderBy) {
-            query += ` ORDER BY ${orderBy} ${orderDirection}`;
-        }
-        if (limit) {
-            query += ` LIMIT ?`;
-            queryParams.push(limit);
-            if (offset) {
-                query += ` OFFSET ?`;
-                queryParams.push(offset);
-            }
-        }
-        const conn = await db.getConnection();
-        console.log(query);
-        try {
-            const [data] = await conn.query(query, queryParams);
-            const [total] = await conn.query(queryCount, queryParamsCount);
-            return { data, total };
-        } catch (e) {
-            console.log(e);
-            throw new Error("Hubo un error con la db");
-        } finally {
-            conn.release();
-        }
+      return { data, total };
+    } catch (e) {
+      console.error(e);
+      throw new Error("Hubo un error con la db");
     }
-    public async create({
+  }
+
+  public async getAllNoCausa({
+    limit,
+    offset = 0,
+    input = "",
+    estado,
+    fecha,
+    orderBy = "id", // Campo por defecto para ordenar
+    orderDirection = "ASC", // Dirección por defecto para ordenar
+  }: {
+    limit?: number;
+    offset?: number;
+    input?: string;
+    fecha?: string;
+    estado?: string;
+    orderBy?: string;
+    orderDirection?: "ASC" | "DESC";
+  }) {
+    const where: any = { causa: 0 };
+    if (input) {
+      where[Op.or] = [
+        { nombre: { [Op.like]: `%${input}%` } },
+        { direccion: { [Op.like]: `%${input}%` } }
+      ];
+    }
+    if (estado !== undefined) where.estado = estado;
+
+    try {
+      const { rows: data, count: total } = await InmobiliariasIlegales.findAndCountAll({
+        where,
+        limit,
+        offset,
+        order: [[orderBy, orderDirection]],
+        attributes: [
+          'id',
+          'nombre',
+          'direccion',
+          [sequelize.fn('DATE_FORMAT', sequelize.col('fecha'), '%d-%m-%Y'), 'fecha'],
+          [sequelize.fn('DATE_FORMAT', sequelize.col('fecha'), '%Y-%m-%d'), 'fecha_edit'],
+          'estado',
+        ],
+      });
+
+      return { data, total };
+    } catch (e) {
+      console.error(e);
+      throw new Error("Hubo un error con la db");
+    }
+  }
+
+  public async create({
+    nombre,
+    direccion,
+    fecha,
+    causa = 1,
+  }: {
+    nombre: string;
+    direccion: string;
+    fecha: string;
+    causa?: number;
+  }) {
+    try {
+      const result = await InmobiliariasIlegales.create({
         nombre,
-        direcion,
+        direccion,
         fecha,
-        causa = undefined,
-
-    }: {
-        nombre: string;
-        direcion: string;
-        fecha: string;
-        causa?: number;
-
-    }) {
-        const conn = await db.getConnection();
-        try {
-            const result = await conn.query(
-                "INSERT INTO InmobiliariasIlegales (nombre,direccion,fecha,causa) VALUES (?,?,?,?)",
-                [nombre, direcion, fecha, causa]
-            );
-            return result;
-        } catch (e) {
-            console.error(e);
-            throw new Error("Hubo un error con la db");
-        } finally {
-            conn.release();
-        }
+        causa,
+      });
+      return result;
+    } catch (e) {
+      console.error(e);
+      throw new Error("Hubo un error con la db");
     }
-    public async setActive({ id, estado }: { id: number; estado: number }) {
-        const conn = await db.getConnection();
-        try {
-            await conn.query("UPDATE InmobiliariasIlegales SET estado = ? WHERE id = ?", [
-                estado,
-                id,
-            ]);
-        } catch (e) {
-            throw (new Error("Error al publicar la inmobiliaria ilegall"), e);
-        } finally {
-            conn.release();
-        }
-    }
-    public async delete({ id }: { id: number }) {
-        const conn = await db.getConnection();
-        try {
-            const result = await conn.query("DELETE FROM InmobiliariasIlegales WHERE id = ?", [
-                id,
-            ]);
-        } catch (e) {
-            throw (new Error("Error al eliminar la inmobiliaria ilegal"), e);
-        } finally {
-            conn.release();
-        }
-    }
-    public async update({
-        id,
-        nombre,
-        direcion,
-        fecha,
-        causa = 1,
+  }
 
-    }: {
-        id: number;
-        nombre: string;
-        direcion: string;
-        fecha: string;
-        causa: number;
-
-    }) {
-        const conn = await db.getConnection();
-        let params = { nombre, direcion, fecha, causa };
-        let queryFragments: string[] = [];
-        let queryParams = [];
-        Object.entries(params).forEach(([key, value]) => {
-            if (value !== undefined) {
-                queryFragments.push(`${key} = ?`);
-                queryParams.push(value);
-            }
-        });
-        const query = `UPDATE InmobiliariasIlegales SET ${queryFragments.join(
-            ", "
-        )} WHERE id = ?`;
-        console.log(query);
-        // Agregar el id al final de los parámetros
-        queryParams.push(id);
-        try {
-            await conn.query(query, queryParams);
-        } catch (e) {
-            throw (new Error("Error al modificar el área"), e);
-        } finally {
-            conn.release();
-        }
+  public async setActive({ id, estado }: { id: number; estado: number }) {
+    try {
+      await InmobiliariasIlegales.update({ estado }, {
+        where: { id },
+      });
+    } catch (e) {
+      throw new Error("Error al publicar la inmobiliaria ilegal");
     }
+  }
+
+  public async delete({ id }: { id: number }) {
+    try {
+      await InmobiliariasIlegales.destroy({
+        where: { id },
+      });
+    } catch (e) {
+      throw new Error("Error al eliminar la inmobiliaria ilegal");
+    }
+  }
+
+  public async update({
+    id,
+    nombre,
+    direccion,
+    fecha,
+    causa ,
+  }: {
+    id: number;
+    nombre?: string;
+    direccion?: string;
+    fecha?: string;
+    causa?: number;
+  }) {
+    console.log(causa)
+    const updateData: any = {};
+    if (nombre !== undefined) updateData.nombre = nombre;
+    if (direccion !== undefined) updateData.direccion = direccion;
+    if (fecha !== undefined) updateData.fecha = fecha;
+    if (causa !== undefined || causa === 0) updateData.causa = causa;
+
+    try {
+      await InmobiliariasIlegales.update(updateData, {
+        where: { id },
+      });
+    } catch (e) {
+      throw new Error("Error al modificar el área");
+    }
+  }
 }
+
 export default new InmobiliariasIlegalesPenalModel();

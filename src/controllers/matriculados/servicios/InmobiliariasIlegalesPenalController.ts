@@ -94,13 +94,13 @@ class InmobiliariasIlegalesPenalController {
   public async create(req: Request, res: Response) {
     const { nombre,fecha,direccion} = req.body;
     const causa = parseInt(req.body.causa as string);
-    console.log("aca",req.body.causa)
+    console.log("aca",req.body.direccion)
     try {
       // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
       await AutoridadSchema.validate({ nombre,fecha,direccion,causa });
 
       // Si la validación pasa, crear el registro en la base de datos
-      await InmobiliariasIlegalesPenalModel.create({ nombre,fecha,direcion:direccion,causa});
+      await InmobiliariasIlegalesPenalModel.create({ nombre,fecha,direccion:direccion,causa});
       res.status(201).send("Registro creado satisfactoriamente!");
     } catch (e: any) {
       // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
@@ -119,7 +119,7 @@ class InmobiliariasIlegalesPenalController {
       await AutoridadSchema.validate({ nombre,fecha,direccion });
 
       // Si la validación pasa, crear el registro en la base de datos
-      await InmobiliariasIlegalesPenalModel.create({ nombre,fecha,direcion:direccion,causa:0});
+      await InmobiliariasIlegalesPenalModel.create({ nombre,fecha,direccion:direccion,causa:0});
       res.status(201).send("Registro creado satisfactoriamente!");
     } catch (e: any) {
       // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
@@ -158,7 +158,7 @@ class InmobiliariasIlegalesPenalController {
     const id = parseInt(req.params.id as string)
     const { nombre,direccion,fecha } = req.body;
     try {
-      await InmobiliariasIlegalesPenalModel.update({ id,nombre,direcion:direccion,fecha,causa:1 });
+      await InmobiliariasIlegalesPenalModel.update({ id,nombre,direccion:direccion,fecha,causa:1 });
       res.status(201).send("Registro Modificado correctamente!");
     } catch (e: any) {
       // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
@@ -174,7 +174,7 @@ class InmobiliariasIlegalesPenalController {
     const id = parseInt(req.params.id as string)
     const { nombre,direccion,fecha } = req.body;
     try {
-      await InmobiliariasIlegalesPenalModel.update({ id,nombre,direcion:direccion,fecha,causa:0 });
+      await InmobiliariasIlegalesPenalModel.update({ id,nombre,direccion:direccion,fecha,causa:0 });
       res.status(201).send("Registro Modificado correctamente!");
     } catch (e: any) {
       // Si hay un error de validación o cualquier otro error, enviar una respuesta de error

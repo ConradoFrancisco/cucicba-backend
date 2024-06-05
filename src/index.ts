@@ -14,6 +14,7 @@ import { comisionRevisadoraRoutes } from "./routes/institucional/comisionRevisad
 import inmobiliariasPenalRoutes from "./routes/inmobiliarias-ilegales";
 import { sancionesRouter } from "./routes/sanciones";
 import { noticiasRoutes } from "./routes/noticias/noticias";
+import { sequelize } from "./db/Database";
 const app = express();
 app.use(express.json());
 app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
@@ -67,10 +68,10 @@ app.post('/upload', upload.single('file'), (req:Request, res) => {
   return res.json({ message: 'Upload success', filePath: filePath });
 });
 //Enrutado de servicios
-app.use("/servicios", serviciosRoutes);
+/* app.use("/servicios", serviciosRoutes);
 app.use("/servicios/preguntas-frecuentes", faqRoutes);
 app.use("/servicios/revista-cucicba", revistaRoutes);
-app.use("/servicios/biblioteca-digital", bibliotecaDigitalRoutes);
+app.use("/servicios/biblioteca-digital", bibliotecaDigitalRoutes); */
 app.use("/servicios/inmobiliarias-penal",inmobiliariasPenalRoutes)
 app.use("/servicios/sanciones",sancionesRouter)
 //Enrutado Institucional
@@ -81,9 +82,17 @@ app.use("/tribunal", tribunal_etica_routes);
 app.use("/comision", comisionRevisadoraRoutes);
 
 //Enrutado de Noticias
-app.use('/noticias',noticiasRoutes);
+/* app.use('/noticias',noticiasRoutes); */
 const PORT = 8080;
 
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+})();
 app.listen(PORT, () => {
   console.log(`Server listening on port: ${PORT}`);
 });

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import * as yup from "yup";
-import AreasModel from "../../models/institucional/AreasModel";
+import AreasModel from "../../models/institucional/personal/AreasModel";
 const areaSchema = yup.object().shape({
   title: yup.string().required(),
   orden: yup.number().required().integer().positive(),
@@ -73,7 +73,7 @@ class AreasController {
     try {
       const result = await AreasModel.setActive({id,estado})
       res.status(200).send("Area publicada satisfactoriamente!");
-      return res.json(result)
+     
     } catch (e :any) {
         res.status(500).json({ error: "Internal Server Error" });
       console.error(e);
@@ -88,7 +88,7 @@ class AreasController {
     try {
       const result = await AreasModel.update({id,title,orden})
       res.status(200).send("Area modificada satisfactoriamente!");
-      return res.json(result)
+      
     } catch (e :any) {
       // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
       if (e.name === 'ValidationError') {
@@ -105,7 +105,7 @@ class AreasController {
     try {
       const result = await AreasModel.delete({id})
       res.status(200).send("Area eliminada satisfactoriamente!");
-      return res.json(result)
+      
     } catch (e :any) {
         res.status(500).json({ error: "Internal Server Error" });
       console.error(e);
