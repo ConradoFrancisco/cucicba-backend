@@ -28,6 +28,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const NoticiasModel_1 = __importDefault(require("../../models/noticias/NoticiasModel"));
 const Yup = __importStar(require("yup"));
+const NoticiasModel_2 = __importDefault(require("../../models/noticias/NoticiasModel"));
 const noticiaSchema = Yup.object().shape({
     title: Yup.string().required("El título es requerido"),
     date: Yup.date().required("La fecha es requerida"),
@@ -37,8 +38,34 @@ const noticiaSchema = Yup.object().shape({
 });
 class NoticiasController {
     async getAll(req, res) {
+        const limit = parseInt(req.query.limit);
+        const offset = parseInt(req.query.offset);
+        const input = req.query.input;
+        let params = {};
+        if (limit) {
+            params = Object.assign({ limit }, params);
+        }
+        if (input) {
+            params = Object.assign({ input }, params);
+        }
+        if (offset) {
+            params = Object.assign({ offset }, params);
+        }
         try {
-            const response = await NoticiasModel_1.default.getAll({});
+            const response = await NoticiasModel_1.default.getAll(params);
+            res.status(200);
+            res.json(response);
+        }
+        catch (e) {
+            console.error("error al obtener las noticias", e);
+            res.status(500).send("error en el servidor");
+        }
+    }
+    async getById(req, res) {
+        const id = parseInt(req.params.id);
+        console.log("aca", id);
+        try {
+            const response = await NoticiasModel_1.default.getByid({ id });
             res.status(200);
             res.json(response);
         }
@@ -51,9 +78,21 @@ class NoticiasController {
         const { date, title, description, body } = req.body;
         const orden = parseInt(req.body.orden);
         try {
-            await noticiaSchema.validate({ title, date, orden, description, content: body });
-            const insertId = await NoticiasModel_1.default.create({ date, title, description, body, orden });
-            res.status(201).json({ message: 'Noticia creada', insertId: insertId });
+            await noticiaSchema.validate({
+                title,
+                date,
+                orden,
+                description,
+                content: body,
+            });
+            const insertId = await NoticiasModel_1.default.create({
+                date,
+                title,
+                description,
+                body,
+                orden,
+            });
+            res.status(201).json({ message: "Noticia creada", insertId: insertId });
         }
         catch (e) {
             // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
@@ -70,12 +109,30 @@ class NoticiasController {
         const files = req.body.files;
         const id = parseInt(req.body.id);
         try {
-            await NoticiasModel_1.default.createImagesRegister({ id_noticia: id, filePaths: files });
-            res.status(201).json({ message: 'Noticia creada e imagenes subidas correctamente!' });
+            await NoticiasModel_1.default.createImagesRegister({
+                id_noticia: id,
+                filePaths: files,
+            });
+            res
+                .status(201)
+                .json({ message: "Noticia creada e imagenes subidas correctamente!" });
         }
         catch (e) {
             res.status(500).json({ error: "Error del servidor" });
             throw new Error("error al subir las imagenes a la db");
+        }
+    }
+    async setActive(req, res) {
+        const id = parseInt(req.params.id);
+        const estado = req.body.estado;
+        try {
+            const result = await NoticiasModel_2.default.setActive({ id, estado });
+            res.status(200).send("Noticia Publicada satisfactoriamente!");
+            return res.json(result);
+        }
+        catch (e) {
+            res.status(500).json({ error: "Internal Server Error" });
+            console.error(e);
         }
     }
 }

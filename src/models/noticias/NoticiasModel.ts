@@ -1,14 +1,16 @@
-import { db } from "../../db/Database";
+import { Op } from 'sequelize';
+import Noticia from './Noticia';
+import Imagen from './Imagen';
 
 class NoticiasModel {
   public async getAll({
-    titulo = undefined,
-    input = undefined,
-    fecha = undefined,
-    limit = undefined,
+    titulo,
+    input,
+    fecha,
+    limit,
     offset = 0,
-    orderBy = "orden", // Campo por defecto para ordenar
-    orderDirection = "ASC", // Dirección por defecto para ordenar
+    orderBy = "orden",
+    orderDirection = "ASC",
   }: {
     input?: string;
     limit?: number;
@@ -18,52 +20,43 @@ class NoticiasModel {
     orderBy?: string;
     orderDirection?: "ASC" | "DESC";
   }) {
-    console.log(input, "input");
-    console.log(limit, "limit");
-    let query = `SELECT n.id, i.imageUrl AS imageUrl, DATE_FORMAT(n.date, '%d-%m-%Y') AS date, n.title, n.description, n.cantFotos, n.body, n.orden, n.estado FROM noticias n LEFT JOIN imagenes i ON n.id = i.noticia_id `;
-    let queryParams: any = [];
-    let queryCount = `SELECT COUNT(*) as total from noticias`;
-    let queryParamsCount: any = [];
-    let whereClauses: any = [];
-
+    const where: any = {};
     if (input) {
-      whereClauses.push(`title LIKE ?`);
-      const searchPattern = `%${input}%`;
-      queryParams.push(searchPattern);
-      queryParamsCount.push(searchPattern);
+      where.title = { [Op.like]: `%${input}%` };
     }
-    if (whereClauses.length > 0) {
-      const whereString = whereClauses.join(" AND ");
-      query += ` WHERE ${whereString}`;
-      queryCount += ` WHERE ${whereString}`;
+    if (titulo) {
+      where.title = { [Op.like]: `%${titulo}%` };
     }
-    query+= "GROUP BY n.id ";
-
-    if (orderBy) {
-      query += ` ORDER BY ${orderBy} ${orderDirection} `;
+    if (fecha) {
+      where.date = { [Op.eq]: new Date(fecha) };
     }
-    if (limit) {
-      query += ` LIMIT ?`;
-      queryParams.push(limit);
-      if (offset) {
-        query += ` OFFSET ?`;
-        queryParams.push(offset);
-      }
-    }
-    const conn = await db.getConnection();
 
     try {
-      const [data] = await conn.query(query, queryParams);
-      const [total] = await conn.query(
-        `SELECT COUNT(*) as total from noticias`
-      );
+      // Consulta para obtener los datos
+      const data = await Noticia.findAll({
+        where,
+        limit,
+        offset,
+        order: [[orderBy, orderDirection]],
+        include: [{
+          model: Imagen,
+          attributes: ['imageUrl'],
+        }],
+        
+      });
+
+      // Consulta para obtener el total
+      const total = await Noticia.count({
+        where,
+      });
+
       return { data, total };
     } catch (e) {
-      throw (new Error("error en la db al obtener los datos"), e);
-    } finally {
-      conn.release();
+      console.error(e);
+      throw new Error("Hubo un error con la db");
     }
   }
+
   public async create({
     date,
     title,
@@ -79,23 +72,22 @@ class NoticiasModel {
     body: string;
     orden: number;
   }) {
-    const conn = await db.getConnection();
     try {
-      const [result] = await conn.query(
-        "INSERT INTO noticias (date,title,description,cantFotos,body,orden) VALUES (?,?,?,?,?,?)",
-        [date, title, description, cantFotos, body, orden]
-      );
-      if ("insertId" in result) {
-        return result.insertId;
-      } else {
-        throw new Error("Error al obtener el ID insertado");
-      }
+      const noticia = await Noticia.create({
+        date,
+        title,
+        description,
+        cantFotos,
+        body,
+        orden,
+      });
+      return noticia.id;
     } catch (e) {
-      throw (new Error("error en al db"), e);
-    } finally {
-      conn.release();
+      console.error("Error en la db al crear la noticia: ", e);
+      throw new Error("Error en la db al crear la noticia");
     }
   }
+
   public async createImagesRegister({
     id_noticia,
     filePaths = [],
@@ -103,77 +95,51 @@ class NoticiasModel {
     id_noticia: number;
     filePaths: string[];
   }) {
-    const conn = await db.getConnection();
     if (filePaths.length === 0) {
       throw new Error("No file paths provided");
     }
-    // Construir la parte del query de VALUES (?, ?), (?, ?), ...
-    let query = "INSERT INTO imagenes (noticia_id, imageUrl) VALUES ";
-    const queryParts: string[] = [];
-    const queryValues: any[] = [];
+    const images = filePaths.map(filePath => ({
+      noticia_id: id_noticia,
+      imageUrl: filePath,
+    }));
 
-    // Crear las partes del query y los valores
-    filePaths.forEach((filePath) => {
-      queryParts.push("(?, ?)");
-      queryValues.push(id_noticia, filePath);
-    });
-    // Unir las partes del query
-    query += queryParts.join(", ");
-    // Ejecutar el query
     try {
-      await conn.query(query, queryValues);
+      await Imagen.bulkCreate(images);
     } catch (error) {
       console.error("Error al insertar imágenes:", error);
       throw error;
-    } finally {
-      conn.release();
     }
   }
-  public async getByid({ id }: { id: number }) {
-    let query = `SELECT 
-    n.id AS noticia_id,
-    DATE_FORMAT(n.date, '%d-%m-%Y') AS date,
-    DATE_FORMAT(n.date, '%Y-%m-%d') AS fecha_edit,
-    n.title,
-    n.description,
-    n.cantFotos,
-    n.body,
-    n.orden,
-    n.estado,
-    GROUP_CONCAT(i.imageUrl SEPARATOR ';') AS imagenes
-FROM 
-    noticias n
-LEFT JOIN 
-    imagenes i ON n.id = i.noticia_id
-WHERE 
-    n.id = ?
-GROUP BY 
-    n.id, n.date, n.title, n.description, n.cantFotos, n.body, n.orden, n.estado`;
 
-    const conn = await db.getConnection();
-    console.log(query);
+  public async getById({ id }: { id: number }) {
     try {
-      const [data] = await conn.query(query, [id]);
+      const noticia = await Noticia.findOne({
+        where: { id },
+        include: [{
+          model: Imagen,
+          attributes: ['imageUrl'],
+        }],
+      });
 
-      return { data };
+      if (!noticia) throw new Error("Noticia no encontrada");
+
+      return { noticia };
     } catch (e) {
-      throw (new Error("error en la db al obtener los datos"), e);
-    } finally {
-      conn.release();
+      console.error("Error en la db al obtener la noticia: ", e);
+      throw new Error("Error en la db al obtener la noticia");
     }
   }
+
   public async setActive({ id, estado }: { id: number; estado: number }) {
-    const conn = await db.getConnection();
     try {
-      await conn.query("UPDATE noticias SET estado = ? WHERE id = ?", [
-        estado,
-        id,
-      ]);
+      await Noticia.update({ estado }, {
+        where: { id },
+      });
     } catch (e) {
-      throw (new Error("Error al publicar la noticia"), e);
-    } finally {
-      conn.release();
+      console.error("Error al cambiar el estado de la noticia: ", e);
+      throw new Error("Error al cambiar el estado de la noticia");
     }
   }
 }
+
 export default new NoticiasModel();

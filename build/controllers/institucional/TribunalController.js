@@ -39,7 +39,7 @@ class TribunalController {
         let params = {};
         const input = req.query.input;
         const orden = parseInt(req.query.orden);
-        const puesto = parseInt(req.query.puesto);
+        const puesto = req.query.puesto;
         console.log(orden);
         const orderDirection = req.query.orderDirection || "ASC";
         const orderBy = req.query.orderBy || "id";
@@ -56,7 +56,7 @@ class TribunalController {
             params = Object.assign({ orden }, params);
         }
         if (puesto) {
-            params = Object.assign({ puesto_id: puesto }, params);
+            params = Object.assign({ posicion: puesto }, params);
         }
         if (input) {
             params = Object.assign({ input }, params);

@@ -1,6 +1,7 @@
 import { Op } from "sequelize";
-import CategoriaSancion from "../servicios/sanciones_tribunal/CategoriaSanciones";
-import SancionesTribunal from "../servicios/sanciones_tribunal/SancionesTribunal";
+import SancionesTribunal from "./SancionesTribunal";
+import CategoriaSancion from "./CategoriaSanciones";
+
 
 class SancionesModel {
   public async getAll({

@@ -5,7 +5,7 @@ GET http://localhost:3000/servicios/biblioteca-digital
 GET http://localhost:8080/servicios/infractores
 
 ###
-GET http://localhost:8080/servicios/preguntas-frecuentes?offset=8&input=&limit=8
+GET http://localhost:8080/noticias
 ###
 GET http://localhost:8080/autoridades?limit=15&offset=0&orderDirection=asc
 ###

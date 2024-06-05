@@ -39,7 +39,7 @@ class ComisionRevisadora {
         let params = {};
         const input = req.query.input;
         const orden = parseInt(req.query.orden);
-        const puesto = parseInt(req.query.puesto);
+        const puesto = req.query.puesto;
         console.log(orden);
         const orderDirection = req.query.orderDirection || "ASC";
         const orderBy = req.query.orderBy || "id";
@@ -56,7 +56,7 @@ class ComisionRevisadora {
             params = Object.assign({ orden }, params);
         }
         if (puesto) {
-            params = Object.assign({ puesto_id: puesto }, params);
+            params = Object.assign({ posicion: puesto }, params);
         }
         if (input) {
             params = Object.assign({ input }, params);
@@ -108,7 +108,6 @@ class ComisionRevisadora {
         try {
             const result = await ComisionRevisadoraModel_1.default.setActive({ id, estado });
             res.status(200).send("Autoridad dada de alta!");
-            return res.json(result);
         }
         catch (e) {
             res.status(500).json({ error: "Error del servidor" });
@@ -120,7 +119,6 @@ class ComisionRevisadora {
         try {
             const result = await ComisionRevisadoraModel_1.default.delete({ id });
             res.status(200).send("Autoridad eliminada satisfactoriamente!");
-            return res.json(result);
         }
         catch (e) {
             res.status(500).json({ error: "Error del servidor" });

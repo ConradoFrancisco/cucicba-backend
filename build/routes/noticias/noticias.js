@@ -8,5 +8,7 @@ const express_1 = require("express");
 const NoticiasController_1 = __importDefault(require("../../controllers/noticias/NoticiasController"));
 exports.noticiasRoutes = (0, express_1.Router)();
 exports.noticiasRoutes.get('/', NoticiasController_1.default.getAll);
+exports.noticiasRoutes.get('/:id', NoticiasController_1.default.getById);
+exports.noticiasRoutes.patch('/:id', NoticiasController_1.default.setActive);
 exports.noticiasRoutes.post('/', NoticiasController_1.default.create);
 exports.noticiasRoutes.post('/images/', NoticiasController_1.default.createImagesRegister);

@@ -5,10 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const autoridades_1 = __importDefault(require("./routes/institucional/autoridades"));
-const biblioteca_digital_1 = __importDefault(require("./routes/biblioteca-digital"));
-const revista_cucicba_1 = require("./routes/revista-cucicba");
 const preguntas_frecuentes_1 = require("./routes/preguntas-frecuentes");
-const servicios_1 = require("./routes/servicios");
 const cors_1 = __importDefault(require("cors"));
 const areas_1 = require("./routes/institucional/areas");
 const personal_1 = require("./routes/institucional/personal");
@@ -18,7 +15,8 @@ const tribunalEtica_1 = require("./routes/institucional/tribunalEtica");
 const comisionRevisadora_1 = require("./routes/institucional/comisionRevisadora");
 const inmobiliarias_ilegales_1 = __importDefault(require("./routes/inmobiliarias-ilegales"));
 const sanciones_1 = require("./routes/sanciones");
-const noticias_1 = require("./routes/noticias/noticias");
+const Database_1 = require("./db/Database");
+const infractores_1 = __importDefault(require("./routes/infractores"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use('/uploads', express_1.default.static(path_1.default.resolve(__dirname, '../uploads')));
@@ -71,10 +69,11 @@ app.post('/upload', upload.single('file'), (req, res) => {
     return res.json({ message: 'Upload success', filePath: filePath });
 });
 //Enrutado de servicios
-app.use("/servicios", servicios_1.serviciosRoutes);
+/* app.use("/servicios", serviciosRoutes); */
 app.use("/servicios/preguntas-frecuentes", preguntas_frecuentes_1.faqRoutes);
-app.use("/servicios/revista-cucicba", revista_cucicba_1.revistaRoutes);
-app.use("/servicios/biblioteca-digital", biblioteca_digital_1.default);
+app.use("/servicios/infractores", infractores_1.default);
+/* app.use("/servicios/revista-cucicba", revistaRoutes);
+app.use("/servicios/biblioteca-digital", bibliotecaDigitalRoutes); */
 app.use("/servicios/inmobiliarias-penal", inmobiliarias_ilegales_1.default);
 app.use("/servicios/sanciones", sanciones_1.sancionesRouter);
 //Enrutado Institucional
@@ -84,8 +83,17 @@ app.use("/personal", personal_1.personalRoutes);
 app.use("/tribunal", tribunalEtica_1.tribunal_etica_routes);
 app.use("/comision", comisionRevisadora_1.comisionRevisadoraRoutes);
 //Enrutado de Noticias
-app.use('/noticias', noticias_1.noticiasRoutes);
+/* app.use('/noticias',noticiasRoutes); */
 const PORT = 8080;
+(async () => {
+    try {
+        await Database_1.sequelize.authenticate();
+        console.log('Connection has been established successfully.');
+    }
+    catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
+})();
 app.listen(PORT, () => {
     console.log(`Server listening on port: ${PORT}`);
 });

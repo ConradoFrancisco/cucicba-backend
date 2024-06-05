@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import * as yup from 'yup'
-import InmobiliariasIlegalesPenalModel from "../../../models/matriculados/servicios/InmobiliariasIlegalesPenalModel";
+import InmobiliariasIlegalesPenalModel from "../../../models/matriculados/servicios/inmobiliarias_ilegales/InmobiliariasIlegalesPenalModel";
+
 const AutoridadSchema = yup.object().shape({
   nombre: yup.string().required(),
   fecha: yup.string().required(),

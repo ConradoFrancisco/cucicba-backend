@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const PreguntasFrecuentesModel_1 = __importDefault(require("../../../models/matriculados/servicios/PreguntasFrecuentesModel"));
+const PreguntasFrecuentesModel_1 = __importDefault(require("../../../models/matriculados/servicios/preguntas_frecuentes/PreguntasFrecuentesModel"));
 class PreguntasFrecuentesController {
     async getPreguntas(req, res) {
         let params = {};
@@ -35,6 +35,7 @@ class PreguntasFrecuentesController {
         if (limit) {
             params = Object.assign({ limit }, params);
         }
+        console.log(puesto);
         try {
             const results = await PreguntasFrecuentesModel_1.default.getPreguntas(params);
             res.json(results);

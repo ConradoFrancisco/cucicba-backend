@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import * as yup from "yup";
-import SancionesModel from "../../../models/matriculados/servicios/SancionesModel";
+import SancionesModel from "../../../models/matriculados/servicios/sanciones_tribunal/SancionesModel";
+
 
 const SancionSchema = yup.object().shape({
   categoria: yup.number().required(),

@@ -1,25 +1,23 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.db = exports.Database = void 0;
-const promise_1 = __importDefault(require("mysql2/promise"));
-const poolOptions = {
-    user: "root",
-    database: "cucicbadb",
-    password: "",
-    host: "localhost",
-    port: 3306,
-    connectionLimit: 10,
-};
-class Database {
-    constructor() {
-        this.pool = promise_1.default.createPool(poolOptions);
+exports.sequelize = void 0;
+const sequelize_1 = require("sequelize");
+exports.sequelize = new sequelize_1.Sequelize('cucicbadb', 'root', '', {
+    host: 'localhost',
+    dialect: 'mysql', // Cambia según tu base de datos (mysql, postgres, sqlite, etc.)
+    pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
     }
-    async getConnection() {
-        return await this.pool.getConnection();
+});
+(async () => {
+    try {
+        await exports.sequelize.authenticate();
+        console.log('Connection has been established successfully.');
     }
-}
-exports.Database = Database;
-exports.db = new Database();
+    catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
+})();

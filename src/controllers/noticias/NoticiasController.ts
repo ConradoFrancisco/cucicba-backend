@@ -37,7 +37,7 @@ class NoticiasController {
     const id = parseInt(req.params.id as string);
     console.log("aca",id);
     try {
-      const response = await noticiasModel.getByid({ id });
+      const response = await noticiasModel.getById({ id });
       res.status(200);
       res.json(response);
     } catch (e) {

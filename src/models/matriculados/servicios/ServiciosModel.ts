@@ -1,20 +1,19 @@
-import { db } from "../../../db/Database";
+import Servicio from './Servicio'; // Asegúrate de ajustar la ruta según sea necesario
 
 class ServiciosModel {
   public async getAll() {
-    const conn = await db.getConnection();
-
-    const query = `SELECT * FROM services Where activo = 1`;
-
     try {
-      const [data] = await conn.query(query);
+      const data = await Servicio.findAll({
+        where: {
+          activo: true
+        }
+      });
       return data;
     } catch (e) {
+      console.error('Error al obtener los servicios: ', e);
       throw new Error(
-        "No se pudieron obtener los servicios, intente de nuevo mas tarde"
+        "No se pudieron obtener los servicios, intente de nuevo más tarde"
       );
-    } finally {
-      conn.release();
     }
   }
 }

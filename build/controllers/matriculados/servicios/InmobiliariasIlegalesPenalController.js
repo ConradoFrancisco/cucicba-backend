@@ -118,11 +118,13 @@ class InmobiliariasIlegalesPenalController {
     }
     async create(req, res) {
         const { nombre, fecha, direccion } = req.body;
+        const causa = parseInt(req.body.causa);
+        console.log("aca", req.body.direccion);
         try {
             // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
-            await AutoridadSchema.validate({ nombre, fecha, direccion });
+            await AutoridadSchema.validate({ nombre, fecha, direccion, causa });
             // Si la validación pasa, crear el registro en la base de datos
-            await InmobiliariasIlegalesPenalModel_1.default.create({ nombre, fecha, direcion: direccion, causa: 1 });
+            await InmobiliariasIlegalesPenalModel_1.default.create({ nombre, fecha, direccion: direccion, causa });
             res.status(201).send("Registro creado satisfactoriamente!");
         }
         catch (e) {
@@ -142,7 +144,7 @@ class InmobiliariasIlegalesPenalController {
             // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
             await AutoridadSchema.validate({ nombre, fecha, direccion });
             // Si la validación pasa, crear el registro en la base de datos
-            await InmobiliariasIlegalesPenalModel_1.default.create({ nombre, fecha, direcion: direccion, causa: 0 });
+            await InmobiliariasIlegalesPenalModel_1.default.create({ nombre, fecha, direccion: direccion, causa: 0 });
             res.status(201).send("Registro creado satisfactoriamente!");
         }
         catch (e) {
@@ -185,7 +187,7 @@ class InmobiliariasIlegalesPenalController {
         const id = parseInt(req.params.id);
         const { nombre, direccion, fecha } = req.body;
         try {
-            await InmobiliariasIlegalesPenalModel_1.default.update({ id, nombre, direcion: direccion, fecha, causa: 1 });
+            await InmobiliariasIlegalesPenalModel_1.default.update({ id, nombre, direccion: direccion, fecha, causa: 1 });
             res.status(201).send("Registro Modificado correctamente!");
         }
         catch (e) {
@@ -203,7 +205,7 @@ class InmobiliariasIlegalesPenalController {
         const id = parseInt(req.params.id);
         const { nombre, direccion, fecha } = req.body;
         try {
-            await InmobiliariasIlegalesPenalModel_1.default.update({ id, nombre, direcion: direccion, fecha, causa: 0 });
+            await InmobiliariasIlegalesPenalModel_1.default.update({ id, nombre, direccion: direccion, fecha, causa: 0 });
             res.status(201).send("Registro Modificado correctamente!");
         }
         catch (e) {

@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const PersonalModel_1 = __importDefault(require("../../models/institucional/PersonalModel"));
+const PersonalModel_1 = __importDefault(require("../../models/institucional/personal/PersonalModel"));
 const yup = __importStar(require("yup"));
 const PersonalCreateSchema = yup.object().shape({
     nombre: yup.string().required("El nombre es requerido"),
@@ -34,15 +34,15 @@ const PersonalCreateSchema = yup.object().shape({
     telefono: yup.string(),
     email: yup.string().email(),
     cargo: yup.string().required("el cargo es requerido"),
-    area: yup.number().positive().required("El area es requerida")
+    area: yup.number().positive().required("El area es requerida"),
 });
 class PersonalController {
     async getAll(req, res) {
         let params = {};
         const input = req.query.input;
         const area = parseInt(req.query.area);
-        const orderDirection = req.query.orderDirection || 'ASC';
-        const orderBy = req.query.orderBy || 'id';
+        const orderDirection = req.query.orderDirection || "ASC";
+        const orderBy = req.query.orderBy || "id";
         const estado = parseInt(req.query.estado);
         const limit = parseInt(req.query.limit);
         const offset = parseInt(req.query.offset);
@@ -77,13 +77,23 @@ class PersonalController {
             res.status(500).send("error en el servidor");
         }
     }
+    async getAllByAreas(req, res) {
+        try {
+            const response = await PersonalModel_1.default.getAllByAreas();
+            res.json(response);
+        }
+        catch (e) {
+            console.error("error al obtener las areas", e);
+            res.status(500).send("error en el servidor");
+        }
+    }
     async create(req, res) {
         const { nombre, apellido, cargo } = req.body;
         const area = parseInt(req.body.area);
         console.log(req.body);
         let params = { nombre, apellido, cargo, area };
         if (req.body.telefono) {
-            const telefono = (req.body.telefono).toString();
+            const telefono = req.body.telefono.toString();
             params = Object.assign({ telefono }, params);
         }
         if (req.body.email) {
@@ -99,7 +109,7 @@ class PersonalController {
         }
         catch (e) {
             // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
-            if (e.name === 'ValidationError') {
+            if (e.name === "ValidationError") {
                 res.status(400).json({ error: e.errors });
             }
             else {
@@ -115,7 +125,7 @@ class PersonalController {
         console.log(req.body);
         let params = { id, nombre, apellido, cargo, area };
         if (req.body.telefono) {
-            const telefono = (req.body.telefono).toString();
+            const telefono = req.body.telefono.toString();
             params = Object.assign({ telefono }, params);
         }
         if (req.body.email) {
@@ -131,7 +141,7 @@ class PersonalController {
         }
         catch (e) {
             // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
-            if (e.name === 'ValidationError') {
+            if (e.name === "ValidationError") {
                 res.status(400).json({ error: e.errors });
             }
             else {
@@ -146,7 +156,6 @@ class PersonalController {
         try {
             const result = await PersonalModel_1.default.setActive({ id, estado });
             res.status(200).send("Personal dado de alta satisfactoriamente!");
-            return res.json(result);
         }
         catch (e) {
             res.status(500).json({ error: "Internal Server Error" });
@@ -158,7 +167,6 @@ class PersonalController {
         try {
             const result = await PersonalModel_1.default.delete({ id });
             res.status(200).send("Personal eliminado satisfactoriamente!");
-            return res.json(result);
         }
         catch (e) {
             res.status(500).json({ error: "Internal Server Error" });

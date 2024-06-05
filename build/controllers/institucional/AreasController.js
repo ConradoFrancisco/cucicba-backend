@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const yup = __importStar(require("yup"));
-const AreasModel_1 = __importDefault(require("../../models/institucional/AreasModel"));
+const AreasModel_1 = __importDefault(require("../../models/institucional/personal/AreasModel"));
 const areaSchema = yup.object().shape({
     title: yup.string().required(),
     orden: yup.number().required().integer().positive(),
@@ -101,7 +101,6 @@ class AreasController {
         try {
             const result = await AreasModel_1.default.setActive({ id, estado });
             res.status(200).send("Area publicada satisfactoriamente!");
-            return res.json(result);
         }
         catch (e) {
             res.status(500).json({ error: "Internal Server Error" });
@@ -116,7 +115,6 @@ class AreasController {
         try {
             const result = await AreasModel_1.default.update({ id, title, orden });
             res.status(200).send("Area modificada satisfactoriamente!");
-            return res.json(result);
         }
         catch (e) {
             // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
@@ -134,7 +132,6 @@ class AreasController {
         try {
             const result = await AreasModel_1.default.delete({ id });
             res.status(200).send("Area eliminada satisfactoriamente!");
-            return res.json(result);
         }
         catch (e) {
             res.status(500).json({ error: "Internal Server Error" });

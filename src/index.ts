@@ -69,11 +69,11 @@ app.post('/upload', upload.single('file'), (req:Request, res) => {
   return res.json({ message: 'Upload success', filePath: filePath });
 });
 //Enrutado de servicios
-/* app.use("/servicios", serviciosRoutes); */
+app.use("/servicios", serviciosRoutes);
 app.use("/servicios/preguntas-frecuentes", faqRoutes);
 app.use("/servicios/infractores",infractoresRoutes)
-/* app.use("/servicios/revista-cucicba", revistaRoutes);
-app.use("/servicios/biblioteca-digital", bibliotecaDigitalRoutes); */
+//app.use("/servicios/revista-cucicba", revistaRoutes);
+app.use("/servicios/biblioteca-digital", bibliotecaDigitalRoutes);
 app.use("/servicios/inmobiliarias-penal",inmobiliariasPenalRoutes)
 app.use("/servicios/sanciones",sancionesRouter)
 //Enrutado Institucional
@@ -84,7 +84,7 @@ app.use("/tribunal", tribunal_etica_routes);
 app.use("/comision", comisionRevisadoraRoutes);
 
 //Enrutado de Noticias
-/* app.use('/noticias',noticiasRoutes); */
+app.use('/noticias',noticiasRoutes);
 const PORT = 8080;
 
 (async () => {

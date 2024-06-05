@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const AutoridadesModel_1 = __importDefault(require("../../models/AutoridadesModel"));
+const AutoridadesModel_1 = __importDefault(require("../../models/institucional/autoridad/AutoridadesModel"));
 const yup = __importStar(require("yup"));
 const AutoridadSchema = yup.object().shape({
     nombre: yup.string().required(),
@@ -42,7 +42,7 @@ class AutoridadesController {
         const puesto = parseInt(req.query.puesto);
         console.log(orden);
         const orderDirection = req.query.orderDirection || "ASC";
-        const orderBy = req.query.orderBy || "id";
+        const orderBy = req.query.orderBy || "orden";
         const estado = parseInt(req.query.estado);
         const limit = parseInt(req.query.limit);
         const offset = parseInt(req.query.offset);
@@ -95,9 +95,21 @@ class AutoridadesController {
         const orden = parseInt(req.body.orden);
         try {
             // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
-            await AutoridadSchema.validate({ nombre, apellido, avatar, puesto, orden });
+            await AutoridadSchema.validate({
+                nombre,
+                apellido,
+                avatar,
+                puesto,
+                orden,
+            });
             // Si la validación pasa, crear el registro en la base de datos
-            await AutoridadesModel_1.default.create({ nombre, apellido, avatar, puesto, orden });
+            await AutoridadesModel_1.default.create({
+                nombre,
+                apellido,
+                avatar,
+                puesto,
+                orden,
+            });
             res.status(201).send("Registro creado satisfactoriamente!");
         }
         catch (e) {
@@ -117,7 +129,6 @@ class AutoridadesController {
         try {
             const result = await AutoridadesModel_1.default.setActive({ id, estado });
             res.status(200).send("Autoridad dada de alta!");
-            return res.json(result);
         }
         catch (e) {
             res.status(500).json({ error: "Error del servidor" });
@@ -129,7 +140,6 @@ class AutoridadesController {
         try {
             const result = await AutoridadesModel_1.default.delete({ id });
             res.status(200).send("Autoridad eliminada satisfactoriamente!");
-            return res.json(result);
         }
         catch (e) {
             res.status(500).json({ error: "Error del servidor" });
@@ -142,7 +152,14 @@ class AutoridadesController {
         const puesto_id = parseInt(req.body.puesto);
         const orden = parseInt(req.body.orden);
         try {
-            await AutoridadesModel_1.default.update({ id, nombre, apellido, avatar, puesto_id, orden });
+            await AutoridadesModel_1.default.update({
+                id,
+                nombre,
+                apellido,
+                avatar,
+                puesto_id,
+                orden,
+            });
             res.status(201).send("Registro Modificado correctamente!");
         }
         catch (e) {
