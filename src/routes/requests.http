@@ -2,7 +2,7 @@ GET http://localhost:3000/servicios/biblioteca-digital
 
 ###
 
-GET http://localhost:8080/personal
+GET http://localhost:8080/servicios/infractores
 
 ###
 GET http://localhost:8080/servicios/preguntas-frecuentes?offset=8&input=&limit=8

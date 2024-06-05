@@ -15,6 +15,7 @@ import inmobiliariasPenalRoutes from "./routes/inmobiliarias-ilegales";
 import { sancionesRouter } from "./routes/sanciones";
 import { noticiasRoutes } from "./routes/noticias/noticias";
 import { sequelize } from "./db/Database";
+import infractoresRoutes from "./routes/infractores";
 const app = express();
 app.use(express.json());
 app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
@@ -68,9 +69,10 @@ app.post('/upload', upload.single('file'), (req:Request, res) => {
   return res.json({ message: 'Upload success', filePath: filePath });
 });
 //Enrutado de servicios
-/* app.use("/servicios", serviciosRoutes);
+/* app.use("/servicios", serviciosRoutes); */
 app.use("/servicios/preguntas-frecuentes", faqRoutes);
-app.use("/servicios/revista-cucicba", revistaRoutes);
+app.use("/servicios/infractores",infractoresRoutes)
+/* app.use("/servicios/revista-cucicba", revistaRoutes);
 app.use("/servicios/biblioteca-digital", bibliotecaDigitalRoutes); */
 app.use("/servicios/inmobiliarias-penal",inmobiliariasPenalRoutes)
 app.use("/servicios/sanciones",sancionesRouter)

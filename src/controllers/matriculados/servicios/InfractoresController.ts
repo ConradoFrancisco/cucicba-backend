@@ -1,61 +1,65 @@
 import { Request, Response } from "express";
-import PreguntasFrecuentesModel from "../../../models/matriculados/servicios/preguntas_frecuentes/PreguntasFrecuentesModel";
+import * as yup from 'yup'
+import InfractoresModel from "../../../models/matriculados/servicios/infractores/InfractoresModel";
 
-class PreguntasFrecuentesController {
-  public async getPreguntas(req: Request, res: Response): Promise<void> {
+const AutoridadSchema = yup.object().shape({
+  nombre: yup.string().required(),
+  fecha: yup.string().required(),
+  direccion: yup.string().required(),
+});
+class InmobiliariasIlegalesPenalController {
+  public async getAll(req: Request, res: Response) {
     let params = {};
-    const offset = parseInt(req.query.offset as string);
-    const estado = parseInt(req.query.estado as string);
-    const limit = parseInt(req.query.limit as string);
+    const input = req.query.input;
+    const fecha = parseInt(req.query.fecha as string)
+    console.log(fecha);
     const orderDirection =
     (req.query.orderDirection as "ASC" | "DESC") || "ASC";
     const orderBy = (req.query.orderBy as string) || "id";
-    const puesto = parseInt(req.query.puesto as string);
-    const input = req.query.input as string;
+    const estado = parseInt(req.query.estado as string);
+    const limit = parseInt(req.query.limit as string);
+    const offset = parseInt(req.query.offset as string);
+    
     if (orderBy) {
       params = Object.assign({ orderBy }, params);
     }
     if (orderDirection) {
       params = Object.assign({ orderDirection }, params);
     }
-    if(estado || estado === 0){
-      params = Object.assign({estado},params)
+    if (fecha) {
+      params = Object.assign({ fecha }, params);
     }
     if (input) {
       params = Object.assign({ input }, params);
     }
-    if (puesto) {
-      params = Object.assign({ category:puesto }, params);
-    }
-    if (offset) {
-      params = Object.assign({ offset }, params);
+    if (estado || estado === 0) {
+      params = Object.assign({ estado }, params);
     }
     if (limit) {
       params = Object.assign({ limit }, params);
     }
-    console.log(puesto)
-    try {
-      const results = await PreguntasFrecuentesModel.getPreguntas(params);
-      res.json(results);
-    } catch (error) {
-      console.error("Error al obtener las preguntas frecuentes:", error);
-      res.status(500).send("error interno del servidor");
+    if (offset) {
+      params = Object.assign({ offset }, params);
     }
-  }
-  public async getCategorys(req: Request, res: Response) {
     try {
-      const results = await PreguntasFrecuentesModel.getCategorys();
-      res.json(results);
+      const result = await InfractoresModel.getAll(params);
+      res.json(result);
     } catch (e) {
-      console.error("Error al obtener las categorias, intentelo mas tarde");
-      res.status(500).send("arror intero del servidor");
+      console.error("error al obtener las inmobiliarias Ilegales", e);
+      res.status(500).send("error en el servidor");
     }
   }
+  
   public async create(req: Request, res: Response) {
-    const {pregunta,respuesta} = req.body
-    const categoria = parseInt(req.body.categoria)
+    const { nombre,fecha,direccion} = req.body;
+    
+    console.log("aca",req.body.direccion)
     try {
-      await PreguntasFrecuentesModel.create({pregunta,respuesta,categoria});
+      // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
+      await AutoridadSchema.validate({ nombre,fecha,direccion });
+
+      // Si la validación pasa, crear el registro en la base de datos
+      await InfractoresModel.create({ nombre,fecha,direccion});
       res.status(201).send("Registro creado satisfactoriamente!");
     } catch (e: any) {
       // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
@@ -71,8 +75,8 @@ class PreguntasFrecuentesController {
     const id = parseInt(req.params.id as string)
     const estado = req.body.estado
     try {
-      const result = await PreguntasFrecuentesModel.setActive({id,estado})
-      res.status(200).send("Pregunta Frecuente Publicada dada de alta!");
+      const result = await InfractoresModel.setActive({id,estado})
+      res.status(200).send("Inmobiliaria Ilegal Publicada");
       return res.json(result)
     } catch (e :any) {
         res.status(500).json({ error: "Error del servidor" });
@@ -82,8 +86,8 @@ class PreguntasFrecuentesController {
   public async delete(req: Request, res: Response) {
     const id = parseInt(req.params.id as string)
     try {
-      const result = await PreguntasFrecuentesModel.delete({id})
-      res.status(200).send("Pregunta eliminada satisfactoriamente!");
+      const result = await InfractoresModel.delete({id})
+      res.status(200).send("Inmobiliaria ilegal eleminada con éxito");
       return res.json(result)
     } catch (e :any) {
         res.status(500).json({ error: "Error del servidor" });
@@ -91,11 +95,10 @@ class PreguntasFrecuentesController {
     }
   }
   public async update(req: Request, res: Response) {
-    const {pregunta,respuesta} = req.body
-    const categoria = parseInt(req.body.categoria)
     const id = parseInt(req.params.id as string)
+    const { nombre,direccion,fecha } = req.body;
     try {
-      await PreguntasFrecuentesModel.update({ id,categoria,pregunta,respuesta});
+      await InfractoresModel.update({ id,nombre,direccion,fecha });
       res.status(201).send("Registro Modificado correctamente!");
     } catch (e: any) {
       // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
@@ -108,4 +111,4 @@ class PreguntasFrecuentesController {
     }
   }
 }
-export default new PreguntasFrecuentesController();
+export default new InmobiliariasIlegalesPenalController();
