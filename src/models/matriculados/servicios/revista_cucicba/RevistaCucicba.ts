@@ -23,6 +23,14 @@ RevistaCucicba.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    descripcion: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    fecha: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   },
   {
     sequelize,

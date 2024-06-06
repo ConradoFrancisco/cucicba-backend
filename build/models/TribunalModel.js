@@ -6,6 +6,7 @@ class TribunalModel {
     async getAll({ limit, offset = 0, input = "", estado, posicion, orden, orderBy = "nombre", // Campo por defecto para ordenar
     orderDirection = "DESC", // Dirección por defecto para ordenar
      }) {
+        console.log(posicion);
         const where = {};
         if (input) {
             where[sequelize_1.Op.or] = [

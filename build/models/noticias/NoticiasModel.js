@@ -1,145 +1,106 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const Database_1 = require("../../db/Database");
+const sequelize_1 = require("sequelize");
+const Noticia_1 = __importDefault(require("./Noticia"));
+const Imagen_1 = __importDefault(require("./Imagen"));
 class NoticiasModel {
-    async getAll({ titulo = undefined, input = undefined, fecha = undefined, limit = undefined, offset = 0, orderBy = "orden", // Campo por defecto para ordenar
-    orderDirection = "ASC", // Dirección por defecto para ordenar
-     }) {
-        console.log(input, "input");
-        console.log(limit, "limit");
-        let query = `SELECT n.id, i.imageUrl AS imageUrl, DATE_FORMAT(n.date, '%d-%m-%Y') AS date, n.title, n.description, n.cantFotos, n.body, n.orden, n.estado FROM noticias n LEFT JOIN imagenes i ON n.id = i.noticia_id `;
-        let queryParams = [];
-        let queryCount = `SELECT COUNT(*) as total from noticias`;
-        let queryParamsCount = [];
-        let whereClauses = [];
+    async getAll({ titulo, input, fecha, limit, offset = 0, orderBy = "orden", orderDirection = "ASC", }) {
+        const where = {};
         if (input) {
-            whereClauses.push(`title LIKE ?`);
-            const searchPattern = `%${input}%`;
-            queryParams.push(searchPattern);
-            queryParamsCount.push(searchPattern);
+            where.title = { [sequelize_1.Op.like]: `%${input}%` };
         }
-        if (whereClauses.length > 0) {
-            const whereString = whereClauses.join(" AND ");
-            query += ` WHERE ${whereString}`;
-            queryCount += ` WHERE ${whereString}`;
+        if (titulo) {
+            where.title = { [sequelize_1.Op.like]: `%${titulo}%` };
         }
-        query += "GROUP BY n.id ";
-        if (orderBy) {
-            query += ` ORDER BY ${orderBy} ${orderDirection} `;
+        if (fecha) {
+            where.date = { [sequelize_1.Op.eq]: new Date(fecha) };
         }
-        if (limit) {
-            query += ` LIMIT ?`;
-            queryParams.push(limit);
-            if (offset) {
-                query += ` OFFSET ?`;
-                queryParams.push(offset);
-            }
-        }
-        const conn = await Database_1.db.getConnection();
         try {
-            const [data] = await conn.query(query, queryParams);
-            const [total] = await conn.query(`SELECT COUNT(*) as total from noticias`);
+            // Consulta para obtener los datos
+            const data = await Noticia_1.default.findAll({
+                where,
+                limit,
+                offset,
+                order: [[orderBy, orderDirection]],
+                include: [{
+                        model: Imagen_1.default,
+                        attributes: ['imageUrl'],
+                    }],
+            });
+            // Consulta para obtener el total
+            const total = await Noticia_1.default.count({
+                where,
+            });
             return { data, total };
         }
         catch (e) {
-            throw (new Error("error en la db al obtener los datos"), e);
-        }
-        finally {
-            conn.release();
+            console.error(e);
+            throw new Error("Hubo un error con la db");
         }
     }
     async create({ date, title, description, cantFotos = 0, body, orden, }) {
-        const conn = await Database_1.db.getConnection();
         try {
-            const [result] = await conn.query("INSERT INTO noticias (date,title,description,cantFotos,body,orden) VALUES (?,?,?,?,?,?)", [date, title, description, cantFotos, body, orden]);
-            if ("insertId" in result) {
-                return result.insertId;
-            }
-            else {
-                throw new Error("Error al obtener el ID insertado");
-            }
+            const noticia = await Noticia_1.default.create({
+                date,
+                title,
+                description,
+                cantFotos,
+                body,
+                orden,
+            });
+            return noticia.id;
         }
         catch (e) {
-            throw (new Error("error en al db"), e);
-        }
-        finally {
-            conn.release();
+            console.error("Error en la db al crear la noticia: ", e);
+            throw new Error("Error en la db al crear la noticia");
         }
     }
     async createImagesRegister({ id_noticia, filePaths = [], }) {
-        const conn = await Database_1.db.getConnection();
         if (filePaths.length === 0) {
             throw new Error("No file paths provided");
         }
-        // Construir la parte del query de VALUES (?, ?), (?, ?), ...
-        let query = "INSERT INTO imagenes (noticia_id, imageUrl) VALUES ";
-        const queryParts = [];
-        const queryValues = [];
-        // Crear las partes del query y los valores
-        filePaths.forEach((filePath) => {
-            queryParts.push("(?, ?)");
-            queryValues.push(id_noticia, filePath);
-        });
-        // Unir las partes del query
-        query += queryParts.join(", ");
-        // Ejecutar el query
+        const images = filePaths.map(filePath => ({
+            noticia_id: id_noticia,
+            imageUrl: filePath,
+        }));
         try {
-            await conn.query(query, queryValues);
+            await Imagen_1.default.bulkCreate(images);
         }
         catch (error) {
             console.error("Error al insertar imágenes:", error);
             throw error;
         }
-        finally {
-            conn.release();
-        }
     }
-    async getByid({ id }) {
-        let query = `SELECT 
-    n.id AS noticia_id,
-    DATE_FORMAT(n.date, '%d-%m-%Y') AS date,
-    DATE_FORMAT(n.date, '%Y-%m-%d') AS fecha_edit,
-    n.title,
-    n.description,
-    n.cantFotos,
-    n.body,
-    n.orden,
-    n.estado,
-    GROUP_CONCAT(i.imageUrl SEPARATOR ';') AS imagenes
-FROM 
-    noticias n
-LEFT JOIN 
-    imagenes i ON n.id = i.noticia_id
-WHERE 
-    n.id = ?
-GROUP BY 
-    n.id, n.date, n.title, n.description, n.cantFotos, n.body, n.orden, n.estado`;
-        const conn = await Database_1.db.getConnection();
-        console.log(query);
+    async getById({ id }) {
         try {
-            const [data] = await conn.query(query, [id]);
-            return { data };
+            const noticia = await Noticia_1.default.findOne({
+                where: { id },
+                include: [{
+                        model: Imagen_1.default,
+                        attributes: ['imageUrl'],
+                    }],
+            });
+            if (!noticia)
+                throw new Error("Noticia no encontrada");
+            return { noticia };
         }
         catch (e) {
-            throw (new Error("error en la db al obtener los datos"), e);
-        }
-        finally {
-            conn.release();
+            console.error("Error en la db al obtener la noticia: ", e);
+            throw new Error("Error en la db al obtener la noticia");
         }
     }
     async setActive({ id, estado }) {
-        const conn = await Database_1.db.getConnection();
         try {
-            await conn.query("UPDATE noticias SET estado = ? WHERE id = ?", [
-                estado,
-                id,
-            ]);
+            await Noticia_1.default.update({ estado }, {
+                where: { id },
+            });
         }
         catch (e) {
-            throw (new Error("Error al publicar la noticia"), e);
-        }
-        finally {
-            conn.release();
+            console.error("Error al cambiar el estado de la noticia: ", e);
+            throw new Error("Error al cambiar el estado de la noticia");
         }
     }
 }

@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const yup = __importStar(require("yup"));
-const SancionesModel_1 = __importDefault(require("../../../models/matriculados/servicios/SancionesModel"));
+const SancionesModel_1 = __importDefault(require("../../../models/matriculados/servicios/sanciones_tribunal/SancionesModel"));
 const SancionSchema = yup.object().shape({
     categoria: yup.number().required(),
     fecha: yup.string().required(),

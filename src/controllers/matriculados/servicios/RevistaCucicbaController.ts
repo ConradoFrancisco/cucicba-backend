@@ -2,10 +2,10 @@ import { Request, Response } from "express";
 import RevistaCucicbaModel from "../../../models/matriculados/servicios/revista_cucicba/RevistaCucicbaModel";
 import * as yup from "yup";
 const revistaSchema = yup.object().shape({
-  nombre: yup.string().required(),
-  apellido: yup.string().required(),
-  orden: yup.number().required().integer().positive(),
-  posicion: yup.string().required(),
+  fecha: yup.string().required(),
+  descripcion: yup.string().required(),
+  portada: yup.string().required(),
+  archivo: yup.string().required(),
 });
 class RevistaCucicbaController {
   public async getAll(req: Request, res: Response) {
@@ -47,13 +47,14 @@ class RevistaCucicbaController {
   }
 
   public async create(req: Request, res: Response) {
-    const { portada, archivo } = req.body;
+    const { portada, archivo,descripcion,fecha } = req.body;
+    console.log('body:',req.body)
     try {
       // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
-      await revistaSchema.validate({ portada, archivo });
+      await revistaSchema.validate({ portada, archivo,descripcion,fecha });
 
       // Si la validación pasa, crear el registro en la base de datos
-      await RevistaCucicbaModel.create({ portada, archivo });
+      await RevistaCucicbaModel.create({ portada, archivo,descripcion,fecha });
       res.status(201).send("Revista creada satisfactoriamente!");
     } catch (e: any) {
       // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
@@ -90,9 +91,9 @@ class RevistaCucicbaController {
   }
   public async update(req: Request, res: Response) {
     const id = parseInt(req.params.id as string);
-    const { portada, archivo } = req.body;
+    const { portada, archivo,descripcion,fecha } = req.body;
     try {
-      await RevistaCucicbaModel.update({ id, portada, archivo });
+      await RevistaCucicbaModel.update({ id, portada, archivo,descripcion,fecha });
       res.status(201).send("Revista Modificada correctamente!");
     } catch (e: any) {
       // Si hay un error de validación o cualquier otro error, enviar una respuesta de error

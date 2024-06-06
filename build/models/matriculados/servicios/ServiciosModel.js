@@ -1,19 +1,22 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const Database_1 = require("../../../db/Database");
+const Servicio_1 = __importDefault(require("./Servicio")); // Asegúrate de ajustar la ruta según sea necesario
 class ServiciosModel {
     async getAll() {
-        const conn = await Database_1.db.getConnection();
-        const query = `SELECT * FROM services Where activo = 1`;
         try {
-            const [data] = await conn.query(query);
+            const data = await Servicio_1.default.findAll({
+                where: {
+                    activo: true
+                }
+            });
             return data;
         }
         catch (e) {
-            throw new Error("No se pudieron obtener los servicios, intente de nuevo mas tarde");
-        }
-        finally {
-            conn.release();
+            console.error('Error al obtener los servicios: ', e);
+            throw new Error("No se pudieron obtener los servicios, intente de nuevo más tarde");
         }
     }
 }

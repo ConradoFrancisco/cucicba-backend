@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const yup = __importStar(require("yup"));
-const InmobiliariasIlegalesPenalModel_1 = __importDefault(require("../../../models/matriculados/servicios/InmobiliariasIlegalesPenalModel"));
+const InmobiliariasIlegalesPenalModel_1 = __importDefault(require("../../../models/matriculados/servicios/inmobiliarias_ilegales/InmobiliariasIlegalesPenalModel"));
 const AutoridadSchema = yup.object().shape({
     nombre: yup.string().required(),
     fecha: yup.string().required(),

@@ -65,7 +65,7 @@ class NoticiasController {
         const id = parseInt(req.params.id);
         console.log("aca", id);
         try {
-            const response = await NoticiasModel_1.default.getByid({ id });
+            const response = await NoticiasModel_1.default.getById({ id });
             res.status(200);
             res.json(response);
         }

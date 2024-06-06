@@ -2,6 +2,7 @@ import { Op } from 'sequelize';
 import RevistaCucicba from './RevistaCucicba';
 
 class RevistaCucicbaModel {
+  // Obtener todas las revistas con filtros, orden y paginación
   public async getAll({
     limit,
     offset = 0,
@@ -21,7 +22,8 @@ class RevistaCucicbaModel {
     if (input) {
       where[Op.or] = [
         { portada: { [Op.like]: `%${input}%` } },
-        { archivo: { [Op.like]: `%${input}%` } }
+        { archivo: { [Op.like]: `%${input}%` } },
+        { descripcion: { [Op.like]: `%${input}%` } },
       ];
     }
     if (estado !== undefined) where.estado = estado;
@@ -45,14 +47,20 @@ class RevistaCucicbaModel {
   public async create({
     portada,
     archivo,
+    descripcion,
+    fecha,
   }: {
     portada: string;
     archivo: string;
+    descripcion?: string;
+    fecha?: Date;
   }) {
     try {
       const result = await RevistaCucicba.create({
         portada,
         archivo,
+        descripcion,
+        fecha,
       });
       return result;
     } catch (e) {
@@ -90,14 +98,20 @@ class RevistaCucicbaModel {
     id,
     portada,
     archivo,
+    descripcion,
+    fecha,
   }: {
     id: number;
     portada?: string;
     archivo?: string;
+    descripcion?: string;
+    fecha?: Date;
   }) {
     const updateData: any = {};
     if (portada !== undefined) updateData.portada = portada;
     if (archivo !== undefined) updateData.archivo = archivo;
+    if (descripcion !== undefined) updateData.descripcion = descripcion;
+    if (fecha !== undefined) updateData.fecha = fecha;
 
     try {
       await RevistaCucicba.update(updateData, {
