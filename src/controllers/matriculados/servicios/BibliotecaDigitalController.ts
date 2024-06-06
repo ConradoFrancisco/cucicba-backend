@@ -12,6 +12,7 @@ const postSchema = Yup.object().shape({
     let params = {};
     const input = req.query.input;
     const fecha = parseInt(req.query.fecha as string)
+    const categoria = parseInt(req.query.categoria as string)
     console.log(fecha);
     const orderDirection =
     (req.query.orderDirection as "ASC" | "DESC") || "ASC";
@@ -22,6 +23,8 @@ const postSchema = Yup.object().shape({
     
     if (orderBy) {
       params = Object.assign({ orderBy }, params);
+    }if (categoria) {
+      params = Object.assign({ categoria_id:categoria }, params);
     }
     if (orderDirection) {
       params = Object.assign({ orderDirection }, params);

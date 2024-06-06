@@ -22,6 +22,7 @@ class TribunalModel {
     orderBy?: string;
     orderDirection?: "ASC" | "DESC";
   }) {
+    console.log(posicion)
     const where: any = {};
     if (input) {
       where[Op.or] = [

@@ -72,7 +72,7 @@ app.post('/upload', upload.single('file'), (req:Request, res) => {
 app.use("/servicios", serviciosRoutes);
 app.use("/servicios/preguntas-frecuentes", faqRoutes);
 app.use("/servicios/infractores",infractoresRoutes)
-//app.use("/servicios/revista-cucicba", revistaRoutes);
+app.use("/servicios/revista-cucicba", revistaRoutes);
 app.use("/servicios/biblioteca-digital", bibliotecaDigitalRoutes);
 app.use("/servicios/inmobiliarias-penal",inmobiliariasPenalRoutes)
 app.use("/servicios/sanciones",sancionesRouter)
