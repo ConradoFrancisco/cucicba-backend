@@ -1,12 +1,6 @@
 import { Request, Response } from "express";
-import AutoridadesModel from "../../models/institucional/autoridad/AutoridadesModel";
-import * as yup from "yup";
-const AutoridadSchema = yup.object().shape({
-  nombre: yup.string().required(),
-  apellido: yup.string().required(),
-  puesto: yup.number().required().integer().positive(),
-  avatar: yup.string().required(),
-});
+import AutoridadesModel from "../../models/institucional/autoridad/AutoridadService";
+import { AutoridadTipo } from "../../models/institucional/autoridad/AutoridadTipo";
 class AutoridadesController {
   public async getAll(req: Request, res: Response) {
     let params = {};
@@ -64,19 +58,12 @@ class AutoridadesController {
   }
   public async create(req: Request, res: Response) {
     const { nombre, apellido, avatar } = req.body;
-    const puesto = parseInt(req.body.puesto as string);
+    const puesto: AutoridadTipo = new AutoridadTipo(); //parseInt(req.body.puesto as string);
     const orden = parseInt(req.body.orden as string);
-    try {
-      // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
-      await AutoridadSchema.validate({
-        nombre,
-        apellido,
-        avatar,
-        puesto,
-        orden,
-      });
 
+    try {
       // Si la validación pasa, crear el registro en la base de datos
+
       await AutoridadesModel.create({
         nombre,
         apellido,

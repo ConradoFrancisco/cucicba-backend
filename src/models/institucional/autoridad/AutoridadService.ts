@@ -1,5 +1,5 @@
-import Autoridad from "./Autoridad";
-import AutoridadPuesto from "./AutoridadPuesto";
+import Autoridad, { IAutoridadAttributes } from "./Autoridad";
+import {AutoridadTipo} from "./AutoridadTipo";
 import { Op } from "sequelize";
 
 interface GetAllParams {
@@ -45,7 +45,7 @@ class AutoridadesModel {
       where,
       include: [
         {
-          model: AutoridadPuesto,
+          model: AutoridadTipo,
           attributes: ["nombre"],
         },
       ],
@@ -65,28 +65,14 @@ class AutoridadesModel {
   }
 
   async getCargos() {
-    return await AutoridadPuesto.findAll();
+    return await AutoridadTipo.findAll();
   }
 
-  async create({
-    nombre,
-    apellido,
-    avatar,
-    puesto,
-    orden,
-  }: {
-    nombre: string;
-    apellido: string;
-    avatar: string;
-    puesto: number;
-    orden: number;
-  }) {
+  async create(autoridad: IAutoridadAttributes) {
     return await Autoridad.create({
-      nombre,
-      apellido,
-      avatar,
-      puesto_id: puesto,
-      orden,
+      ...autoridad,
+      nombre: autoridad.nombre.toUpperCase().trim(),
+      apellido: autoridad.apellido.toUpperCase().trim(),
     });
   }
 

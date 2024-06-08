@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import AutoridadesModel from "../../models/institucional/autoridad/AutoridadesModel";
+import AutoridadesModel from "../../models/institucional/autoridad/AutoridadService";
 import * as yup from 'yup'
 import ComisionRevisadoraModel from "../../models/ComisionRevisadoraModel";
 const AutoridadSchema = yup.object().shape({

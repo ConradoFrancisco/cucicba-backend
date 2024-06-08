@@ -1,16 +1,16 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../../db/Database';
-import AutoridadPuesto from './AutoridadPuesto';
+import { AutoridadTipo } from './AutoridadTipo';
 
-class Autoridad extends Model {
-    public id!: number;
-    public nombre!: string;
-    public apellido!: string;
-    public avatar!: string;
-    public estado!: number;
-    public orden!: number;
-    public puesto_id!: number;
-  }
+export interface IAutoridadAttributes {
+  nombre: string;
+  apellido: string;
+  avatar: string;
+  puesto: AutoridadTipo;
+  orden: number;
+}
+
+class Autoridad extends Model {}
   
   Autoridad.init({
     id: {
@@ -20,15 +20,42 @@ class Autoridad extends Model {
     },
     nombre: {
       type: DataTypes.STRING,
-      allowNull: false
+      validate: {
+        notEmpty: {
+          msg: 'El campo nombre no puede estar vacío'
+        },
+        isNull: {
+          msg: 'El campo nombre no puede ser nulo'
+        },
+      },
+      allowNull: false,
+      get(){
+        return this.getDataValue('nombre')
+      },
+      set(value: string){
+        this.setDataValue('nombre', value.toUpperCase().trim());
+      }
     },
     apellido: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      get(){
+        return this.getDataValue('apellido')
+      },
+      set(value: string){
+        this.setDataValue('apellido', value.toUpperCase().trim());
+      }
     },
     avatar: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
+      defaultValue: null,
+      get(){
+        return this.getDataValue('avatar')
+      },
+      set(value: string){
+        this.setDataValue('avatar', value.trim());
+      }
     },
     estado: {
       type: DataTypes.INTEGER,
@@ -42,7 +69,7 @@ class Autoridad extends Model {
     puesto_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: AutoridadPuesto,
+        model: AutoridadTipo,
         key: 'id'
       }
     }
@@ -52,6 +79,6 @@ class Autoridad extends Model {
     timestamps: false
   });
   
-  Autoridad.belongsTo(AutoridadPuesto, { foreignKey: 'puesto_id' });
+  Autoridad.belongsTo(AutoridadTipo, { foreignKey: 'puesto_id' });
   
   export default Autoridad;
