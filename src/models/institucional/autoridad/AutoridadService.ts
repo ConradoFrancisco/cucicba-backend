@@ -52,7 +52,7 @@ class AutoridadesModel {
       order: [[orderBy, orderDirection]],
       limit,
       offset,
-      raw: true, // Aquí se indica que se devuelvan los resultados en formato plano
+      raw: true,
     });
     
     const modRows = rows.map((row: any) => {
@@ -69,6 +69,7 @@ class AutoridadesModel {
   }
 
   async create(autoridad: IAutoridadAttributes) {
+    console.log("aca",autoridad)
     return await Autoridad.create({
       ...autoridad,
       nombre: autoridad.nombre.toUpperCase().trim(),

@@ -22,5 +22,5 @@ AutoridadTipo.init({
 }, {
   sequelize,
   tableName: 'autoridades_tipos',
-  timestamps: true
+  timestamps: false
 });

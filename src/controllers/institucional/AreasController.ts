@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import * as yup from "yup";
-import AreasModel from "../../models/institucional/personal/AreasModel";
+import AreasModel from "../../models/institucional/personal/AreasService";
 const areaSchema = yup.object().shape({
   title: yup.string().required(),
   orden: yup.number().required().integer().positive(),
@@ -30,7 +30,7 @@ class AreasController {
     if (offset) {
       params = Object.assign({ offset }, params);
     }
-    if (limit) {
+    if (limit) { 
       params = Object.assign({ limit }, params);
     }
     if(orderBy){

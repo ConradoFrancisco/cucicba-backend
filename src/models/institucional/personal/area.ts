@@ -4,7 +4,19 @@ import { sequelize } from '../../../db/Database'
 const Area = sequelize.define('Area', {
   title: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      notEmpty: {
+        msg: 'El campo titulo no puede estar vacío'
+      },
+    },
+    
+    get(){
+      return this.getDataValue('title')
+    },
+    set(value: string){
+      this.setDataValue('title', value.toUpperCase().trim());
+    }
   },
   orden: {
     type: DataTypes.INTEGER,
@@ -16,8 +28,8 @@ const Area = sequelize.define('Area', {
     defaultValue:0
   }
 }, {
-  tableName: 'areas', // Ajusta el nombre de la tabla si es necesario
-  timestamps: false // Ajusta si tu tabla tiene timestamps
+  tableName: 'areas', 
+  timestamps: false 
 });
 
 export default Area;

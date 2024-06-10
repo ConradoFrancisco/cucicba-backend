@@ -13,7 +13,7 @@ GET http://localhost:8080/servicios/preguntas-frecuentes/categorias
 ###
 GET  http://localhost:8080/comision?estado=1&posicion=titular
 ###
-GET  http://localhost:8080/autoridades?orden=2
+GET  http://localhost:8080/autoridades
 ###
 
 POST http://localhost:8080/areas

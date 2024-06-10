@@ -24,9 +24,6 @@ class Autoridad extends Model {}
         notEmpty: {
           msg: 'El campo nombre no puede estar vacío'
         },
-        isNull: {
-          msg: 'El campo nombre no puede ser nulo'
-        },
       },
       allowNull: false,
       get(){
@@ -50,12 +47,6 @@ class Autoridad extends Model {}
       type: DataTypes.STRING,
       allowNull: true,
       defaultValue: null,
-      get(){
-        return this.getDataValue('avatar')
-      },
-      set(value: string){
-        this.setDataValue('avatar', value.trim());
-      }
     },
     estado: {
       type: DataTypes.INTEGER,

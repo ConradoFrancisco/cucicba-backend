@@ -60,10 +60,8 @@ class AutoridadesController {
     const { nombre, apellido, avatar } = req.body;
     const puesto: AutoridadTipo = new AutoridadTipo(); //parseInt(req.body.puesto as string);
     const orden = parseInt(req.body.orden as string);
-
+    console.log(nombre,apellido,avatar,puesto,orden)
     try {
-      // Si la validación pasa, crear el registro en la base de datos
-
       await AutoridadesModel.create({
         nombre,
         apellido,
