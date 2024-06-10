@@ -27,7 +27,7 @@ Servicio.init({
         type: new DataTypes.STRING(255),
         allowNull: false,
     },
-    order: {
+    orden: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
     },

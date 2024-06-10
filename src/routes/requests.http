@@ -2,10 +2,10 @@ GET http://localhost:3000/servicios/biblioteca-digital
 
 ###
 
-GET http://localhost:8080/servicios/infractores
+GET http://localhost:8080/noticias/4
 
 ###
-GET http://localhost:8080/noticias
+GET http://localhost:8080/servicios/biblioteca-digital/categorias
 ###
 GET http://localhost:8080/autoridades?limit=15&offset=0&orderDirection=asc
 ###
@@ -16,7 +16,7 @@ GET  http://localhost:8080/comision?estado=1&posicion=titular
 GET  http://localhost:8080/autoridades?orden=2
 ###
 
-POST http://localhost:8080/areas
+POST http://localhost:8080/noticias/1
 Content-Type: application/json
 
 {

@@ -113,6 +113,7 @@ class NoticiasModel {
 
   public async getById({ id }: { id: number }) {
     try {
+      // Consulta para obtener la noticia actual
       const noticia = await Noticia.findOne({
         where: { id },
         include: [{
@@ -123,7 +124,29 @@ class NoticiasModel {
 
       if (!noticia) throw new Error("Noticia no encontrada");
 
-      return { noticia };
+      // Consulta para obtener el ID de la siguiente noticia
+      const siguienteNoticia = await Noticia.findOne({
+        where: {
+          id: { [Op.gt]: id },
+        },
+        order: [['id', 'ASC']],
+        attributes: ['id'],
+      });
+
+      const siguienteId = siguienteNoticia ? siguienteNoticia.id : null;
+
+      // Consulta para obtener el ID de la noticia anterior
+      const anteriorNoticia = await Noticia.findOne({
+        where: {
+          id: { [Op.lt]: id },
+        },
+        order: [['id', 'DESC']],
+        attributes: ['id'],
+      });
+
+      const anteriorId = anteriorNoticia ? anteriorNoticia.id : null;
+
+      return { noticia, siguienteId, anteriorId };
     } catch (e) {
       console.error("Error en la db al obtener la noticia: ", e);
       throw new Error("Error en la db al obtener la noticia");
