@@ -4,11 +4,27 @@ import { sequelize } from '../../../db/Database'
 const Area = sequelize.define('Area', {
   title: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    get(){
+      return this.getDataValue('title')
+    },
+    set(value: string){
+      this.setDataValue('title', value.toUpperCase().trim());
+    },
+    validate: {
+      notEmpty: {
+        msg: 'El campo title no puede estar vacío'
+      },
+    },
   },
   orden: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      notEmpty: {
+        msg: 'El campo orden no puede estar vacío'
+      },
+    },
   },
   estado: {
     type: DataTypes.INTEGER,

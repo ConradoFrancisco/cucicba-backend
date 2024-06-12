@@ -1,14 +1,6 @@
 import { Request, Response } from "express";
 import PersonalModel from "../../models/institucional/personal/PersonalModel";
-import * as yup from "yup";
-const PersonalCreateSchema = yup.object().shape({
-  nombre: yup.string().required("El nombre es requerido"),
-  apellido: yup.string().required("el apellido es requerido"),
-  telefono: yup.string(),
-  email: yup.string().email(),
-  cargo: yup.string().required("el cargo es requerido"),
-  area: yup.number().positive().required("El area es requerida"),
-});
+
 class PersonalController {
   public async getAll(req: Request, res: Response) {
     let params = {};
@@ -75,10 +67,8 @@ class PersonalController {
     }
     console.log(params);
     try {
-      if (await PersonalCreateSchema.validate(params)) {
-        await PersonalModel.create(params);
-        res.status(201).send("Registro creado satisfactoriamente!");
-      }
+      await PersonalModel.create(params);
+      res.status(201).send("Registro creado satisfactoriamente!");
     } catch (e: any) {
       // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
       if (e.name === "ValidationError") {
@@ -106,10 +96,8 @@ class PersonalController {
     }
     console.log(params);
     try {
-      if (await PersonalCreateSchema.validate(params)) {
-        await PersonalModel.update(params);
-        res.status(200).send("Registro modificado satisfactoriamente!");
-      }
+      await PersonalModel.update(params);
+      res.status(200).send("Registro modificado satisfactoriamente!");
     } catch (e: any) {
       // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
       if (e.name === "ValidationError") {

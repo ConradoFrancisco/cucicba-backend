@@ -20,15 +20,48 @@ class Autoridad extends Model {
     },
     nombre: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'El campo nombre no puede estar vacío'
+        },
+      },
+      get(){
+        return this.getDataValue('nombre')
+      },
+      set(value: string){
+        this.setDataValue('nombre', value.toUpperCase().trim());
+      }
     },
     apellido: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'El campo apellido no puede estar vacío'
+        },
+      },
+      get(){
+        return this.getDataValue('apellido')
+      },
+      set(value: string){
+        this.setDataValue('apellido', value.toUpperCase().trim());
+      }
     },
     avatar: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
+      validate: {
+        notEmpty: {
+          msg: 'El campo avatar no puede estar vacío'
+        },
+      },
+      get(){
+        return this.getDataValue('avatar')
+      },
+      set(value: string){
+        this.setDataValue('avatar', value.trim());
+      }
     },
     estado: {
       type: DataTypes.INTEGER,
@@ -37,10 +70,26 @@ class Autoridad extends Model {
     },
     orden: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      validate: {
+        isNumeric: {
+          msg:'el campo orden debe ser un numero'
+        },
+        notEmpty: {
+          msg: 'El campo orden no puede estar vacío'
+        },
+      },
     },
     puesto_id: {
       type: DataTypes.INTEGER,
+      validate: {
+        isNumeric: {
+          msg:'el campo orden debe ser un numero'
+        },
+        notEmpty: {
+          msg: 'El campo puesto no puede estar vacío'
+        },
+      },
       references: {
         model: AutoridadPuesto,
         key: 'id'

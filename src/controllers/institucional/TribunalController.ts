@@ -2,12 +2,6 @@ import { Request, Response } from "express";
 import AutoridadesModel from "../../models/institucional/autoridad/AutoridadesModel";
 import * as yup from 'yup'
 import TribunalModel from "../../models/TribunalModel";
-const AutoridadSchema = yup.object().shape({
-  nombre: yup.string().required(),
-  apellido: yup.string().required(),
-  orden: yup.number().required().integer().positive(),
-  posicion:yup.string().required(),
-});
 class TribunalController {
   public async getAll(req: Request, res: Response) {
     let params = {};
@@ -61,10 +55,6 @@ class TribunalController {
     const puesto = parseInt(req.body.puesto as string);
     const orden = parseInt(req.body.orden as string);
     try {
-      // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
-      await AutoridadSchema.validate({ nombre,apellido,orden,posicion });
-
-      // Si la validación pasa, crear el registro en la base de datos
       await TribunalModel.create({ nombre,apellido,orden,posicion });
       res.status(201).send("Registro creado satisfactoriamente!");
     } catch (e: any) {

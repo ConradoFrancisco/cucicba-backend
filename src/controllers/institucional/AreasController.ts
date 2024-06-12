@@ -1,23 +1,20 @@
 import { Request, Response } from "express";
 import * as yup from "yup";
 import AreasModel from "../../models/institucional/personal/AreasModel";
-const areaSchema = yup.object().shape({
-  title: yup.string().required(),
-  orden: yup.number().required().integer().positive(),
-});
 class AreasController {
   public async getAll(req: Request, res: Response) {
     let params = {};
     const input = req.query.input as string;
     const estado = parseInt(req.query.estado as string);
-    const orderDirection = req.query.orderDirection as 'ASC' | 'DESC' || 'ASC';
+    const orderDirection =
+      (req.query.orderDirection as "ASC" | "DESC") || "ASC";
     const orden = parseInt(req.query.orden as string);
-    const offset = parseInt(req.query.offset as string)
-    const orderBy= req.query.orderBy as string || 'id'
-    console.log(orderBy)
-    console.log(orderDirection)
-    const limit = parseInt(req.query.limit as string)
-    
+    const offset = parseInt(req.query.offset as string);
+    const orderBy = (req.query.orderBy as string) || "id";
+    console.log(orderBy);
+    console.log(orderDirection);
+    const limit = parseInt(req.query.limit as string);
+
     if (input) {
       params = Object.assign({ input }, params);
     }
@@ -33,11 +30,11 @@ class AreasController {
     if (limit) {
       params = Object.assign({ limit }, params);
     }
-    if(orderBy){
-      params= Object.assign({orderBy},params)
+    if (orderBy) {
+      params = Object.assign({ orderBy }, params);
     }
-    if(orderDirection){
-      params= Object.assign({orderDirection},params)
+    if (orderDirection) {
+      params = Object.assign({ orderDirection }, params);
     }
     try {
       const results = await AreasModel.getAll(params);
@@ -49,17 +46,13 @@ class AreasController {
   }
   public async create(req: Request, res: Response) {
     const { title } = req.body;
-    const orden = parseInt(req.body.orden as string)
+    const orden = parseInt(req.body.orden as string);
     try {
-      // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
-      await areaSchema.validate({ title, orden });
-  
-      // Si la validación pasa, crear el registro en la base de datos
       await AreasModel.create({ title, orden });
       res.status(201).send("Registro creado satisfactoriamente!");
-    } catch (e :any) {
+    } catch (e: any) {
       // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
-      if (e.name === 'ValidationError') {
+      if (e.name === "ValidationError") {
         res.status(400).json({ error: e.errors });
       } else {
         res.status(500).json({ error: "Internal Server Error" });
@@ -68,30 +61,27 @@ class AreasController {
     }
   }
   public async setActive(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string)
-    const estado = req.body.estado
+    const id = parseInt(req.params.id as string);
+    const estado = req.body.estado;
     try {
-      const result = await AreasModel.setActive({id,estado})
+      const result = await AreasModel.setActive({ id, estado });
       res.status(200).send("Area publicada satisfactoriamente!");
-     
-    } catch (e :any) {
-        res.status(500).json({ error: "Internal Server Error" });
+    } catch (e: any) {
+      res.status(500).json({ error: "Internal Server Error" });
       console.error(e);
     }
   }
 
   public async update(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string)
-    const title = req.body.title
-    const orden = parseInt(req.body.orden as string)
-    await areaSchema.validate({ title, orden });
+    const id = parseInt(req.params.id as string);
+    const title = req.body.title;
+    const orden = parseInt(req.body.orden as string);
     try {
-      const result = await AreasModel.update({id,title,orden})
+      const result = await AreasModel.update({ id, title, orden });
       res.status(200).send("Area modificada satisfactoriamente!");
-      
-    } catch (e :any) {
+    } catch (e: any) {
       // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
-      if (e.name === 'ValidationError') {
+      if (e.name === "ValidationError") {
         res.status(400).json({ error: e.errors });
       } else {
         res.status(500).json({ error: "Internal Server Error" });
@@ -101,25 +91,23 @@ class AreasController {
   }
 
   public async delete(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string)
+    const id = parseInt(req.params.id as string);
     try {
-      const result = await AreasModel.delete({id})
+      const result = await AreasModel.delete({ id });
       res.status(200).send("Area eliminada satisfactoriamente!");
-      
-    } catch (e :any) {
-        res.status(500).json({ error: "Internal Server Error" });
+    } catch (e: any) {
+      res.status(500).json({ error: "Internal Server Error" });
       console.error(e);
     }
   }
 
-  public async getAreasNames(req:Request,res:Response){
-    try{
+  public async getAreasNames(req: Request, res: Response) {
+    try {
       const result = await AreasModel.getAreasNames();
       res.json(result);
-    }catch(e){
-      console.log(e)
+    } catch (e) {
+      console.log(e);
     }
   }
-
 }
 export default new AreasController();
