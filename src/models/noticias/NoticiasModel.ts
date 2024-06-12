@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
 import Noticia from './Noticia';
 import Imagen from './Imagen';
-import { sequelize } from '../../db/Database';
+import { sequelize } from '../../Database';
 
 class NoticiasModel {
   public async getAll({

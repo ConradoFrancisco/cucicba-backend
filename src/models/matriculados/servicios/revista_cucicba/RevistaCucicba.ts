@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../../../../db/Database';
+import { sequelize } from '../../../../Database';
 
 class RevistaCucicba extends Model {}
 

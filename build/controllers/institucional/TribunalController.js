@@ -1,39 +1,9 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const yup = __importStar(require("yup"));
 const TribunalModel_1 = __importDefault(require("../../models/TribunalModel"));
-const AutoridadSchema = yup.object().shape({
-    nombre: yup.string().required(),
-    apellido: yup.string().required(),
-    orden: yup.number().required().integer().positive(),
-    posicion: yup.string().required(),
-});
 class TribunalController {
     async getAll(req, res) {
         let params = {};
@@ -84,9 +54,6 @@ class TribunalController {
         const puesto = parseInt(req.body.puesto);
         const orden = parseInt(req.body.orden);
         try {
-            // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
-            await AutoridadSchema.validate({ nombre, apellido, orden, posicion });
-            // Si la validación pasa, crear el registro en la base de datos
             await TribunalModel_1.default.create({ nombre, apellido, orden, posicion });
             res.status(201).send("Registro creado satisfactoriamente!");
         }

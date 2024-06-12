@@ -94,14 +94,6 @@ class AutoridadesController {
         const puesto = parseInt(req.body.puesto);
         const orden = parseInt(req.body.orden);
         try {
-            // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
-            await AutoridadSchema.validate({
-                nombre,
-                apellido,
-                avatar,
-                puesto,
-                orden,
-            });
             // Si la validación pasa, crear el registro en la base de datos
             await AutoridadesModel_1.default.create({
                 nombre,

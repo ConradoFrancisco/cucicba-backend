@@ -39,6 +39,7 @@ const noticiaSchema = Yup.object().shape({
 class NoticiasController {
     async getAll(req, res) {
         const limit = parseInt(req.query.limit);
+        const estado = parseInt(req.query.estado);
         const offset = parseInt(req.query.offset);
         const input = req.query.input;
         let params = {};
@@ -51,6 +52,9 @@ class NoticiasController {
         if (offset) {
             params = Object.assign({ offset }, params);
         }
+        if (estado || estado === 0) {
+            params = Object.assign({ estado }, params);
+        }
         try {
             const response = await NoticiasModel_1.default.getAll(params);
             res.status(200);
@@ -59,6 +63,16 @@ class NoticiasController {
         catch (e) {
             console.error("error al obtener las noticias", e);
             res.status(500).send("error en el servidor");
+        }
+    }
+    async deleteImage(req, res) {
+        const { id } = req.params;
+        try {
+            await NoticiasModel_2.default.deleteImage({ id: parseInt(id) });
+            res.status(200).send({ message: 'Imagen eliminada con éxito' });
+        }
+        catch (error) {
+            res.status(500).send({ error: 'Error al eliminar la imagen' });
         }
     }
     async getById(req, res) {
@@ -132,6 +146,45 @@ class NoticiasController {
         }
         catch (e) {
             res.status(500).json({ error: "Internal Server Error" });
+            console.error(e);
+        }
+    }
+    async delete(req, res) {
+        const id = parseInt(req.params.id);
+        try {
+            const result = await NoticiasModel_2.default.delete({ id });
+            res.status(200).send("Noticia eleminada con éxito");
+            return res.json(result);
+        }
+        catch (e) {
+            res.status(500).json({ error: "Error del servidor" });
+            console.error(e);
+        }
+    }
+    async update(req, res) {
+        const { id } = req.params;
+        const { date, title, description, body, orden, filePaths } = req.body;
+        try {
+            // Actualizar la noticia y sus imágenes (si se proporcionan)
+            const updatedNoticia = await NoticiasModel_1.default.updatear({
+                id: parseInt(id),
+                date,
+                title,
+                description,
+                body,
+                orden,
+                filePaths,
+            });
+            res.status(200).json({ message: "Noticia actualizada", updatedNoticia });
+        }
+        catch (e) {
+            // Manejar errores de validación y otros errores
+            if (e.name === "ValidationError") {
+                res.status(400).json({ error: e.errors });
+            }
+            else {
+                res.status(500).json({ error: "Error del servidor" });
+            }
             console.error(e);
         }
     }

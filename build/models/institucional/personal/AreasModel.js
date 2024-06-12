@@ -17,7 +17,6 @@ class AreasModel {
         if (orden !== undefined) {
             where.orden = orden;
         }
-        console.log('hola');
         const { count, rows } = await area_1.default.findAndCountAll({
             where,
             order: [[orderBy, orderDirection]],

@@ -29,10 +29,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const RevistaCucicbaModel_1 = __importDefault(require("../../../models/matriculados/servicios/revista_cucicba/RevistaCucicbaModel"));
 const yup = __importStar(require("yup"));
 const revistaSchema = yup.object().shape({
-    nombre: yup.string().required(),
-    apellido: yup.string().required(),
-    orden: yup.number().required().integer().positive(),
-    posicion: yup.string().required(),
+    fecha: yup.string().required(),
+    descripcion: yup.string().required(),
+    portada: yup.string().required(),
+    archivo: yup.string().required(),
 });
 class RevistaCucicbaController {
     async getAll(req, res) {
@@ -71,12 +71,13 @@ class RevistaCucicbaController {
         }
     }
     async create(req, res) {
-        const { portada, archivo } = req.body;
+        const { portada, archivo, descripcion, fecha } = req.body;
+        console.log('body:', req.body);
         try {
             // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
-            await revistaSchema.validate({ portada, archivo });
+            await revistaSchema.validate({ portada, archivo, descripcion, fecha });
             // Si la validación pasa, crear el registro en la base de datos
-            await RevistaCucicbaModel_1.default.create({ portada, archivo });
+            await RevistaCucicbaModel_1.default.create({ portada, archivo, descripcion, fecha });
             res.status(201).send("Revista creada satisfactoriamente!");
         }
         catch (e) {
@@ -117,9 +118,9 @@ class RevistaCucicbaController {
     }
     async update(req, res) {
         const id = parseInt(req.params.id);
-        const { portada, archivo } = req.body;
+        const { portada, archivo, descripcion, fecha } = req.body;
         try {
-            await RevistaCucicbaModel_1.default.update({ id, portada, archivo });
+            await RevistaCucicbaModel_1.default.update({ id, portada, archivo, descripcion, fecha });
             res.status(201).send("Revista Modificada correctamente!");
         }
         catch (e) {

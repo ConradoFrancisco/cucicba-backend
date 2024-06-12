@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 import { InmobiliariasIlegales } from './InmobiliariasIlegales';
-import { sequelize } from '../../../../db/Database';
+import { sequelize } from '../../../../Database';
 
 
 class InmobiliariasIlegalesPenalModel {

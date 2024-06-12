@@ -5,11 +5,27 @@ const Database_1 = require("../../../db/Database");
 const Area = Database_1.sequelize.define('Area', {
     title: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        get() {
+            return this.getDataValue('title');
+        },
+        set(value) {
+            this.setDataValue('title', value.toUpperCase().trim());
+        },
+        validate: {
+            notEmpty: {
+                msg: 'El campo title no puede estar vacío'
+            },
+        },
     },
     orden: {
         type: sequelize_1.DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'El campo orden no puede estar vacío'
+            },
+        },
     },
     estado: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -17,7 +33,7 @@ const Area = Database_1.sequelize.define('Area', {
         defaultValue: 0
     }
 }, {
-    tableName: 'areas', // Ajusta el nombre de la tabla si es necesario
+    tableName: 'areas',
     timestamps: false // Ajusta si tu tabla tiene timestamps
 });
 exports.default = Area;

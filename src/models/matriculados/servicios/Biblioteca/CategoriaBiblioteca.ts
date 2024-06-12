@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../../../../db/Database'; // Ajusta la ruta según sea necesario
+import { sequelize } from '../../../../Database'; // Ajusta la ruta según sea necesario
 
 
 

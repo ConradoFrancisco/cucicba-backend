@@ -22,7 +22,7 @@ Servicio.init({
         type: new sequelize_1.DataTypes.STRING(255),
         allowNull: false,
     },
-    order: {
+    orden: {
         type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
     },

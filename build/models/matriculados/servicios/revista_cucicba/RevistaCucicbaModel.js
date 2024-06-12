@@ -6,12 +6,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const RevistaCucicba_1 = __importDefault(require("./RevistaCucicba"));
 class RevistaCucicbaModel {
+    // Obtener todas las revistas con filtros, orden y paginación
     async getAll({ limit, offset = 0, input = "", estado, orderBy = "id", orderDirection = "ASC", }) {
         const where = {};
         if (input) {
             where[sequelize_1.Op.or] = [
                 { portada: { [sequelize_1.Op.like]: `%${input}%` } },
-                { archivo: { [sequelize_1.Op.like]: `%${input}%` } }
+                { archivo: { [sequelize_1.Op.like]: `%${input}%` } },
+                { descripcion: { [sequelize_1.Op.like]: `%${input}%` } },
             ];
         }
         if (estado !== undefined)
@@ -31,11 +33,13 @@ class RevistaCucicbaModel {
         }
     }
     // Crear una nueva revista
-    async create({ portada, archivo, }) {
+    async create({ portada, archivo, descripcion, fecha, }) {
         try {
             const result = await RevistaCucicba_1.default.create({
                 portada,
                 archivo,
+                descripcion,
+                fecha,
             });
             return result;
         }
@@ -69,12 +73,16 @@ class RevistaCucicbaModel {
         }
     }
     // Actualizar una revista
-    async update({ id, portada, archivo, }) {
+    async update({ id, portada, archivo, descripcion, fecha, }) {
         const updateData = {};
         if (portada !== undefined)
             updateData.portada = portada;
         if (archivo !== undefined)
             updateData.archivo = archivo;
+        if (descripcion !== undefined)
+            updateData.descripcion = descripcion;
+        if (fecha !== undefined)
+            updateData.fecha = fecha;
         try {
             await RevistaCucicba_1.default.update(updateData, {
                 where: { id },

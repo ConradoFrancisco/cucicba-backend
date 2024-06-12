@@ -16,15 +16,48 @@ Autoridad.init({
     },
     nombre: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'El campo nombre no puede estar vacío'
+            },
+        },
+        get() {
+            return this.getDataValue('nombre');
+        },
+        set(value) {
+            this.setDataValue('nombre', value.toUpperCase().trim());
+        }
     },
     apellido: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'El campo apellido no puede estar vacío'
+            },
+        },
+        get() {
+            return this.getDataValue('apellido');
+        },
+        set(value) {
+            this.setDataValue('apellido', value.toUpperCase().trim());
+        }
     },
     avatar: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: true
+        allowNull: true,
+        validate: {
+            notEmpty: {
+                msg: 'El campo avatar no puede estar vacío'
+            },
+        },
+        get() {
+            return this.getDataValue('avatar');
+        },
+        set(value) {
+            this.setDataValue('avatar', value.trim());
+        }
     },
     estado: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -33,10 +66,26 @@ Autoridad.init({
     },
     orden: {
         type: sequelize_1.DataTypes.INTEGER,
-        allowNull: true
+        allowNull: true,
+        validate: {
+            isNumeric: {
+                msg: 'el campo orden debe ser un numero'
+            },
+            notEmpty: {
+                msg: 'El campo orden no puede estar vacío'
+            },
+        },
     },
     puesto_id: {
         type: sequelize_1.DataTypes.INTEGER,
+        validate: {
+            isNumeric: {
+                msg: 'el campo orden debe ser un numero'
+            },
+            notEmpty: {
+                msg: 'El campo puesto no puede estar vacío'
+            },
+        },
         references: {
             model: AutoridadPuesto_1.default,
             key: 'id'

@@ -1,41 +1,9 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const PersonalModel_1 = __importDefault(require("../../models/institucional/personal/PersonalModel"));
-const yup = __importStar(require("yup"));
-const PersonalCreateSchema = yup.object().shape({
-    nombre: yup.string().required("El nombre es requerido"),
-    apellido: yup.string().required("el apellido es requerido"),
-    telefono: yup.string(),
-    email: yup.string().email(),
-    cargo: yup.string().required("el cargo es requerido"),
-    area: yup.number().positive().required("El area es requerida"),
-});
 class PersonalController {
     async getAll(req, res) {
         let params = {};
@@ -102,10 +70,8 @@ class PersonalController {
         }
         console.log(params);
         try {
-            if (await PersonalCreateSchema.validate(params)) {
-                await PersonalModel_1.default.create(params);
-                res.status(201).send("Registro creado satisfactoriamente!");
-            }
+            await PersonalModel_1.default.create(params);
+            res.status(201).send("Registro creado satisfactoriamente!");
         }
         catch (e) {
             // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
@@ -134,10 +100,8 @@ class PersonalController {
         }
         console.log(params);
         try {
-            if (await PersonalCreateSchema.validate(params)) {
-                await PersonalModel_1.default.update(params);
-                res.status(200).send("Registro modificado satisfactoriamente!");
-            }
+            await PersonalModel_1.default.update(params);
+            res.status(200).send("Registro modificado satisfactoriamente!");
         }
         catch (e) {
             // Si hay un error de validación o cualquier otro error, enviar una respuesta de error

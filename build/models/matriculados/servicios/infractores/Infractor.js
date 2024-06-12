@@ -29,7 +29,7 @@ Infractor.init({
     },
 }, {
     tableName: 'infractores',
-    sequelize: Database_1.sequelize, // passing the `sequelize` instance is required
+    sequelize: Database_1.sequelize,
     timestamps: false,
 });
 exports.default = Infractor;

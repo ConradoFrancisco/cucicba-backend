@@ -23,6 +23,14 @@ RevistaCucicba.init({
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
+    descripcion: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true,
+    },
+    fecha: {
+        type: sequelize_1.DataTypes.DATE,
+        allowNull: true,
+    },
 }, {
     sequelize: Database_1.sequelize,
     modelName: 'RevistaCucicba',

@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sequelize = void 0;
+exports.DbConnection = void 0;
 const sequelize_1 = require("sequelize");
-exports.sequelize = new sequelize_1.Sequelize('cucicbadb', 'root', '', {
-    host: 'localhost',
-    dialect: 'mysql', // Cambia según tu base de datos (mysql, postgres, sqlite, etc.)
+exports.DbConnection = new sequelize_1.Sequelize(process.env.DB_NAME || '', process.env.DB_USER || 'root', process.env.DB_PASS || 'root', {
+    host: process.env.DB_HOST || 'localhost',
+    port: Number.parseInt(process.env.DB_PORT) || 5432,
+    dialect: 'postgres',
     pool: {
         max: 5,
         min: 0,
@@ -12,12 +13,3 @@ exports.sequelize = new sequelize_1.Sequelize('cucicbadb', 'root', '', {
         idle: 10000
     }
 });
-(async () => {
-    try {
-        await exports.sequelize.authenticate();
-        console.log('Connection has been established successfully.');
-    }
-    catch (error) {
-        console.error('Unable to connect to the database:', error);
-    }
-})();

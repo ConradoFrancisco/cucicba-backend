@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import { sequelize } from "../../../db/Database";
+import { sequelize } from "../../../Database";
 import Area from "./area";
 
 const Personal = sequelize.define('Personal', {

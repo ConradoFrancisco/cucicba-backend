@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import { sequelize } from "../../../../db/Database";
+import { sequelize } from "../../../../Database";
 class PreguntasFrecuentesCategoria extends Model {}
 PreguntasFrecuentesCategoria.init(
   {
