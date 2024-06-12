@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 import Noticia from './Noticia';
 import Imagen from './Imagen';
+import { sequelize } from '../../db/Database';
 
 class NoticiasModel {
   public async getAll({
@@ -11,6 +12,7 @@ class NoticiasModel {
     offset = 0,
     orderBy = "orden",
     orderDirection = "ASC",
+    estado = undefined
   }: {
     input?: string;
     limit?: number;
@@ -19,6 +21,7 @@ class NoticiasModel {
     fecha?: string;
     orderBy?: string;
     orderDirection?: "ASC" | "DESC";
+    estado?:number
   }) {
     const where: any = {};
     if (input) {
@@ -29,6 +32,9 @@ class NoticiasModel {
     }
     if (fecha) {
       where.date = { [Op.eq]: new Date(fecha) };
+    }
+    if (estado || estado === 0)  {
+      where.estado = { [Op.eq]: estado };
     }
 
     try {
@@ -54,6 +60,16 @@ class NoticiasModel {
     } catch (e) {
       console.error(e);
       throw new Error("Hubo un error con la db");
+    }
+  }
+  public async deleteImage({ id }: { id: number }) {
+    try {
+      await Imagen.destroy({
+        where: { id },
+      });
+    } catch (e) {
+      console.error("Error al eliminar la imagen:", e);
+      throw new Error("Error al eliminar la imagen");
     }
   }
 
@@ -88,6 +104,67 @@ class NoticiasModel {
     }
   }
 
+  public async updatear({
+    id,
+    date,
+    title,
+    description,
+    cantFotos,
+    body,
+    orden,
+    filePaths = [],
+  }: {
+    id: number;
+    date?: string;
+    title?: string;
+    description?: string;
+    cantFotos?: number;
+    body?: string;
+    orden?: number;
+    filePaths?: string[];
+  }) {
+    const transaction = await sequelize.transaction();
+    try {
+      // Actualizar el registro de la noticia
+      const noticia = await Noticia.update(
+        {
+          date,
+          title,
+          description,
+          cantFotos,
+          body,
+          orden,
+        },
+        {
+          where: { id },
+          transaction,
+        }
+      );
+
+      // Actualizar imágenes si se proporcionan nuevos filePaths
+      if (filePaths.length > 0) {
+        // Eliminar imágenes antiguas
+        await Imagen.destroy({
+          where: { noticia_id: id },
+          transaction,
+        });
+
+        // Insertar nuevas imágenes
+        const images = filePaths.map((filePath) => ({
+          noticia_id: id,
+          imageUrl: filePath,
+        }));
+        await Imagen.bulkCreate(images, { transaction });
+      }
+
+      await transaction.commit();
+      return noticia;
+    } catch (e) {
+      await transaction.rollback();
+      console.error("Error al actualizar la noticia y sus imágenes:", e);
+      throw new Error("Error al actualizar la noticia y sus imágenes");
+    }
+  }
   public async createImagesRegister({
     id_noticia,
     filePaths = [],
@@ -163,6 +240,29 @@ class NoticiasModel {
       throw new Error("Error al cambiar el estado de la noticia");
     }
   }
+  public async delete({ id }: { id: number }) {
+    const transaction = await sequelize.transaction();
+    try {
+      // Eliminar imágenes relacionadas
+      await Imagen.destroy({
+        where: { noticia_id: id },
+        transaction,
+      });
+
+      // Eliminar la noticia
+      await Noticia.destroy({
+        where: { id },
+        transaction,
+      });
+
+      await transaction.commit();
+    } catch (e) {
+      await transaction.rollback();
+      console.error("Error al eliminar la noticia y sus imágenes:", e);
+      throw new Error("Error al eliminar la noticia y sus imágenes");
+    }
+  }
+
 }
 
 export default new NoticiasModel();
