@@ -3,27 +3,11 @@ import * as dotenv from "dotenv";
 import * as cors from "cors";
 import bodyParser = require("body-parser");
 import path = require("path");
-import { getConnection } from "./Database";
-
-// import express, { Request, Response } from "express";
-// import autoridadesRoutes from "./routes/institucional/autoridades";
-// import bibliotecaDigitalRoutes from "./routes/biblioteca-digital";
-// import { revistaRoutes } from "./routes/revista-cucicba";
-// import { faqRoutes } from "./routes/preguntas-frecuentes";
-// import { serviciosRoutes } from "./routes/servicios";
-// import cors from "cors";
-// import { areasRoutes } from "./routes/institucional/areas";
-// import { personalRoutes } from "./routes/institucional/personal";
-// import multer,{ MulterError } from 'multer'
-// import path from "path";
-// import { tribunal_etica_routes } from "./routes/institucional/tribunalEtica";
-// import { comisionRevisadoraRoutes } from "./routes/institucional/comisionRevisadora";
-// import inmobiliariasPenalRoutes from "./routes/inmobiliarias-ilegales";
-// import { sancionesRouter } from "./routes/sanciones";
-// import { noticiasRoutes } from "./routes/noticias/noticias";
-// import { DbConnection } from "./db/Database";
-// import infractoresRoutes from "./routes/infractores";
-
+import { DataSource } from "typeorm";
+import { getDataSource } from "./data-source";
+import { ServiciosRouter } from "./routes/ServiciosRouter";
+import DbSeed from "./seeders/DbSeed";
+import { AreasRouter } from "./routes/AreasRouter";
 class App {
   public app: express.Application;
   //public corsOptions: cors.CorsOptions;
@@ -57,18 +41,25 @@ class App {
     );
     this.app.use("/api/v1/", this.router);
     this.app.use(cors());
+
+    new ServiciosRouter().routes(this.router);
+    new AreasRouter().routes(this.router);
   }
 
   private initializeDatabase() {
     // Initialize database connection
-    const conn = getConnection();
-    conn
-      .authenticate()
-      .then(() => {
-        console.log("Connection has been established successfully.");
+    const MyDataSource: DataSource = getDataSource();
+    MyDataSource.initialize()
+      .then((db) => {
+        console.log(
+          `+ Database [${db.options.database}] connected - ${db.options.type.toUpperCase()} v${
+            db.driver.version
+          }`
+        );
+        DbSeed.run(db); // Seed the database
       })
-      .catch((error) => {
-        console.error("Unable to connect to the database:", error);
+      .catch((err) => {
+        console.error(err);
       });
   }
 
@@ -78,6 +69,24 @@ class App {
 }
 
 export default new App().app;
+
+
+
+// import autoridadesRoutes from "./routes/institucional/autoridades";
+// import bibliotecaDigitalRoutes from "./routes/biblioteca-digital";
+// import { revistaRoutes } from "./routes/revista-cucicba";
+// import { faqRoutes } from "./routes/preguntas-frecuentes";
+// import { serviciosRoutes } from "./routes/servicios";
+// import { areasRoutes } from "./routes/institucional/areas";
+// import { personalRoutes } from "./routes/institucional/personal";
+// import multer,{ MulterError } from 'multer'
+// import { tribunal_etica_routes } from "./routes/institucional/tribunalEtica";
+// import { comisionRevisadoraRoutes } from "./routes/institucional/comisionRevisadora";
+// import inmobiliariasPenalRoutes from "./routes/inmobiliarias-ilegales";
+// import { sancionesRouter } from "./routes/sanciones";
+// import { noticiasRoutes } from "./routes/noticias/noticias";
+
+// import infractoresRoutes from "./routes/infractores";
 
 // const app = express();
 // app.use(express.json());

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import AreasController from "../../controllers/institucional/AreasController";
+import AreasController from "../../controllers/AreasController";
 
 export const areasRoutes = Router();
 
