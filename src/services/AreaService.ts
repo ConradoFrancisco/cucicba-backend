@@ -6,15 +6,75 @@ export default class AreaService {
 
     private repository: Repository<Area>;
 
-    constructor(){
+    constructor() {
         const ds: DataSource = getDataSource();
         this.repository = ds.manager.getRepository(Area);
     }
 
-    public async getAll(): Promise<Area[]>{
+    public async getAll(): Promise<Area[]> {
         return await this.repository.find();
     }
+    public async createArea({
+        nombre,
+        descripcion,
+        estado = false,
+        orden
+    }: {
+        nombre: string;
+        descripcion: string;
+        estado?: boolean;
+        orden?: number;
+    }): Promise<Area> {
+        const nuevaArea = new Area();
+        nuevaArea.nombre = nombre;
+        nuevaArea.descripcion = descripcion;
+        nuevaArea.estado = estado;
+        nuevaArea.orden = orden;
+        nuevaArea.createdAt = new Date();
+        nuevaArea.updatedAt = new Date();
 
+        const areaGuardada = await this.repository.save(nuevaArea);
+        return areaGuardada;
+    }
+
+    public async updateArea(
+        { id, nombre, descripcion, orden }: { id: any, nombre: string; descripcion: string; orden?: number }
+    ): Promise<Area | null> {
+        const areaExistente = await this.repository.findOne(id);
+        if (!areaExistente) {
+            return null;
+        }
+
+        areaExistente.nombre = nombre;
+        areaExistente.descripcion = descripcion;
+        areaExistente.orden = orden;
+        areaExistente.updatedAt = new Date();
+
+        const areaActualizada = await this.repository.save(areaExistente);
+        return areaActualizada;
+    }
+    public async setActive({id, estado }: {id: any, estado: boolean }): Promise<Area | null> {
+    const areaExistente = await this.repository.findOne(id);
+    if (!areaExistente) {
+        return null;
+    }
+    areaExistente.estado = estado;
+    areaExistente.updatedAt = new Date();
+
+    const areaActualizada = await this.repository.save(areaExistente);
+    return areaActualizada;
+}
+    public async delete({id}:{id: any}): Promise<Area | null> {
+        const areaExistente = await this.repository.findOne(id);
+        if (!areaExistente) {
+            return null;
+        }
+        areaExistente.deletedAt = new Date();
+        areaExistente.updatedAt = new Date();
+        const areaActualizada = await this.repository.save(areaExistente);
+        return areaActualizada;
+    }
+    
     // public async get(id): Promise<User>{
     //     return await this.repository.findOne({ where: {id: id}, relations: ['theaters', 'bookings']});
     // }

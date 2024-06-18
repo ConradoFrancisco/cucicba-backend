@@ -5,7 +5,7 @@ export class AreasController {
 
   private static service: AreaService = new AreaService();
 
-  public async get(req: Request, res: Response):Promise<void> {
+  public async getAll(req: Request, res: Response): Promise<void> {
     try {
       const result = await AreasController.service.getAll();
       res.json(result);
@@ -13,6 +13,52 @@ export class AreasController {
       console.log(e);
     }
   }
+  public async create(req: Request, res: Response) {
+    const { nombre, descripcion } = req.body;
+    const orden = parseInt(req.body.orden as string);
+    try {
+      await AreasController.service.createArea({ nombre, descripcion, orden });
+      res.status(201).send("Registro creado satisfactoriamente!");
+    } catch (e: any) {
+      res.status(500).json({ error: "Internal Server Error" });
+      console.error(e);
+    }
+  }
+
+  public async update(req:Request,res:Response){
+    const { nombre, descripcion } = req.body;
+    const orden = parseInt(req.body.orden as string);
+    const id = parseInt(req.params.id as string);
+    try {
+      await AreasController.service.updateArea({ id,descripcion,nombre,orden });
+      res.status(201).send("Registro modificado satisfactoriamente!");
+    } catch (e: any) {
+      res.status(500).json({ error: "Internal Server Error" });
+      console.error(e);
+    }
+  }
+  public async delete(req:Request,res:Response){
+    const id = parseInt(req.params.id as string);
+    try {
+      await AreasController.service.delete({id});
+      res.status(201).send("Registro eliminado satisfactoriamente!");
+    } catch (e: any) {
+      res.status(500).json({ error: "Internal Server Error" });
+      console.error(e);
+    }
+  }
+  public async setActive(req:Request,res:Response){
+    const {estado} = req.body.estado;
+    const id = parseInt(req.params.id as string);
+    try {
+      await AreasController.service.setActive({id,estado});
+      res.status(201).send("Registro eliminado satisfactoriamente!");
+    } catch (e: any) {
+      res.status(500).json({ error: "Internal Server Error" });
+      console.error(e);
+    }
+  }
+}
 
   // public async getAll(req: Request, res: Response) {
   //   let params = {};
@@ -56,22 +102,7 @@ export class AreasController {
   //     res.status(500).send("error en el servidor");
   //   }
   // }
-  // public async create(req: Request, res: Response) {
-  //   const { title } = req.body;
-  //   const orden = parseInt(req.body.orden as string);
-  //   try {
-  //     await AreasModel.create({ title, orden });
-  //     res.status(201).send("Registro creado satisfactoriamente!");
-  //   } catch (e: any) {
-  //     // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
-  //     if (e.name === "ValidationError") {
-  //       res.status(400).json({ error: e.errors });
-  //     } else {
-  //       res.status(500).json({ error: "Internal Server Error" });
-  //     }
-  //     console.error(e);
-  //   }
-  // }
+  
   // public async setActive(req: Request, res: Response) {
   //   const id = parseInt(req.params.id as string);
   //   const estado = req.body.estado;
@@ -121,4 +152,4 @@ export class AreasController {
   //     console.log(e);
   //   }
   // }
-}
+
