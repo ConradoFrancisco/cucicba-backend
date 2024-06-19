@@ -7,11 +7,14 @@ export class AreasController {
 
   public async getAll(req: Request, res: Response): Promise<void> {
     let params = {};
-    const {input,orden,orderBy,orderDirection} = req.query;
+    const {input,orden,orderBy,orderDirection,estado} = req.query;
     const limit = parseInt(req.query.limit as string);
     const offset = parseInt(req.query.offset as string);
     if(input){
       params = Object.assign({ input }, params);
+    }
+    if(estado){
+      params = Object.assign({ estado }, params);
     }
     if (orden) {
       const orden = parseInt(req.query.orden as string);

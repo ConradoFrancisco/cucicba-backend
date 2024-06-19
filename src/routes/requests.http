@@ -26,7 +26,7 @@ Content-Type: application/json
 ###
 PATCH http://localhost:8080/areas/14
 ###
-GET http://localhost:8080/api/v1/areas
+GET http://localhost:8080/api/v1/areas?limit=15&offset=0&orden=2&input=&estado=&orderDirection=asc
 
 ###
 POST http://localhost:8080/personal
