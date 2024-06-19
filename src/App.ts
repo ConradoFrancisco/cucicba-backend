@@ -20,7 +20,7 @@ class App {
     dotenv.config({
       path: path.resolve(__dirname, "../.env"),
     });
-
+    this.app.use(cors());
     this.initializeRoutes();
     this.initializeDatabase();
   }

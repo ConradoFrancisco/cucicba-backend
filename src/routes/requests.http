@@ -26,7 +26,7 @@ Content-Type: application/json
 ###
 PATCH http://localhost:8080/areas/14
 ###
-DELETE  http://localhost:8080/areas/15
+GET http://localhost:8080/api/v1/areas
 
 ###
 POST http://localhost:8080/personal

@@ -1,6 +1,7 @@
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, FindManyOptions, FindOptionsWhere, Like, Repository } from 'typeorm';
 import { getDataSource } from '../data-source';
 import { Area } from '../entity/Area';
+import { AreaDto } from '../entity/dtos/AreaDto';
 
 export default class AreaService {
 
@@ -11,8 +12,53 @@ export default class AreaService {
         this.repository = ds.manager.getRepository(Area);
     }
 
-    public async getAll(): Promise<Area[]> {
-        return await this.repository.find();
+    public async getAll({
+        limit,
+        offset = 0,
+        input,
+        estado,
+        orden,
+        orderBy,
+        orderDirection,
+    }: {
+        limit?: number,
+        offset?: number,
+        input?: string,
+        estado?: boolean,
+        orden?: number,
+        orderBy?: keyof Area,
+        orderDirection?: 'ASC' | 'DESC';
+    }): Promise<{ data: AreaDto[], total: number }> {
+        const where: FindManyOptions<Area>['where'] = {};
+
+        console.log(limit, offset, input, estado, orden, orderBy, orderDirection)
+
+        if (input) {
+            where.nombre = Like(`%${input}%`);
+
+        }
+
+        if (estado !== undefined) {
+            where.estado = estado;
+        }
+        if (orden) {
+            where.orden = orden;
+        }
+
+        const order: FindManyOptions<Area>['order'] = {};
+        if (orderBy) {
+            order[orderBy] = orderDirection || 'ASC';
+        }
+        const options: any = {
+            where,
+            order,
+            take: limit,
+            skip: offset,
+        };
+
+        const [areas, total] = await this.repository.findAndCount(options);
+        const areasDto = areas.map(area => new AreaDto(area));
+        return { data: areasDto, total };
     }
     public async createArea({
         nombre,
@@ -53,18 +99,21 @@ export default class AreaService {
         const areaActualizada = await this.repository.save(areaExistente);
         return areaActualizada;
     }
-    public async setActive({id, estado }: {id: any, estado: boolean }): Promise<Area | null> {
-    const areaExistente = await this.repository.findOne(id);
-    if (!areaExistente) {
-        return null;
-    }
-    areaExistente.estado = estado;
-    areaExistente.updatedAt = new Date();
+    public async setActive({ id, estado }: { id: any, estado: boolean }): Promise<Area | null> {
+        console.log("id model:", id)
+        const areaExistente = await this.repository.findOneBy({
+            id
+        });
+        if (!areaExistente) {
+            return null;
+        }
+        areaExistente.estado = estado;
+        areaExistente.updatedAt = new Date();
 
-    const areaActualizada = await this.repository.save(areaExistente);
-    return areaActualizada;
-}
-    public async delete({id}:{id: any}): Promise<Area | null> {
+        const areaActualizada = await this.repository.save(areaExistente);
+        return areaActualizada;
+    }
+    public async delete({ id }: { id: any }): Promise<Area | null> {
         const areaExistente = await this.repository.findOne(id);
         if (!areaExistente) {
             return null;
@@ -74,7 +123,7 @@ export default class AreaService {
         const areaActualizada = await this.repository.save(areaExistente);
         return areaActualizada;
     }
-    
+
     // public async get(id): Promise<User>{
     //     return await this.repository.findOne({ where: {id: id}, relations: ['theaters', 'bookings']});
     // }

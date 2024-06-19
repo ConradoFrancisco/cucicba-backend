@@ -6,7 +6,7 @@
    "scripts": {
       "tsc": "tsc",
       "build": "tsc",
-      "start": "export NODE_ENV=development && echo $NODE_ENV && nodemon",
+      "start": "set NODE_ENV=development&& echo %NODE_ENV%&& nodemon",
       "test": "NODE_OPTIONS=--experimental-vm-modules && export NODE_ENV=test &&  echo $NODE_ENV  && npx jest --detectOpenHandles --watchAll --forceExit",
       "typeorm": "typeorm-ts-node-commonjs"
    },
@@ -58,6 +58,7 @@
       "sqlite3": "^5.1.7",
       "swagger-jsdoc": "^6.2.8",
       "swagger-ui-express": "^4.6.2",
-      "typeorm": "0.3.20"
+      "typeorm": "0.3.20",
+      "typeorm-typedi-extensions": "^0.4.1"
    }
 }

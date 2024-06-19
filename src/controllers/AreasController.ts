@@ -6,8 +6,31 @@ export class AreasController {
   private static service: AreaService = new AreaService();
 
   public async getAll(req: Request, res: Response): Promise<void> {
+    let params = {};
+    const {input,orden,orderBy,orderDirection} = req.query;
+    const limit = parseInt(req.query.limit as string);
+    const offset = parseInt(req.query.offset as string);
+    if(input){
+      params = Object.assign({ input }, params);
+    }
+    if (orden) {
+      const orden = parseInt(req.query.orden as string);
+      params = Object.assign({ orden }, params);
+    }
+    if (orderBy) {
+      params = Object.assign({ orderBy }, params);
+    }
+    if (orderDirection) {
+      params = Object.assign({ orderDirection }, params);
+    }
+    if(limit){
+      params = Object.assign({ limit}, params);
+    }
+    if(offset){
+      params = Object.assign({ offset}, params);
+    }
     try {
-      const result = await AreasController.service.getAll();
+      const result = await AreasController.service.getAll(params);
       res.json(result);
     } catch (e) {
       console.log(e);
@@ -48,11 +71,12 @@ export class AreasController {
     }
   }
   public async setActive(req:Request,res:Response){
-    const {estado} = req.body.estado;
+    const estado = req.body.estado;
+    console.log("controller:",req.body)
     const id = parseInt(req.params.id as string);
     try {
       await AreasController.service.setActive({id,estado});
-      res.status(201).send("Registro eliminado satisfactoriamente!");
+      res.status(201).send("Area modificada satisfactoriamente!");
     } catch (e: any) {
       res.status(500).json({ error: "Internal Server Error" });
       console.error(e);
