@@ -1,4 +1,4 @@
-GET http://localhost:8080/api/v1/servicios/inmobiliarias-ilegales
+GET http://localhost:8080/api/v1/servicios/preguntas-frecuentes?categoria=
 ###
 GET http://localhost:8080/api/v1/areas
 ###

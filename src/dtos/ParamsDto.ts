@@ -7,6 +7,7 @@ export class ParamsDto {
   public limit: number;
   public offset: number;
   public penal?: boolean;
+  public categoriaId?: number;
 
   constructor(body: any) {
     console.log("construcotr:", body);
@@ -19,6 +20,7 @@ export class ParamsDto {
     this.setOrderDirection(body);
     this.offset = parseInt(body.offset) || 0;
     this.penal = body.penal ? body.penal : false;
+    this.categoriaId = body.categoria ? parseInt(body.categoria) : null;
   }
 
   private setLimit(body: any) {

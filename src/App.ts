@@ -10,6 +10,7 @@ import DbSeed from "./seeders/DbSeed";
 import { AreasRouter } from "./routes/AreasRouter";
 import { InfractoresRouter } from "./routes/servicios/InfractoresRouter";
 import { InmobiliariasRouter } from "./routes/servicios/inmobiliarias-ilegales";
+import { PreguntasFrecuentesRouter } from "./routes/servicios/PreguntasFrecuentesRouter";
 class App {
   public app: express.Application;
   //public corsOptions: cors.CorsOptions;
@@ -43,6 +44,7 @@ class App {
     );
     this.app.use("/api/v1/", this.router);
     this.app.use(cors());
+    new PreguntasFrecuentesRouter().routes(this.router);
     new InmobiliariasRouter().routes(this.router);
     new InfractoresRouter().routes(this.router);
     new ServiciosRouter().routes(this.router);
