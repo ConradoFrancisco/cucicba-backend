@@ -1,20 +1,7 @@
-GET http://localhost:3000/servicios/biblioteca-digital
-
+GET http://localhost:8080/api/v1/servicios/inmobiliarias-ilegales
 ###
-
-GET http://localhost:8080/noticias?limit=3
+GET http://localhost:8080/api/v1/areas
 ###
-GET http://localhost:8080/servicios/biblioteca-digital/categorias
-###
-GET http://localhost:8080/autoridades?limit=15&offset=0&orderDirection=asc
-###
-GET http://localhost:8080/servicios/preguntas-frecuentes/categorias
-###
-GET  http://localhost:8080/comision?estado=1&posicion=titular
-###
-GET  http://localhost:8080/autoridades?orden=2
-###
-
 POST http://localhost:8080/noticias/1
 Content-Type: application/json
 
@@ -24,9 +11,16 @@ Content-Type: application/json
 }
 
 ###
-PATCH http://localhost:8080/areas/14
+POST http://localhost:8080/api/v1/areas
+Content-Type: application/json
+
+{
+    "nombre": "area nueva",
+    "descripcion":"Nueva cescripcion de area",
+    "estado": false
+}
 ###
-GET http://localhost:8080/api/v1/areas?limit=15&offset=0&orden=2&input=&estado=&orderDirection=asc
+GET http://localhost:8080/api/v1/servicios/infractores?orderBy=nombre&orderDirection=ASC
 
 ###
 POST http://localhost:8080/personal

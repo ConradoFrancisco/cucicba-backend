@@ -1,18 +1,17 @@
 import { Request, Response } from "express";
-import AreaService from "../services/AreaService";
-import { ParamsDto } from "../dtos/ParamsDto";
-import { AreaDto } from "../dtos/AreaDto";
-import { DeleteParamsDto } from "../dtos/DeleteParamsDto";
-import { ActiveParamsDto } from "../dtos/ActiveParamsDto";
+import { ParamsDto } from "../../../dtos/ParamsDto";
+import InfractorService from "../../../services/servicios/InfractorService";
+import { InfractorDto } from "../../../dtos/servicios/InfractorDto";
+import { ActiveParamsDto } from "../../../dtos/ActiveParamsDto";
+import { DeleteParamsDto } from "../../../dtos/DeleteParamsDto";
 
-export class AreasController {
-  private static service: AreaService = new AreaService();
+export class InfractorController {
+  private static service: InfractorService = new InfractorService();
 
-  //GET
   public async getAll(req: Request, res: Response): Promise<void> {
     try {
       const paramsDto: ParamsDto = new ParamsDto(req.query);
-      const result = await AreasController.service.getAll(paramsDto);
+      const result = await InfractorController.service.getAll(paramsDto);
       res.json(result);
     } catch (e) {
       console.log(e);
@@ -20,26 +19,28 @@ export class AreasController {
     }
   }
   public async create(req: Request, res: Response) {
-    const areaDto: AreaDto = req.body;
+    const infractorDto: InfractorDto = new InfractorDto(req.body);
     try {
-      await AreasController.service.createArea(areaDto);
+      await InfractorController.service.createInfractor(infractorDto);
       res.status(201).send("Registro creado satisfactoriamente!");
     } catch (e: any) {
-      res.status(500).json({ error: "Internal Server Error" });
-      console.error(e);
+      res.status(500).json({ error: e });
     }
   }
-
   public async update(req: Request, res: Response) {
-    const { nombre, descripcion, orden } = req.body;
-    const id = req.params.id;
-    const areaDto: AreaDto = new AreaDto({ nombre, descripcion, orden, id });
+    const { id } = req.params;
+    const { nombre, direccion, fecha } = req.body;
+    const infractorDto: InfractorDto = new InfractorDto({
+      id,
+      nombre,
+      direccion,
+      fecha,
+    });
+    await InfractorController.service.updateInfractor(infractorDto);
     try {
-      await AreasController.service.updateArea(areaDto);
-      res.status(201).send("Registro modificado satisfactoriamente!");
+      res.status(201).send("Registro Modificado correctamente!");
     } catch (e: any) {
-      res.status(500).json({ error: "Internal Server Error" });
-      console.error(e);
+      res.status(500).json({ error: e });
     }
   }
   public async setActive(req: Request, res: Response) {
@@ -47,8 +48,8 @@ export class AreasController {
     const estado = req.body.estado;
     const activeParams: ActiveParamsDto = new ActiveParamsDto({ id, estado });
     try {
-      await AreasController.service.setActive(activeParams);
-      res.status(201).send("Area modificada satisfactoriamente!");
+      await InfractorController.service.setActive(activeParams);
+      res.status(201).send("Infractor modificado correctamente!");
     } catch (e: any) {
       res.status(500).json({ error: "Internal Server Error" });
       console.error(e);
@@ -59,7 +60,7 @@ export class AreasController {
     const deletedAt: Date = new Date();
     const body: DeleteParamsDto = new DeleteParamsDto({ id, deletedAt });
     try {
-      await AreasController.service.delete(body);
+      await InfractorController.service.delete(body);
       res.status(201).send("Registro eliminado satisfactoriamente!");
     } catch (e: any) {
       res.status(500).json({ error: "Internal Server Error" });

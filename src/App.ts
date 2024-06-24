@@ -8,6 +8,8 @@ import { getDataSource } from "./data-source";
 import { ServiciosRouter } from "./routes/ServiciosRouter";
 import DbSeed from "./seeders/DbSeed";
 import { AreasRouter } from "./routes/AreasRouter";
+import { InfractoresRouter } from "./routes/servicios/InfractoresRouter";
+import { InmobiliariasRouter } from "./routes/servicios/inmobiliarias-ilegales";
 class App {
   public app: express.Application;
   //public corsOptions: cors.CorsOptions;
@@ -41,7 +43,8 @@ class App {
     );
     this.app.use("/api/v1/", this.router);
     this.app.use(cors());
-
+    new InmobiliariasRouter().routes(this.router);
+    new InfractoresRouter().routes(this.router);
     new ServiciosRouter().routes(this.router);
     new AreasRouter().routes(this.router);
   }
@@ -52,9 +55,9 @@ class App {
     MyDataSource.initialize()
       .then((db) => {
         console.log(
-          `+ Database [${db.options.database}] connected - ${db.options.type.toUpperCase()} v${
-            db.driver.version
-          }`
+          `+ Database [${
+            db.options.database
+          }] connected - ${db.options.type.toUpperCase()} v${db.driver.version}`
         );
         DbSeed.run(db); // Seed the database
       })
@@ -69,8 +72,6 @@ class App {
 }
 
 export default new App().app;
-
-
 
 // import autoridadesRoutes from "./routes/institucional/autoridades";
 // import bibliotecaDigitalRoutes from "./routes/biblioteca-digital";
