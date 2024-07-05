@@ -1,94 +1,83 @@
 import { Request, Response } from "express";
 import { PreguntaFrecuenteService } from "../../../services/servicios/PreguntaFrecuenteService";
 import { ParamsDto } from "../../../dtos/ParamsDto";
+import { PreguntaFrecuenteDto } from "../../../dtos/servicios/PreguntaFrecuenteDto";
+import { ActiveParamsDto } from "../../../dtos/ActiveParamsDto";
+import { DeleteParamsDto } from "../../../dtos/DeleteParamsDto";
 
 export class PreguntasFrecuentesController {
-  private static service: PreguntaFrecuenteService = new PreguntaFrecuenteService();
+  private static service: PreguntaFrecuenteService =
+    new PreguntaFrecuenteService();
 
   public async getAll(req: Request, res: Response): Promise<void> {
     try {
       const paramsDto: ParamsDto = new ParamsDto(req.query);
-      const result = await PreguntasFrecuentesController.service.getAll(paramsDto);
+      const result = await PreguntasFrecuentesController.service.getAll(
+        paramsDto
+      );
       res.json(result);
     } catch (e) {
       console.log(e);
       res.status(500).json({ error: e });
     }
   }
-  public async getAllCategorias(req: Request, res: Response) : Promise<void>{
-    try{
-      const result = await PreguntasFrecuentesController.service.getAllCategorias();
-      res.json(result);
-    } catch (e) {
-      console.log(e);
-      res.status(500).json({ error: e });
-    }
-  }
-}
-  /* public async getCategorys(req: Request, res: Response) {
+  public async getAllCategorias(req: Request, res: Response): Promise<void> {
     try {
-      const results = await PreguntasFrecuentesModel.getCategorys();
-      res.json(results);
+      const result =
+        await PreguntasFrecuentesController.service.getAllCategorias();
+      res.json(result);
     } catch (e) {
-      console.error("Error al obtener las categorias, intentelo mas tarde");
-      res.status(500).send("arror intero del servidor");
+      console.log(e);
+      res.status(500).json({ error: e });
     }
   }
   public async create(req: Request, res: Response) {
-    const {pregunta,respuesta} = req.body
-    const categoria = parseInt(req.body.categoria)
+    const PreguntaFrecuente: PreguntaFrecuenteDto = new PreguntaFrecuenteDto(
+      req.body
+    );
     try {
-      await PreguntasFrecuentesModel.create({pregunta,respuesta,categoria});
+      await PreguntasFrecuentesController.service.create(PreguntaFrecuente);
       res.status(201).send("Registro creado satisfactoriamente!");
     } catch (e: any) {
-      // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
-      if (e.name === "ValidationError") {
-        res.status(400).json({ error: e.errors });
-      } else {
-        res.status(500).json({ error: "Error del servidor" });
-      }
-      console.error(e);
+      res.status(500).json({ error: e });
     }
   }
-  public async setActive(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string)
-    const estado = req.body.estado
+  public async setState(req: Request, res: Response) {
+    const { id } = req.params;
+    const { estado } = req.body;
+    const activeParams: ActiveParamsDto = new ActiveParamsDto({ id, estado });
     try {
-      const result = await PreguntasFrecuentesModel.setActive({id,estado})
+      await PreguntasFrecuentesController.service.setState(activeParams);
       res.status(200).send("Pregunta Frecuente Publicada dada de alta!");
-      return res.json(result)
-    } catch (e :any) {
-        res.status(500).json({ error: "Error del servidor" });
+    } catch (e: any) {
+      res.status(500).json({ error: e });
       console.error(e);
     }
   }
   public async delete(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string)
+    const { id } = req.params;
+    const deleteParamsDto: DeleteParamsDto = new DeleteParamsDto({ id });
     try {
-      const result = await PreguntasFrecuentesModel.delete({id})
+      const result = await PreguntasFrecuentesController.service.delete(
+        deleteParamsDto
+      );
       res.status(200).send("Pregunta eliminada satisfactoriamente!");
-      return res.json(result)
-    } catch (e :any) {
-        res.status(500).json({ error: "Error del servidor" });
-      console.error(e);
+      return res.json(result);
+    } catch (e: any) {
+      res.status(500).json({ error: "Error del servidor" });
     }
   }
   public async update(req: Request, res: Response) {
-    const {pregunta,respuesta} = req.body
-    const categoria = parseInt(req.body.categoria)
-    const id = parseInt(req.params.id as string)
+    const { id } = req.query;
+    const updateDto = Object.assign({ id }, req.body);
+    const preguntasFrecuentesDto: PreguntaFrecuenteDto =
+      new PreguntaFrecuenteDto(updateDto);
     try {
-      await PreguntasFrecuentesModel.update({ id,categoria,pregunta,respuesta});
-      res.status(201).send("Registro Modificado correctamente!");
+      await PreguntasFrecuentesController.service.update(
+        preguntasFrecuentesDto
+      );
     } catch (e: any) {
-      // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
-      if (e.name === "ValidationError") {
-        res.status(400).json({ error: e.errors });
-      } else {
-        res.status(500).json({ error: "Error del servidor" });
-      }
-      console.error(e);
+      res.status(500).json({ error: "Error del servidor" });
     }
   }
 }
- */

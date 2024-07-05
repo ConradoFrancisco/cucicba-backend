@@ -3,7 +3,7 @@ export class ActiveParamsDto {
   public estado: boolean;
   public updatedAt: Date;
 
-  constructor(body: any) {
+  constructor(body : { id: string; estado: boolean }) {
     this.id = parseInt(body.id);
     this.estado = body.estado;
     this.updatedAt = new Date();

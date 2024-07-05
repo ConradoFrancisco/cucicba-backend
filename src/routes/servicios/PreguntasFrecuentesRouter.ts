@@ -12,9 +12,9 @@ export class PreguntasFrecuentesRouter {
   public routes(router: Router): void {
     router.get(`${this.prefix}`, this.controller.getAll);
     router.get(`${this.prefix}/categorias`, this.controller.getAllCategorias);
-   /*  router.post(`${this.prefix}`, this.controller.create);
+    router.post(`${this.prefix}`, this.controller.create);
     router.patch(`${this.prefix}/:id`, this.controller.update);
-    router.patch(`${this.prefix}/active/:id`, this.controller.setActive);
-    router.patch(`${this.prefix}/delete/:id`, this.controller.delete); */
+    router.patch(`${this.prefix}/active/:id`, this.controller.setState);
+    /* router.patch(`${this.prefix}/delete/:id`, this.controller.delete); */
   }
 }

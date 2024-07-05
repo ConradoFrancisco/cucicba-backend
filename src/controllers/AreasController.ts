@@ -56,8 +56,7 @@ export class AreasController {
   }
   public async delete(req: Request, res: Response) {
     const { id } = req.params;
-    const deletedAt: Date = new Date();
-    const body: DeleteParamsDto = new DeleteParamsDto({ id, deletedAt });
+    const body: DeleteParamsDto = new DeleteParamsDto({ id });
     try {
       await AreasController.service.delete(body);
       res.status(201).send("Registro eliminado satisfactoriamente!");
