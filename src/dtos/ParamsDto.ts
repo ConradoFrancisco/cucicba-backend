@@ -18,12 +18,11 @@ export class ParamsDto {
     this.estado = body.estado !== null ? body.estado : null;
     this.setOrderDirection(body);
     this.offset = parseInt(body.offset) || 0;
-    this.penal = body.penal ? body.penal : false;
+    this.penal = body.penal !== null ? body.penal : null;
   }
 
   private setLimit(body: any) {
     this.limit = 15;
-    console.log("bodyConstruct:", body);
     if (body.limit) {
       this.limit = parseInt(body.limit) > 50 ? 50 : parseInt(body.limit);
     }

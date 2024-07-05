@@ -43,12 +43,12 @@ export class InfractorController {
       res.status(500).json({ error: e });
     }
   }
-  public async setActive(req: Request, res: Response) {
+  public async setEstado(req: Request, res: Response) {
     const { id } = req.params;
     const estado = req.body.estado;
     const activeParams: ActiveParamsDto = new ActiveParamsDto({ id, estado });
     try {
-      await InfractorController.service.setActive(activeParams);
+      await InfractorController.service.setEstado(activeParams);
       res.status(201).send("Infractor modificado correctamente!");
     } catch (e: any) {
       res.status(500).json({ error: "Internal Server Error" });

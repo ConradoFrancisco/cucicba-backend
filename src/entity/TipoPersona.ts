@@ -4,9 +4,11 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Persona } from "./Persona";
 
 @Entity({ name: "tipo_persona" })
 export class TipoPersona {
@@ -15,6 +17,9 @@ export class TipoPersona {
 
   @Column()
   descripcion: string;
+
+  @OneToMany(() => Persona, (persona) => persona.tipoPersona)
+  personas: Persona[];
 
   @CreateDateColumn({ name: "created_at" })
   @IsDate()

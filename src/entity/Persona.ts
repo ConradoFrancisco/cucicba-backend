@@ -17,6 +17,7 @@ import {
   ManyToOne,
 } from "typeorm";
 import { Area } from "./Area";
+import { TipoPersona } from "./TipoPersona";
 
 @Entity({ name: "persona" })
 export class Persona {
@@ -56,6 +57,9 @@ export class Persona {
 
   @ManyToOne(() => Area, (area) => area.personas)
   area?: Area;
+
+  @ManyToOne(() => TipoPersona, (tipoPersona) => tipoPersona.personas)
+  tipoPersona: TipoPersona;
 
   @CreateDateColumn({ name: "created_at" })
   @IsDate()
