@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import * as yup from "yup";
 import InmobiliariasIlegalesPenalModel from "../../../models/matriculados/servicios/inmobiliarias_ilegales/InmobiliariasIlegalesPenalModel";
 import { ParamsDto } from "../../../dtos/ParamsDto";
 import { InmobiliariaIlegalService } from "../../../services/servicios/InmobiliariaIlegalService";
@@ -69,7 +68,7 @@ export class InmobiliariaIlegalController {
   public async delete(req: Request, res: Response) {
     const { id } = req.params;
     const deletedAt: Date = new Date();
-    const body: DeleteParamsDto = new DeleteParamsDto({ id, deletedAt });
+    const body: DeleteParamsDto = new DeleteParamsDto({ id });
     try {
       await InmobiliariaIlegalController.service.delete(body);
       res.status(201).send("Registro eliminado satisfactoriamente!");
