@@ -7,33 +7,33 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { IsBoolean, IsDate, IsNotEmpty, Max, Min } from "class-validator";
-import { CategoriasPreguntasFrecuentes } from "./Categoria_pregunta_frecuente";
+import { IsBoolean, IsDate, IsNotEmpty, Length } from "class-validator";
+import { CategoriaSancion } from "./Categoria_sancion";
 
-@Entity({ name: "pregunta_frecuente" })
-export class PreguntaFrecuente {
+@Entity({ name: "sancion" })
+export class Sancion {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   @IsNotEmpty()
-  @Min(2)
-  @Max(255)
-  pregunta: string;
-
-  @Column({ type: "text" })
-  @IsNotEmpty()
-  respuesta: string;
+  @Length(2, 255)
+  descripcion: string;
 
   @Column({ default: false })
   @IsBoolean()
   estado: boolean;
 
+  @Column({ default: "" })
+  @IsNotEmpty()
+  @Length(2, 255)
+  archivo: string;
+
   @ManyToOne(
-    () => CategoriasPreguntasFrecuentes,
-    (categoria) => categoria.preguntasFrecuentes
+    () => CategoriaSancion,
+    (categoriaSancion) => categoriaSancion.sanciones
   )
-  categoria: CategoriasPreguntasFrecuentes;
+  categoria: CategoriaSancion;
 
   @CreateDateColumn({ name: "created_at" })
   @IsDate()

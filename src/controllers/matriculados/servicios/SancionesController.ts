@@ -1,129 +1,74 @@
 import { Request, Response } from "express";
-import * as yup from "yup";
-import SancionesModel from "../../../models/matriculados/servicios/sanciones_tribunal/SancionesModel";
+import { PreguntaFrecuenteService } from "../../../services/servicios/PreguntaFrecuenteService";
+import { ParamsDto } from "../../../dtos/ParamsDto";
+import { PreguntaFrecuenteDto } from "../../../dtos/servicios/PreguntaFrecuenteDto";
+import { ActiveParamsDto } from "../../../dtos/ActiveParamsDto";
+import { DeleteParamsDto } from "../../../dtos/DeleteParamsDto";
+import { SancionService } from "../../../services/servicios/SancionService";
+import { SancionDto } from "../../../dtos/servicios/SancionDto";
 
+export class SancionesController {
+  private static service: SancionService = new SancionService();
 
-const SancionSchema = yup.object().shape({
-  categoria: yup.number().required(),
-  fecha: yup.string().required(),
-  descripcion: yup.string().required(),
-  pdf: yup.string().required(),
-});
-class SancionesController {
-  public async getAll(req: Request, res: Response) {
-    let params = {};
-    const input = req.query.input;
-    const fecha = parseInt(req.query.fecha as string);
-    const categoria = parseInt(req.query.categoria as string);
-    console.log(fecha);
-    const orderDirection =
-      (req.query.orderDirection as "ASC" | "DESC") || "ASC";
-    const orderBy = (req.query.orderBy as string) || "id";
-    const estado = parseInt(req.query.estado as string);
-    const limit = parseInt(req.query.limit as string);
-    const offset = parseInt(req.query.offset as string);
-
-    if (orderBy) {
-      params = Object.assign({ orderBy }, params);
-    }
-    if (orderDirection) {
-      params = Object.assign({ orderDirection }, params);
-    }
-    if (fecha) {
-      params = Object.assign({ fecha }, params);
-    }
-    if (input) {
-      params = Object.assign({ input }, params);
-    }
-    if (estado || estado === 0) {
-      params = Object.assign({ estado }, params);
-    }
-    if (limit) {
-      params = Object.assign({ limit }, params);
-    }
-    if (offset) {
-      params = Object.assign({ offset }, params);
-    }
-    if (categoria) {
-        params = Object.assign({ categoria }, params);
-      }
+  public async getAll(req: Request, res: Response): Promise<void> {
     try {
-      const result = await SancionesModel.getAll(params);
+      const paramsDto: ParamsDto = new ParamsDto(req.query);
+      const result = await SancionesController.service.getAll(paramsDto);
       res.json(result);
     } catch (e) {
-      console.error("error al obtener las inmobiliarias Ilegales", e);
-      res.status(500).send("error en el servidor");
+      console.log(e);
+      res.status(500).json({ error: e });
     }
   }
-  public async getCategorias(req:Request,res:Response){
+  public async getAllCategorias(req: Request, res: Response): Promise<void> {
     try {
-        const result = await SancionesModel.getCategorys();
-        res.json(result);
-      } catch (e) {
-        console.error("error al obtener las categorias");
-        res.status(500).send("error en el servidor");
-      }
+      const result = await SancionesController.service.getAllCategorias();
+      res.json(result);
+    } catch (e) {
+      console.log(e);
+      res.status(500).json({ error: e });
+    }
   }
-
   public async create(req: Request, res: Response) {
-    const { descripcion, fecha, pdf } = req.body;
-    const categoria = parseInt(req.body.categoria as string);
+    const Sancion: SancionDto = new SancionDto(req.body);
     try {
-      // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
-      await SancionSchema.validate({ descripcion, fecha, pdf, categoria });
-
-      // Si la validación pasa, crear el registro en la base de datos
-      await SancionesModel.create({ categoria, descripcion, fecha, pdf });
+      await SancionesController.service.create(Sancion);
       res.status(201).send("Registro creado satisfactoriamente!");
     } catch (e: any) {
-      // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
-      if (e.name === "ValidationError") {
-        res.status(400).json({ error: e.errors });
-      } else {
-        res.status(500).json({ error: "Error del servidor" });
-      }
-      console.error(e);
+      res.status(500).json({ error: e });
     }
   }
-  public async setActive(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string);
-    const estado = req.body.estado;
+  public async setState(req: Request, res: Response) {
+    const { id } = req.params;
+    const { estado } = req.body;
+    const activeParams: ActiveParamsDto = new ActiveParamsDto({ id, estado });
     try {
-      const result = await SancionesModel.setActive({ id, estado });
-      res.status(200).send("Inmobiliaria Ilegal Publicada");
-      return res.json(result);
+      await SancionesController.service.setState(activeParams);
+      res.status(200).send("Sanción dada de alta!");
     } catch (e: any) {
-      res.status(500).json({ error: "Error del servidor" });
+      res.status(500).json({ error: e });
       console.error(e);
     }
   }
   public async delete(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string);
+    const { id } = req.params;
+    const deleteParamsDto: DeleteParamsDto = new DeleteParamsDto({ id });
     try {
-      const result = await SancionesModel.delete({ id });
-      res.status(200).send("Inmobiliaria ilegal eleminada con éxito");
+      const result = await SancionesController.service.delete(deleteParamsDto);
+      res.status(200).send("Sanción eliminada satisfactoriamente!");
       return res.json(result);
     } catch (e: any) {
-      res.status(500).json({ error: "Error del servidor" });
-      console.error(e);
+      res.status(500).json({ error: e });
     }
   }
   public async update(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string);
-    const { descripcion, fecha, pdf } = req.body;
-    const categoria = parseInt(req.body.categoria as string);
+    const { id } = req.query;
+    const updateDto = Object.assign({ id }, req.body);
+    const sancionDto: SancionDto = new SancionDto(updateDto);
     try {
-      await SancionesModel.update({ categoria_sancion_id:categoria, descripcion, fecha, id, pdf });
-      res.status(201).send("Registro Modificado correctamente!");
+      await SancionesController.service.update(sancionDto);
     } catch (e: any) {
-      // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
-      if (e.name === "ValidationError") {
-        res.status(400).json({ error: e.errors });
-      } else {
-        res.status(500).json({ error: "Error del servidor" });
-      }
-      console.error(e);
+      res.status(500).json({ error: e });
     }
   }
 }
-export default new SancionesController();

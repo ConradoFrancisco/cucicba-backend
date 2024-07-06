@@ -11,6 +11,7 @@ import { AreasRouter } from "./routes/AreasRouter";
 import { InfractoresRouter } from "./routes/servicios/InfractoresRouter";
 import { InmobiliariasRouter } from "./routes/servicios/inmobiliarias-ilegales";
 import { PreguntasFrecuentesRouter } from "./routes/servicios/PreguntasFrecuentesRouter";
+import { SancionesRouter } from "./routes/servicios/SancionesRouter";
 class App {
   public app: express.Application;
   //public corsOptions: cors.CorsOptions;
@@ -49,6 +50,7 @@ class App {
     new InfractoresRouter().routes(this.router);
     new ServiciosRouter().routes(this.router);
     new AreasRouter().routes(this.router);
+    new SancionesRouter().routes(this.router);
   }
 
   private initializeDatabase() {

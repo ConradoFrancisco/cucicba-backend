@@ -1,6 +1,6 @@
 GET http://localhost:8080/api/v1/servicios/preguntas-frecuentes
 ###
-GET http://localhost:8080/api/v1/servicios/preguntas-frecuentes/categorias
+GET http://localhost:8080/api/v1/servicios/sanciones/categorias
 ###
 
 PATCH http://localhost:8080/api/v1/servicios/preguntas-frecuentes/active/2
@@ -18,6 +18,6 @@ Content-Type: application/json
     "pregunta" : "nose que preguntar",
     "respuesta" : "No se que contestar",
     "categoria" : {
-        "id" : 2
+        "id" : "3"
     }
 }

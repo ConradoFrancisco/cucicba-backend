@@ -5,6 +5,8 @@ import InfractorTableSeeder from "./InfractorTableSeeder";
 import IlegalesTableSeeder from "./IlegalesTableSeeder";
 import PreguntasFrecuentesCategoriasTableSeeder from "./PreguntasFrecuentesCategoriasTableSeeder";
 import PreguntasFrecuentesTableSeeder from "./PreguntasFrecuentesTableSeeder";
+import CategoriaSancionSeeder from "./CategoriaSancionSeeder";
+import SancionSeeder from "./SancionSeeder";
 
 class DbSeed {
   constructor() {
@@ -13,11 +15,14 @@ class DbSeed {
 
   public async run(cn: DataSource) {
     await PreguntasFrecuentesCategoriasTableSeeder.run(cn);
-    await PreguntasFrecuentesTableSeeder.run(cn)
+    await PreguntasFrecuentesTableSeeder.run(cn);
     await AreaTableSeeder.run(cn);
     await TipoPersonaTableSeeder.run(cn);
     await InfractorTableSeeder.run(cn);
     await IlegalesTableSeeder.run(cn);
+    //sanciones
+    await CategoriaSancionSeeder.run(cn);
+    await SancionSeeder.run(cn);
   }
 }
 
