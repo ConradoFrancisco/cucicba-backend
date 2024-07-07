@@ -1,131 +1,78 @@
 import { Request, Response } from "express";
-import BibliotecaDigitalModel from "../../../models/matriculados/servicios/Biblioteca/BibliotecaDigitalModel";
-import * as Yup from 'yup'
-const postSchema = Yup.object().shape({
-  categoria_id: Yup.number().required("La categoria es requerida"),
-  fecha: Yup.date().required("La fecha es requerida"),
-  descripcion: Yup.string().required("La descripción es requerida"),
-  archivo: Yup.string().required("El cuerpo de la noticia es requerido"),
-});
- class BibliotecaDigitalController {
-  public async getAll(req: Request, res: Response) {
-    let params = {};
-    const input = req.query.input;
-    const fecha = parseInt(req.query.fecha as string)
-    const categoria = parseInt(req.query.categoria as string)
-    console.log(fecha);
-    const orderDirection =
-    (req.query.orderDirection as "ASC" | "DESC") || "ASC";
-    const orderBy = (req.query.orderBy as string) || "id";
-    const estado = parseInt(req.query.estado as string);
-    const limit = parseInt(req.query.limit as string);
-    const offset = parseInt(req.query.offset as string);
-    
-    if (orderBy) {
-      params = Object.assign({ orderBy }, params);
-    }if (categoria) {
-      params = Object.assign({ categoria_id:categoria }, params);
-    }
-    if (orderDirection) {
-      params = Object.assign({ orderDirection }, params);
-    }
-    if (fecha) {
-      params = Object.assign({ fecha }, params);
-    }
-    if (input) {
-      params = Object.assign({ input }, params);
-    }
-    if (estado || estado === 0) {
-      params = Object.assign({ estado }, params);
-    }
-    if (limit) {
-      params = Object.assign({ limit }, params);
-    }
-    if (offset) {
-      params = Object.assign({ offset }, params);
-    }
+import { BibliotecaDigitalService } from "../../../services/servicios/BibliotecaDigitalService";
+import { ParamsDto } from "../../../dtos/ParamsDto";
+import { ActiveParamsDto } from "../../../dtos/ActiveParamsDto";
+import { DeleteParamsDto } from "../../../dtos/DeleteParamsDto";
+import { PostDto } from "../../../dtos/servicios/PostDto";
+
+export class BibliotecaDigitalController {
+  private static service: BibliotecaDigitalService =
+    new BibliotecaDigitalService();
+
+  public async getAll(req: Request, res: Response): Promise<void> {
     try {
-      const result = await BibliotecaDigitalModel.getAll(params);
+      const paramsDto: ParamsDto = new ParamsDto(req.query);
+      const result = await BibliotecaDigitalController.service.getAll(
+        paramsDto
+      );
       res.json(result);
     } catch (e) {
-      console.error("error al obtener las inmobiliarias Ilegales", e);
-      res.status(500).send("error en el servidor");
+      console.log(e);
+      res.status(500).json({ error: e });
     }
   }
-  
-  public async create(req: Request, res: Response) {
-    const { pdf,descripcion,fecha} = req.body;
-    const categoria_id = parseInt(req.body.categoria as string);    
-    console.log(req.body);
-    
+  public async getAllCategorias(req: Request, res: Response): Promise<void> {
     try {
-      // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
-      await postSchema.validate({ categoria_id,fecha,descripcion,archivo:pdf });
-
-      // Si la validación pasa, crear el registro en la base de datos
-      await BibliotecaDigitalModel.create({ categoria_id,fecha,descripcion,archivo:pdf});
+      const result =
+        await BibliotecaDigitalController.service.getAllCategorias();
+      res.json(result);
+    } catch (e) {
+      console.log(e);
+      res.status(500).json({ error: e });
+    }
+  }
+  public async create(req: Request, res: Response) {
+    const PreguntaFrecuente: PostDto = new PostDto(req.body);
+    try {
+      await BibliotecaDigitalController.service.create(PreguntaFrecuente);
       res.status(201).send("Registro creado satisfactoriamente!");
     } catch (e: any) {
-      // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
-      if (e.name === "ValidationError") {
-        res.status(400).json({ error: e.errors });
-      } else {
-        res.status(500).json({ error: "Error del servidor" });
-      }
-      console.error(e);
+      res.status(500).json({ error: e });
     }
   }
-
-  public async getAllCategories(req:Request,res:Response){
-      try{
-        const categorias = await BibliotecaDigitalModel.getAllCategories();
-        res.json(categorias);
-      }catch (e) {
-        console.error("error al obtener las inmobiliarias Ilegales", e);
-        res.status(500).send("error en el servidor");
-      }
-  }
-
-  public async setActive(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string)
-    const estado = req.body.estado
+  public async setState(req: Request, res: Response) {
+    const { id } = req.params;
+    const { estado } = req.body;
+    const activeParams: ActiveParamsDto = new ActiveParamsDto({ id, estado });
     try {
-      const result = await BibliotecaDigitalModel.setActive({id,estado})
-      res.status(200).send("Inmobiliaria Ilegal Publicada");
-      return res.json(result)
-    } catch (e :any) {
-        res.status(500).json({ error: "Error del servidor" });
+      await BibliotecaDigitalController.service.setState(activeParams);
+      res.status(200).send("Post cambiado de estado!");
+    } catch (e: any) {
+      res.status(500).json({ error: e });
       console.error(e);
     }
   }
   public async delete(req: Request, res: Response) {
-    console.log("hola")
-    const id = parseInt(req.params.id as string)
+    const { id } = req.params;
+    const deleteParamsDto: DeleteParamsDto = new DeleteParamsDto({ id });
     try {
-      const result = await BibliotecaDigitalModel.delete({id})
-      res.status(200).send("post eliminado con éxito");
-      return res.json(result)
-    } catch (e :any) {
-        res.status(500).json({ error: "Error del servidor" });
-      console.error(e);
+      const result = await BibliotecaDigitalController.service.delete(
+        deleteParamsDto
+      );
+      res.status(200).send("Pregunta eliminada satisfactoriamente!");
+      return res.json(result);
+    } catch (e: any) {
+      res.status(500).json({ error: "Error del servidor" });
     }
   }
   public async update(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string)
-    const { pdf,descripcion,date} = req.body;
-    const categoria_id = parseInt(req.body.categoria_id as string);  
+    const { id } = req.query;
+    const updateDto = Object.assign({ id }, req.body);
+    const preguntasFrecuentesDto: PostDto = new PostDto(updateDto);
     try {
-      await BibliotecaDigitalModel.update({ id,categoria_id,fecha:date,descripcion,archivo:pdf });
-      res.status(201).send("Registro Modificado correctamente!");
+      await BibliotecaDigitalController.service.update(preguntasFrecuentesDto);
     } catch (e: any) {
-      // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
-      if (e.name === "ValidationError") {
-        res.status(400).json({ error: e.errors });
-      } else {
-        res.status(500).json({ error: "Error del servidor" });
-      }
-      console.error(e);
+      res.status(500).json({ error: "Error del servidor" });
     }
   }
 }
-export default new BibliotecaDigitalController()

@@ -7,6 +7,7 @@ import PreguntasFrecuentesCategoriasTableSeeder from "./PreguntasFrecuentesCateg
 import PreguntasFrecuentesTableSeeder from "./PreguntasFrecuentesTableSeeder";
 import CategoriaSancionSeeder from "./CategoriaSancionSeeder";
 import SancionSeeder from "./SancionSeeder";
+import CategoriaBibliotecaSeeder from "./CategoriaBibliotecaSeeder";
 
 class DbSeed {
   constructor() {
@@ -23,6 +24,8 @@ class DbSeed {
     //sanciones
     await CategoriaSancionSeeder.run(cn);
     await SancionSeeder.run(cn);
+    // Posts Biblioteca
+    await CategoriaBibliotecaSeeder.run(cn);
   }
 }
 

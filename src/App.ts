@@ -12,6 +12,8 @@ import { InfractoresRouter } from "./routes/servicios/InfractoresRouter";
 import { InmobiliariasRouter } from "./routes/servicios/inmobiliarias-ilegales";
 import { PreguntasFrecuentesRouter } from "./routes/servicios/PreguntasFrecuentesRouter";
 import { SancionesRouter } from "./routes/servicios/SancionesRouter";
+import { BibliotecaDigitalRouter } from "./routes/servicios/BibliotecaRouter";
+import { RevistaRouter } from "./routes/servicios/RevistaRouter";
 class App {
   public app: express.Application;
   //public corsOptions: cors.CorsOptions;
@@ -45,7 +47,9 @@ class App {
     );
     this.app.use("/api/v1/", this.router);
     this.app.use(cors());
+    new RevistaRouter().routes(this.router);
     new PreguntasFrecuentesRouter().routes(this.router);
+    new BibliotecaDigitalRouter().routes(this.router);
     new InmobiliariasRouter().routes(this.router);
     new InfractoresRouter().routes(this.router);
     new ServiciosRouter().routes(this.router);

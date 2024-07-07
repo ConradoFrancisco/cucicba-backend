@@ -1,9 +1,9 @@
-GET http://localhost:8080/api/v1/servicios/preguntas-frecuentes
+GET http://localhost:8080/api/v1/servicios/revista
 ###
-GET http://localhost:8080/api/v1/servicios/sanciones/categorias
+GET http://localhost:8080/api/v1/servicios/biblioteca-digital/categorias
 ###
 
-PATCH http://localhost:8080/api/v1/servicios/preguntas-frecuentes/active/2
+PATCH http://localhost:8080/api/v1/servicios/revista/active/2
 Content-Type: application/json
 
 {
@@ -11,13 +11,24 @@ Content-Type: application/json
 }
 ###
 
-POST http://localhost:8080/api/v1/servicios/preguntas-frecuentes
+POST http://localhost:8080/api/v1/servicios/revista
 Content-Type: application/json
 
 {
-    "pregunta" : "nose que preguntar",
-    "respuesta" : "No se que contestar",
+    "descripcion" : "nosssss",
+    "archivo" : "No se que contestar",
+    "imagen" : "asssss imagen",
+    "fecha" : "2024-07-06T11:04:46.512Z"
+}
+###
+PATCH http://localhost:8080/api/v1/servicios/biblioteca-digital/1
+Content-Type: application/json
+
+{
+    "descripcion" : "ssss",
+    "archivo" : "ssss",
+    "fecha" : "2024-07-06T11:04:46.512Z",
     "categoria" : {
-        "id" : "3"
+        "id" : "5"
     }
 }

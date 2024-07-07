@@ -1,110 +1,67 @@
 import { Request, Response } from "express";
-import RevistaCucicbaModel from "../../../models/matriculados/servicios/revista_cucicba/RevistaCucicbaModel";
-import * as yup from "yup";
-const revistaSchema = yup.object().shape({
-  fecha: yup.string().required(),
-  descripcion: yup.string().required(),
-  portada: yup.string().required(),
-  archivo: yup.string().required(),
-});
-class RevistaCucicbaController {
-  public async getAll(req: Request, res: Response) {
-    let params = {};
-    const input = req.query.input;
+import { PreguntaFrecuenteService } from "../../../services/servicios/PreguntaFrecuenteService";
+import { ParamsDto } from "../../../dtos/ParamsDto";
+import { PreguntaFrecuenteDto } from "../../../dtos/servicios/PreguntaFrecuenteDto";
+import { ActiveParamsDto } from "../../../dtos/ActiveParamsDto";
+import { DeleteParamsDto } from "../../../dtos/DeleteParamsDto";
+import { SancionService } from "../../../services/servicios/SancionService";
+import { SancionDto } from "../../../dtos/servicios/SancionDto";
+import RevistaService from "../../../services/servicios/RevistaService";
+import { RevistaDto } from "../../../dtos/servicios/RevistaDto";
 
-    const orderDirection =
-      (req.query.orderDirection as "ASC" | "DESC") || "ASC";
-    const orderBy = (req.query.orderBy as string) || "id";
-    const estado = parseInt(req.query.estado as string);
-    const limit = parseInt(req.query.limit as string);
-    const offset = parseInt(req.query.offset as string);
+export class RevistaController {
+  private static service: RevistaService = new RevistaService();
 
-    if (orderBy) {
-      params = Object.assign({ orderBy }, params);
-    }
-    if (orderDirection) {
-      params = Object.assign({ orderDirection }, params);
-    }
-    if (input) {
-      params = Object.assign({ input }, params);
-    }
-    if (estado || estado === 0) {
-      params = Object.assign({ estado }, params);
-    }
-    if (limit) {
-      params = Object.assign({ limit }, params);
-    }
-    if (offset) {
-      params = Object.assign({ offset }, params);
-    }
+  public async getAll(req: Request, res: Response): Promise<void> {
     try {
-      const result = await RevistaCucicbaModel.getAll(params);
+      const paramsDto: ParamsDto = new ParamsDto(req.query);
+      const result = await RevistaController.service.getAll(paramsDto);
       res.json(result);
     } catch (e) {
-      console.error("error al obtener las autoridades", e);
-      res.status(500).send("error en el servidor");
+      console.log(e);
+      res.status(500).json({ error: e });
     }
   }
-
   public async create(req: Request, res: Response) {
-    const { portada, archivo,descripcion,fecha } = req.body;
-    console.log('body:',req.body)
+    const Revista: RevistaDto = new RevistaDto(req.body);
     try {
-      // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
-      await revistaSchema.validate({ portada, archivo,descripcion,fecha });
-
-      // Si la validación pasa, crear el registro en la base de datos
-      await RevistaCucicbaModel.create({ portada, archivo,descripcion,fecha });
-      res.status(201).send("Revista creada satisfactoriamente!");
+      await RevistaController.service.create(Revista);
+      res.status(201).send("Registro creado satisfactoriamente!");
     } catch (e: any) {
-      // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
-      if (e.name === "ValidationError") {
-        res.status(400).json({ error: e.errors });
-      } else {
-        res.status(500).json({ error: "Error del servidor" });
-      }
-      console.error(e);
+      res.status(500).json({ error: e });
     }
   }
-  public async setActive(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string);
-    const estado = req.body.estado;
+  public async setState(req: Request, res: Response) {
+    const { id } = req.params;
+    const { estado } = req.body;
+    const activeParams: ActiveParamsDto = new ActiveParamsDto({ id, estado });
     try {
-      const result = await RevistaCucicbaModel.setActive({ id, estado });
-      res.status(200).send("Revista publicada!");
-      return res.json(result);
+      await RevistaController.service.setState(activeParams);
+      res.status(200).send("Sanción dada de alta!");
     } catch (e: any) {
-      res.status(500).json({ error: "Error del servidor" });
+      res.status(500).json({ error: e });
       console.error(e);
     }
   }
   public async delete(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string);
+    const { id } = req.params;
+    const deleteParamsDto: DeleteParamsDto = new DeleteParamsDto({ id });
     try {
-      const result = await RevistaCucicbaModel.delete({ id });
-      res.status(200).send("Revista eliminada satisfactoriamente!");
+      const result = await RevistaController.service.delete(deleteParamsDto);
+      res.status(200).send("Sanción eliminada satisfactoriamente!");
       return res.json(result);
     } catch (e: any) {
-      res.status(500).json({ error: "Error del servidor" });
-      console.error(e);
+      res.status(500).json({ error: e });
     }
   }
   public async update(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string);
-    const { portada, archivo,descripcion,fecha } = req.body;
+    const { id } = req.query;
+    const updateDto = Object.assign({ id }, req.body);
+    const revistaDto: RevistaDto = new RevistaDto(updateDto);
     try {
-      await RevistaCucicbaModel.update({ id, portada, archivo,descripcion,fecha });
-      res.status(201).send("Revista Modificada correctamente!");
+      await RevistaController.service.update(revistaDto);
     } catch (e: any) {
-      // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
-      if (e.name === "ValidationError") {
-        res.status(400).json({ error: e.errors });
-      } else {
-        res.status(500).json({ error: "Error del servidor" });
-      }
-      console.error(e);
+      res.status(500).json({ error: e });
     }
   }
 }
-
-export default new RevistaCucicbaController();
