@@ -14,6 +14,7 @@ export class InmobiliariaIlegalService {
     this.repository = ds.manager.getRepository(Ilegal);
   }
   public async getAll(p: ParamsDto) {
+    console.log("servicio: ", p);
     const where: FindManyOptions<Ilegal>["where"] = {};
     where.deletedAt != null;
     where.penal === p.penal;

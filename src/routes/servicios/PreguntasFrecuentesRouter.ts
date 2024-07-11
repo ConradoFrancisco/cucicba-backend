@@ -15,6 +15,6 @@ export class PreguntasFrecuentesRouter {
     router.post(`${this.prefix}`, this.controller.create);
     router.patch(`${this.prefix}/:id`, this.controller.update);
     router.patch(`${this.prefix}/active/:id`, this.controller.setState);
-    /* router.patch(`${this.prefix}/delete/:id`, this.controller.delete); */
+    router.patch(`${this.prefix}/delete/:id`, this.controller.delete);
   }
 }

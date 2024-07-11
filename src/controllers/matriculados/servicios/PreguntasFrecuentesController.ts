@@ -11,6 +11,7 @@ export class PreguntasFrecuentesController {
 
   public async getAll(req: Request, res: Response): Promise<void> {
     try {
+      console.log("controller query:", req.query);
       const paramsDto: ParamsDto = new ParamsDto(req.query);
       const result = await PreguntasFrecuentesController.service.getAll(
         paramsDto
@@ -58,11 +59,8 @@ export class PreguntasFrecuentesController {
     const { id } = req.params;
     const deleteParamsDto: DeleteParamsDto = new DeleteParamsDto({ id });
     try {
-      const result = await PreguntasFrecuentesController.service.delete(
-        deleteParamsDto
-      );
+      await PreguntasFrecuentesController.service.delete(deleteParamsDto);
       res.status(200).send("Pregunta eliminada satisfactoriamente!");
-      return res.json(result);
     } catch (e: any) {
       res.status(500).json({ error: "Error del servidor" });
     }
@@ -76,6 +74,7 @@ export class PreguntasFrecuentesController {
       await PreguntasFrecuentesController.service.update(
         preguntasFrecuentesDto
       );
+      res.status(200).send("Pregunta editada satisfactoriamente!");
     } catch (e: any) {
       res.status(500).json({ error: "Error del servidor" });
     }

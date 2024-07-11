@@ -28,7 +28,7 @@ export class PreguntaFrecuenteService {
     if (p.estado !== null) {
       where.estado = p.estado;
     }
-
+    console.log(p.categoriaId);
     where.categoria = { id: p.categoriaId };
 
     const order: FindManyOptions<PreguntaFrecuente>["order"] = {};
@@ -60,9 +60,11 @@ export class PreguntaFrecuenteService {
     preguntaFrecuente.pregunta = p.pregunta;
     preguntaFrecuente.respuesta = p.respuesta;
     if (p.categoria) {
-      const categoria = await this.categoriaRepository.findOneBy({id:p.categoria.id});
-      console.log(p.categoria)
-      console.log(categoria)
+      const categoria = await this.categoriaRepository.findOneBy({
+        id: p.categoria.id,
+      });
+      console.log(p.categoria);
+      console.log(categoria);
       if (categoria) {
         preguntaFrecuente.categoria = categoria;
       } else {
@@ -86,7 +88,9 @@ export class PreguntaFrecuenteService {
     PreguntaExistente.pregunta = p.pregunta;
     PreguntaExistente.respuesta = p.respuesta;
     if (p.categoria) {
-      const category = await this.categoriaRepository.findOneBy({id:p.categoria.id});
+      const category = await this.categoriaRepository.findOneBy({
+        id: p.categoria.id,
+      });
       PreguntaExistente.categoria = category;
     }
 
@@ -110,7 +114,7 @@ export class PreguntaFrecuenteService {
     const areaActualizada = await this.repository.save(PreguntaExistente);
     return areaActualizada;
   }
-  public async delete(p: DeleteParamsDto): Promise<void> {
+  public async delete(p: DeleteParamsDto): Promise<PreguntaFrecuente | null> {
     const PreguntaExistente = await this.repository.findOneBy({
       id: p.id,
     });
@@ -119,7 +123,6 @@ export class PreguntaFrecuenteService {
     }
     PreguntaExistente.deletedAt = p.deletedAt;
     PreguntaExistente.updatedAt = p.deletedAt;
-    await this.repository.save(PreguntaExistente);
+    return await this.repository.save(PreguntaExistente);
   }
-
 }
