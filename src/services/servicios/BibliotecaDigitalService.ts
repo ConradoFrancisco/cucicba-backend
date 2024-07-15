@@ -20,6 +20,7 @@ export class BibliotecaDigitalService {
     this.categoriaRepository = ds.manager.getRepository(CategoriaPost);
   }
   public async getAll(p: ParamsDto) {
+    console.log(p.categoriaId, "aca");
     const where: FindManyOptions<PostBiblioteca>["where"] = {};
     where.deletedAt != null;
     if (p.input) {
@@ -30,7 +31,10 @@ export class BibliotecaDigitalService {
       where.estado = p.estado;
     }
 
-    where.categoria = { id: p.categoriaId };
+    if (p.categoriaId) {
+      where.categoria = { id: p.categoriaId };
+      console.log(p.categoriaId);
+    }
 
     const order: FindManyOptions<PostBiblioteca>["order"] = {};
     if (p.orderBy) {
@@ -110,7 +114,7 @@ export class BibliotecaDigitalService {
     const postActualizado = await this.repository.save(PostExistente);
     return postActualizado;
   }
-  public async delete(p: DeleteParamsDto): Promise<void> {
+  public async delete(p: DeleteParamsDto): Promise<PostBiblioteca | null> {
     const PostExistente = await this.repository.findOneBy({
       id: p.id,
     });

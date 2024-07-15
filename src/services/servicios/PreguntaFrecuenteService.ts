@@ -28,6 +28,7 @@ export class PreguntaFrecuenteService {
     if (p.estado !== null) {
       where.estado = p.estado;
     }
+
     console.log(p.categoriaId);
     where.categoria = { id: p.categoriaId };
 

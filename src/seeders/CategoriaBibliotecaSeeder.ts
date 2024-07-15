@@ -13,7 +13,7 @@ class CategoriaBibliotecaSeeder {
       );
 
     const categoria1 = new CategoriaPost();
-    categoria1.nombre = "Aamparo individual a la ley 5859";
+    categoria1.nombre = "Amparo individual a la ley 5859";
     const categoria2 = new CategoriaPost();
     categoria2.nombre = "Código de edificación en la ciudad de Buenos Aires";
     const categoria3 = new CategoriaPost();

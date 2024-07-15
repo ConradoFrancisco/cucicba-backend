@@ -14,6 +14,8 @@ import { PreguntasFrecuentesRouter } from "./routes/servicios/PreguntasFrecuente
 import { SancionesRouter } from "./routes/servicios/SancionesRouter";
 import { BibliotecaDigitalRouter } from "./routes/servicios/BibliotecaRouter";
 import { RevistaRouter } from "./routes/servicios/RevistaRouter";
+import { FilesRouter } from "./routes/files/FilesRouter";
+import { NoticiaRouter } from "./routes/NoticiaRouter";
 class App {
   public app: express.Application;
   //public corsOptions: cors.CorsOptions;
@@ -47,6 +49,9 @@ class App {
     );
     this.app.use("/api/v1/", this.router);
     this.app.use(cors());
+    //files
+    new FilesRouter().routes(this.router);
+    //Servicios
     new RevistaRouter().routes(this.router);
     new PreguntasFrecuentesRouter().routes(this.router);
     new BibliotecaDigitalRouter().routes(this.router);
@@ -55,6 +60,8 @@ class App {
     new ServiciosRouter().routes(this.router);
     new AreasRouter().routes(this.router);
     new SancionesRouter().routes(this.router);
+    //noticias
+    new NoticiaRouter().routes(this.router);
   }
 
   private initializeDatabase() {

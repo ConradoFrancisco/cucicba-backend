@@ -48,8 +48,7 @@ export class RevistaController {
     const deleteParamsDto: DeleteParamsDto = new DeleteParamsDto({ id });
     try {
       const result = await RevistaController.service.delete(deleteParamsDto);
-      res.status(200).send("Sanción eliminada satisfactoriamente!");
-      return res.json(result);
+      res.status(200).send("Revista eliminada satisfactoriamente!");
     } catch (e: any) {
       res.status(500).json({ error: e });
     }

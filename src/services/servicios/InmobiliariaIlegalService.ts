@@ -17,7 +17,9 @@ export class InmobiliariaIlegalService {
     console.log("servicio: ", p);
     const where: FindManyOptions<Ilegal>["where"] = {};
     where.deletedAt != null;
-    where.penal === p.penal;
+    if (p.penal) {
+      where.penal = p.penal;
+    }
     if (p.input) {
       where.nombre = Like(`%${p.input}%`);
     }
@@ -50,7 +52,7 @@ export class InmobiliariaIlegalService {
     nuevaInmobiliariaIlegal.nombre = p.nombre;
     nuevaInmobiliariaIlegal.fecha = p.fecha;
     nuevaInmobiliariaIlegal.direccion = p.direccion;
-
+    nuevaInmobiliariaIlegal.penal = p.penal;
     const infractorGuardado = await this.repository.save(
       nuevaInmobiliariaIlegal
     );

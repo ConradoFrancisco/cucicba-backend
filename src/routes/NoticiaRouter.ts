@@ -1,12 +1,13 @@
 import { Router } from "express";
-import { RevistaController } from "../../controllers/matriculados/servicios/RevistaCucicbaController";
+import { AreasController } from "../controllers/AreasController";
+import { NoticiaController } from "../controllers/NoticiaController";
 
-export class RevistaRouter {
-  private controller: RevistaController;
-  private prefix: string = "/servicios/revista";
+export class NoticiaRouter {
+  private controller: NoticiaController;
+  private prefix: string = "/noticia";
 
   constructor() {
-    this.controller = new RevistaController();
+    this.controller = new NoticiaController();
   }
 
   public routes(router: Router): void {

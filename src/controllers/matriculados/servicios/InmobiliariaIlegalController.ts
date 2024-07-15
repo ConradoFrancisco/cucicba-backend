@@ -11,7 +11,8 @@ export class InmobiliariaIlegalController {
     new InmobiliariaIlegalService();
 
   public async getAll(req: Request, res: Response) {
-    const paramsDto: ParamsDto = new ParamsDto(req.body);
+    const paramsDto: ParamsDto = new ParamsDto(req.query);
+    console.log(req.query);
     try {
       const result = await InmobiliariaIlegalController.service.getAll(
         paramsDto
@@ -53,13 +54,13 @@ export class InmobiliariaIlegalController {
       res.status(500).json({ error: e });
     }
   }
-  public async setActive(req: Request, res: Response) {
+  public async setState(req: Request, res: Response) {
     const { id } = req.params;
     const estado = req.body.estado;
     const activeParams: ActiveParamsDto = new ActiveParamsDto({ id, estado });
     try {
       await InmobiliariaIlegalController.service.setActive(activeParams);
-      res.status(201).send("Infractor modificado correctamente!");
+      res.status(201).send("inmobiliaria modificada correctamente!");
     } catch (e: any) {
       res.status(500).json({ error: "Internal Server Error" });
       console.error(e);
@@ -67,6 +68,7 @@ export class InmobiliariaIlegalController {
   }
   public async delete(req: Request, res: Response) {
     const { id } = req.params;
+    console.log("entre");
     const deletedAt: Date = new Date();
     const body: DeleteParamsDto = new DeleteParamsDto({ id });
     try {

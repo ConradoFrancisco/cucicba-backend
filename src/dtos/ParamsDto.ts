@@ -11,19 +11,20 @@ export class ParamsDto {
   public categoriaId?: number;
 
   constructor(body: any) {
-    console.log("constructor:", body);
-
     const inp: string = body.input || "";
     this.input = body.input !== null ? inp.trim().toLowerCase() : null;
     this.direccion = body.direccion ? body.direccion : null;
     this.orden = body.orden ? parseInt(body.orden) : null;
     this.orderBy = body.orderBy ? body.orderBy : "id";
     this.setLimit(body);
-    this.estado = body.estado !== null ? body.estado : null;
+    this.estado =
+      body.estado !== "" || body.estado !== null ? body.estado : null;
     this.setOrderDirection(body);
     this.offset = parseInt(body.offset) || 0;
-    this.penal = body.penal !== null ? body.penal : false;
+    this.penal = body.penal !== null ? body.penal : null;
     this.categoriaId = body.categoria ? parseInt(body.categoria) : null;
+    console.log(body, "aca elbody");
+    console.log(this.estado, "aca el estado");
   }
 
   private setLimit(body: any) {
