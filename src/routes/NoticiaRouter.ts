@@ -12,6 +12,7 @@ export class NoticiaRouter {
 
   public routes(router: Router): void {
     router.get(`${this.prefix}`, this.controller.getAll);
+    router.get(`${this.prefix}/:id`, this.controller.getById);
     router.post(`${this.prefix}`, this.controller.create);
     router.patch(`${this.prefix}/:id`, this.controller.update);
     router.patch(`${this.prefix}/active/:id`, this.controller.setState);

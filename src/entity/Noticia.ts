@@ -15,26 +15,26 @@ export class Noticia {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   @IsNotEmpty()
   @Min(2)
   @Max(255)
   titulo: string;
 
-  @Column()
+  @Column({ nullable: true })
   @IsDate()
   fecha: Date;
 
-  @Column()
-  orden: number;
+  @Column({ nullable: true })
+  orden?: number;
 
-  @Column()
+  @Column({ nullable: true })
   @IsNotEmpty()
   @Min(2)
   @Max(255)
   descripcion: string;
 
-  @Column("text")
+  @Column("text",{ nullable: true })
   @IsNotEmpty()
   cuerpo: string;
 

@@ -23,8 +23,6 @@ export class ParamsDto {
     this.offset = parseInt(body.offset) || 0;
     this.penal = body.penal !== null ? body.penal : null;
     this.categoriaId = body.categoria ? parseInt(body.categoria) : null;
-    console.log(body, "aca elbody");
-    console.log(this.estado, "aca el estado");
   }
 
   private setLimit(body: any) {

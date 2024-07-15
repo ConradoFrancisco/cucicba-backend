@@ -19,10 +19,20 @@ export class NoticiaController {
     }
   }
 
-  public async create(req: Request, res: Response) {
-    const PreguntaFrecuente: NoticiaDto = new NoticiaDto(req.body);
+  public async getById(req: Request, res: Response) {
+    const id = parseInt(req.query.id as string)
+    console.log('entre')
     try {
-      await NoticiaController.service.create(PreguntaFrecuente);
+      const noticia = await NoticiaController.service.getByid(id);
+      res.json(noticia);
+    } catch (e: any) {
+      res.status(500).json({ error: e });
+    }
+  }
+
+  public async create(req: Request, res: Response) {
+    try {
+      await NoticiaController.service.create(req.body.titulo);
       res.status(201).send("Registro creado satisfactoriamente!");
     } catch (e: any) {
       res.status(500).json({ error: e });

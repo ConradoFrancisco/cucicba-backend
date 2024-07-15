@@ -13,5 +13,7 @@ export class NoticiaDto {
     this.descripcion = noticia.description;
     this.estado = noticia.estado ? noticia.estado : false;
     this.orden = parseInt(noticia.orden);
+    this.cuerpo = noticia.cuerpo
+    this.fecha = noticia.fecha;
   }
 }

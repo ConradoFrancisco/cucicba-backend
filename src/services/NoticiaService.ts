@@ -46,15 +46,22 @@ export class NoticiaService {
 
     return { data: preguntasFrecuentesDto, total };
   }
-  public async create(p: NoticiaDto): Promise<Noticia> {
+  public async getByid(id:number): Promise<Noticia | null> {
+    console.log('entre service',id)
+    const noticiaExistente = await this.repository.findOneBy({
+      id:id,
+    });
+    console.log(noticiaExistente)
+    if (!noticiaExistente) {
+      return null;
+    }
+    return noticiaExistente;
+  }
+  public async create(titulo:string): Promise<Noticia> {
     const noticia = new Noticia();
-    noticia.cuerpo = p.cuerpo;
-    noticia.descripcion = p.descripcion;
-    noticia.fecha = p.fecha;
-    noticia.titulo = p.titulo;
-    noticia.orden = p.orden;
-    const preguntaGuardada = await this.repository.save(noticia);
-    return preguntaGuardada;
+    noticia.titulo = titulo;
+    const noticiaGuardada = await this.repository.save(noticia);
+    return noticiaGuardada;
   }
 
   public async update(p: NoticiaDto): Promise<Noticia | null> {
