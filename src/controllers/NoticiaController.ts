@@ -20,8 +20,8 @@ export class NoticiaController {
   }
 
   public async getById(req: Request, res: Response) {
-    const id = parseInt(req.query.id as string)
-    console.log('entre')
+    const id = parseInt(req.params.id as string);
+    console.log("entre");
     try {
       const noticia = await NoticiaController.service.getByid(id);
       res.json(noticia);

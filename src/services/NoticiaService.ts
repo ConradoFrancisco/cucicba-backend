@@ -40,24 +40,22 @@ export class NoticiaService {
 
     const [data, total] = await this.repository.findAndCount(options);
 
-    const preguntasFrecuentesDto = data.map(
-      (noticia) => new NoticiaDto(noticia)
-    );
+    const noticiaDto = data.map((noticia) => new NoticiaDto(noticia));
 
-    return { data: preguntasFrecuentesDto, total };
+    return { data: noticiaDto, total };
   }
-  public async getByid(id:number): Promise<Noticia | null> {
-    console.log('entre service',id)
+  public async getByid(id: number): Promise<NoticiaDto | null> {
+    console.log("entre service", id);
     const noticiaExistente = await this.repository.findOneBy({
-      id:id,
+      id: id,
     });
-    console.log(noticiaExistente)
     if (!noticiaExistente) {
       return null;
     }
-    return noticiaExistente;
+    const data = new NoticiaDto(noticiaExistente);
+    return data;
   }
-  public async create(titulo:string): Promise<Noticia> {
+  public async create(titulo: string): Promise<Noticia> {
     const noticia = new Noticia();
     noticia.titulo = titulo;
     const noticiaGuardada = await this.repository.save(noticia);

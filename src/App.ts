@@ -29,12 +29,18 @@ class App {
       path: path.resolve(__dirname, "../.env"),
     });
     this.app.use(cors());
+    this.app.use("/files", express.static(path.resolve(__dirname, "../files")));
+    this.app.use(
+      "/uploads",
+      express.static(path.resolve(__dirname, "../uploads"))
+    );
     this.initializeRoutes();
     this.initializeDatabase();
   }
 
   private initializeRoutes() {
     this.app.use(bodyParser.json());
+
     this.app.use(
       (
         req: express.Request,
