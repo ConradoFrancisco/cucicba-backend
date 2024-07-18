@@ -1,3 +1,5 @@
+import { Area } from "../entity/Area";
+
 export class ParamsDto {
   public input: string;
   public direccion?: string;
@@ -9,20 +11,20 @@ export class ParamsDto {
   public offset: number;
   public penal?: boolean;
   public categoriaId?: number;
-
+  public area?: any;
   constructor(body: any) {
     const inp: string = body.input || "";
-    this.input = body.input !== null ? inp.trim().toLowerCase() : null;
+    this.input = body.input !== null ? inp.trim() : null;
     this.direccion = body.direccion ? body.direccion : null;
     this.orden = body.orden ? parseInt(body.orden) : null;
     this.orderBy = body.orderBy ? body.orderBy : "id";
-    this.setLimit(body);
     this.estado =
       body.estado !== "" || body.estado !== null ? body.estado : null;
     this.setOrderDirection(body);
     this.offset = parseInt(body.offset) || 0;
     this.penal = body.penal !== null ? body.penal : null;
     this.categoriaId = body.categoria ? parseInt(body.categoria) : null;
+    this.area = body.area ? body.area : null;
   }
 
   private setLimit(body: any) {

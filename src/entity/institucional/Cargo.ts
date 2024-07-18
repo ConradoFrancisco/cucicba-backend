@@ -7,29 +7,19 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
 } from "typeorm";
+import { AutoridadPrincipal } from "./AutoridadPrincipal";
+import { IsDate } from "class-validator";
 
-import { IsBoolean, IsDate, IsNumber, IsPositive } from "class-validator";
-import { Personal } from "./institucional/Personal";
-
-@Entity({ name: "area" })
-export class Area {
+@Entity({ name: "cargo" })
+export class Cargo {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  nombre: string;
+  descripcion: string;
 
-  @Column({ default: false })
-  @IsBoolean()
-  estado: boolean;
-
-  @Column({ nullable: true })
-  @IsNumber()
-  @IsPositive()
-  orden?: number;
-
-  @OneToMany(() => Personal, (personal) => personal.area)
-  personal: Personal[];
+  @OneToMany(() => AutoridadPrincipal, (autoridad) => autoridad.cargo)
+  autoridades: AutoridadPrincipal[];
 
   @CreateDateColumn({ name: "created_at" })
   @IsDate()

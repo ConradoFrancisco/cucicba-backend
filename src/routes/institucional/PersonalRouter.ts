@@ -1,16 +1,17 @@
 import { Router } from "express";
-import { AreasController } from "../controllers/AreasController";
+import { PersonalController } from "../../controllers/institucional/PersonalController";
 
-export class AreasRouter {
-  private controller: AreasController;
-  private prefix: string = "/areas";
+export class PersonalRouter {
+  private controller: PersonalController;
+  private prefix: string = "/institucional/personal";
 
   constructor() {
-    this.controller = new AreasController();
+    this.controller = new PersonalController();
   }
 
   public routes(router: Router): void {
     router.get(`${this.prefix}`, this.controller.getAll);
+    router.get(`${this.prefix}/front`, this.controller.getByAreas);
     router.post(`${this.prefix}`, this.controller.create);
     router.patch(`${this.prefix}/:id`, this.controller.update);
     router.patch(`${this.prefix}/active/:id`, this.controller.setActive);

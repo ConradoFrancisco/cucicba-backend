@@ -2,34 +2,22 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
 } from "typeorm";
+import { IsDate, IsNotEmpty, Min, Max } from "class-validator";
 
-import { IsBoolean, IsDate, IsNumber, IsPositive } from "class-validator";
-import { Personal } from "./institucional/Personal";
-
-@Entity({ name: "area" })
-export class Area {
+@Entity({ name: "representante_asambleario" })
+export class RepresentanteAsambleario {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
+  @IsNotEmpty()
+  @Min(2)
+  @Max(255)
   nombre: string;
-
-  @Column({ default: false })
-  @IsBoolean()
-  estado: boolean;
-
-  @Column({ nullable: true })
-  @IsNumber()
-  @IsPositive()
-  orden?: number;
-
-  @OneToMany(() => Personal, (personal) => personal.area)
-  personal: Personal[];
 
   @CreateDateColumn({ name: "created_at" })
   @IsDate()

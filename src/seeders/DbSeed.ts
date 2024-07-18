@@ -1,6 +1,5 @@
 import { DataSource } from "typeorm";
 import AreaTableSeeder from "./AreaTableSeeder";
-import TipoPersonaTableSeeder from "./TipoPersonaTableSeeder";
 import InfractorTableSeeder from "./InfractorTableSeeder";
 import IlegalesTableSeeder from "./IlegalesTableSeeder";
 import PreguntasFrecuentesCategoriasTableSeeder from "./PreguntasFrecuentesCategoriasTableSeeder";
@@ -11,6 +10,7 @@ import CategoriaBibliotecaSeeder from "./CategoriaBibliotecaSeeder";
 import NoticiaSeeder from "./NoticiaSeeder";
 import BibliotecaSeeder from "./BibliotecaSeeder";
 import ImagenNoticiaSeeder from "./ImagenNoticiaSeeder";
+import PersonalSeeder from "./institucional/PersonalSeeder";
 
 class DbSeed {
   constructor() {
@@ -18,12 +18,15 @@ class DbSeed {
   }
 
   public async run(cn: DataSource) {
+    //institucional
+    await AreaTableSeeder.run(cn);
+    await PersonalSeeder.run(cn);
+    //noticias
     await NoticiaSeeder.run(cn);
     await ImagenNoticiaSeeder.run(cn);
+    //servicios
     await PreguntasFrecuentesCategoriasTableSeeder.run(cn);
     await PreguntasFrecuentesTableSeeder.run(cn);
-    await AreaTableSeeder.run(cn);
-    await TipoPersonaTableSeeder.run(cn);
     await InfractorTableSeeder.run(cn);
     await IlegalesTableSeeder.run(cn);
     //sanciones

@@ -16,6 +16,7 @@ import { BibliotecaDigitalRouter } from "./routes/servicios/BibliotecaRouter";
 import { RevistaRouter } from "./routes/servicios/RevistaRouter";
 import { FilesRouter } from "./routes/files/FilesRouter";
 import { NoticiaRouter } from "./routes/NoticiaRouter";
+import { PersonalRouter } from "./routes/institucional/PersonalRouter";
 class App {
   public app: express.Application;
   //public corsOptions: cors.CorsOptions;
@@ -64,10 +65,12 @@ class App {
     new InmobiliariasRouter().routes(this.router);
     new InfractoresRouter().routes(this.router);
     new ServiciosRouter().routes(this.router);
-    new AreasRouter().routes(this.router);
     new SancionesRouter().routes(this.router);
     //noticias
     new NoticiaRouter().routes(this.router);
+    //institucional
+    new AreasRouter().routes(this.router);
+    new PersonalRouter().routes(this.router);
   }
 
   private initializeDatabase() {

@@ -14,13 +14,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  ManyToOne,
+  TableInheritance,
 } from "typeorm";
-import { Area } from "./Area";
-import { TipoPersona } from "./TipoPersona";
 
 @Entity({ name: "persona" })
-export class Persona {
+@TableInheritance({ column: { type: "varchar", name: "type" } })
+export abstract class Persona {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -44,22 +43,6 @@ export class Persona {
   @IsNumber()
   @IsPositive()
   orden?: number;
-
-  @Column({ nullable: true })
-  @Min(2)
-  @Max(255)
-  avatar?: string;
-
-  @Column({ nullable: true })
-  @Min(2)
-  @Max(255)
-  posicion?: string;
-
-  @ManyToOne(() => Area, (area) => area.personas)
-  area?: Area;
-
-  @ManyToOne(() => TipoPersona, (tipoPersona) => tipoPersona.personas)
-  tipoPersona: TipoPersona;
 
   @CreateDateColumn({ name: "created_at" })
   @IsDate()

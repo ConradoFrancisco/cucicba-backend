@@ -53,7 +53,6 @@ export default class AreaService {
   public async createArea(p: AreaDto): Promise<Area> {
     const nuevaArea = new Area();
     nuevaArea.nombre = p.nombre;
-    nuevaArea.descripcion = p.descripcion;
     nuevaArea.estado = p.estado;
     nuevaArea.orden = p.orden;
     nuevaArea.createdAt = new Date();
@@ -72,7 +71,6 @@ export default class AreaService {
     }
 
     areaExistente.nombre = p.nombre;
-    areaExistente.descripcion = p.descripcion;
     areaExistente.orden = p.orden;
     areaExistente.updatedAt = new Date();
 
