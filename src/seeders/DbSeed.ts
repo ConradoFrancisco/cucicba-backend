@@ -9,6 +9,8 @@ import CategoriaSancionSeeder from "./CategoriaSancionSeeder";
 import SancionSeeder from "./SancionSeeder";
 import CategoriaBibliotecaSeeder from "./CategoriaBibliotecaSeeder";
 import NoticiaSeeder from "./NoticiaSeeder";
+import BibliotecaSeeder from "./BibliotecaSeeder";
+import ImagenNoticiaSeeder from "./ImagenNoticiaSeeder";
 
 class DbSeed {
   constructor() {
@@ -17,6 +19,7 @@ class DbSeed {
 
   public async run(cn: DataSource) {
     await NoticiaSeeder.run(cn);
+    await ImagenNoticiaSeeder.run(cn);
     await PreguntasFrecuentesCategoriasTableSeeder.run(cn);
     await PreguntasFrecuentesTableSeeder.run(cn);
     await AreaTableSeeder.run(cn);
@@ -28,6 +31,7 @@ class DbSeed {
     await SancionSeeder.run(cn);
     // Posts Biblioteca
     await CategoriaBibliotecaSeeder.run(cn);
+    await BibliotecaSeeder.run(cn);
   }
 }
 

@@ -61,7 +61,7 @@ export class NoticiaController {
     }
   }
   public async update(req: Request, res: Response) {
-    const { id } = req.query;
+    const { id } = req.params;
     const updateDto = Object.assign({ id }, req.body);
     const postDto: NoticiaDto = new NoticiaDto(updateDto);
     try {

@@ -8,8 +8,10 @@ export class NoticiaDto {
   estado?: boolean;
   orden?: number;
   fecha?: Date;
-  imagenes?: { id: number; url: string }[];
-  constructor(noticia: Noticia) {
+  imagenes?: string[];
+  previousId: number | null;
+  nextId: number | null;
+  constructor(noticia: any) {
     this.id = noticia.id ? parseInt(noticia.id.toString()) : null;
     this.titulo = noticia.titulo;
     this.descripcion = noticia.descripcion;
@@ -18,5 +20,7 @@ export class NoticiaDto {
     this.cuerpo = noticia.cuerpo;
     this.fecha = noticia.fecha;
     this.imagenes = noticia.imagenes ? noticia.imagenes : [];
+    this.previousId = null;
+    this.nextId = null;
   }
 }
