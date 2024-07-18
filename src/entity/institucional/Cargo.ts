@@ -16,7 +16,7 @@ export class Cargo {
   id: number;
 
   @Column()
-  descripcion: string;
+  nombre: string;
 
   @OneToMany(() => AutoridadPrincipal, (autoridad) => autoridad.cargo)
   autoridades: AutoridadPrincipal[];

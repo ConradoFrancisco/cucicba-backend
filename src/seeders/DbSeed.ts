@@ -11,6 +11,9 @@ import NoticiaSeeder from "./NoticiaSeeder";
 import BibliotecaSeeder from "./BibliotecaSeeder";
 import ImagenNoticiaSeeder from "./ImagenNoticiaSeeder";
 import PersonalSeeder from "./institucional/PersonalSeeder";
+import CargoSeeder from "./institucional/CargoSeeder";
+import AutoridadSeeder from "./institucional/AutoridadSeeder";
+
 
 class DbSeed {
   constructor() {
@@ -21,6 +24,8 @@ class DbSeed {
     //institucional
     await AreaTableSeeder.run(cn);
     await PersonalSeeder.run(cn);
+    await CargoSeeder.run(cn)
+    await AutoridadSeeder.run(cn);
     //noticias
     await NoticiaSeeder.run(cn);
     await ImagenNoticiaSeeder.run(cn);
