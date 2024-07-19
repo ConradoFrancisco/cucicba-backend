@@ -55,6 +55,7 @@ export default class AutoridadRevisoraService {
   public async createAutoridad(p: EticaDto): Promise<AutoridadRevisora | null> {
     const nuevaAutoridad = new AutoridadRevisora();
     nuevaAutoridad.nombre = p.nombre;
+    nuevaAutoridad.orden = p.orden;
     nuevaAutoridad.apellido = p.apellido;
     nuevaAutoridad.estado = p.estado || false;
     nuevaAutoridad.titular = p.titular;
@@ -74,6 +75,7 @@ export default class AutoridadRevisoraService {
     }
 
     autoridadExistente.nombre = p.nombre;
+    autoridadExistente.orden = p.orden
     autoridadExistente.apellido = p.apellido;
     autoridadExistente.estado = p.estado || false;
     autoridadExistente.titular = p.titular;

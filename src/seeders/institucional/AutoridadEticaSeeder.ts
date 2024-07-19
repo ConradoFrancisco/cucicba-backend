@@ -20,14 +20,16 @@ class AutoridadEticaSeeder {
       { nombre: "Nora Amelia", apellido: "Ghezzi" },
       { nombre: "Fortunato José", apellido: "Suppa" },
     ];
+    let ordenTitular: number = 1;
     for (const titular of titulares) {
       const autoridad = new AutoridadEtica();
       autoridad.nombre = titular.nombre;
       autoridad.apellido = titular.apellido;
       autoridad.titular = true;
       autoridad.estado = true;
-
+      autoridad.orden = ordenTitular;
       await autoridadRepository.save(autoridad);
+      ordenTitular++;
     }
 
     const suplentes = [
@@ -37,14 +39,17 @@ class AutoridadEticaSeeder {
       { nombre: "José Daniel", apellido: "Becerra" },
       { nombre: "Irma Mabel", apellido: "Fernandez" },
     ];
+    let ordenSuplente: number = 1;
     for (const suplente of suplentes) {
       const autoridad = new AutoridadEtica();
       autoridad.nombre = suplente.nombre;
       autoridad.apellido = suplente.apellido;
       autoridad.titular = false;
       autoridad.estado = true;
-
+      autoridad.orden = ordenSuplente;
       await autoridadRepository.save(autoridad);
+
+      ordenSuplente++;
     }
   }
 }

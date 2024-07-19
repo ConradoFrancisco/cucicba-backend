@@ -18,14 +18,16 @@ class AutoridadRevisoraSeeder {
       { nombre: "Mónica Gabriela", apellido: "Jabie" },
       { nombre: "Emiliano Oscar", apellido: "Bellino Bat" },
     ];
+    let ordenTitular :number = 1;
     for (const titular of titulares) {
       const autoridad = new AutoridadRevisora();
       autoridad.nombre = titular.nombre;
       autoridad.apellido = titular.apellido;
       autoridad.titular = true;
       autoridad.estado = true;
-
+      autoridad.orden = ordenTitular
       await autoridadRepository.save(autoridad);
+      ordenTitular++
     }
 
     const suplentes = [
@@ -33,14 +35,17 @@ class AutoridadRevisoraSeeder {
       { nombre: "Armando", apellido: "Caputo" },
       { nombre: "Jacqueline Adriana", apellido: "Amabile" },
     ];
+    let ordenSuplente:number = 1;
+
     for (const suplente of suplentes) {
       const autoridad = new AutoridadRevisora();
       autoridad.nombre = suplente.nombre;
       autoridad.apellido = suplente.apellido;
       autoridad.titular = false;
       autoridad.estado = true;
-
+      autoridad.orden = ordenSuplente;
       await autoridadRepository.save(autoridad);
+      ordenSuplente++
     }
   }
 }

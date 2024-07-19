@@ -41,7 +41,7 @@ class AutoridadSeeder {
       {
         name: "Fernando",
         lastName: "Coluccio",
-        picture: "uploads/file-1716726487493-865216914.jpg",
+        picture: "uploads/file-1716726465278-583283878.jpg",
         position: "Tesorero",
       },
       {
