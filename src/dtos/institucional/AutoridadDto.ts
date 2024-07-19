@@ -11,20 +11,20 @@ export class AutoridadDto {
   orden?: number;
   cargoid?: number;
   foto: string;
-  cargo: Cargo;
+  cargo?: Cargo;
+  puesto?: string;
 
-  constructor(autoridad: AutoridadPrincipal, get?: boolean) {
+  constructor(autoridad: any, get?: boolean) {
     this.id = autoridad.id ? parseInt(autoridad.id.toString()) : null;
     (this.nombre = autoridad.nombre),
-    this.foto = autoridad.foto,
+      (this.foto = autoridad.foto),
       (this.apellido = autoridad.apellido),
       (this.estado = autoridad.estado !== null ? autoridad.estado : null),
       (this.orden = autoridad.orden
         ? parseInt(autoridad.orden.toString())
         : null),
-      (this.cargoid = autoridad.cargo.id ? autoridad.cargo.id : null),
+      (this.cargoid = autoridad.cargoid ? autoridad.cargoid : null),
       (this.cargo = autoridad.cargo);
+    this.puesto = autoridad.cargo ? autoridad.cargo.nombre : null;
   }
-
-  p;
 }

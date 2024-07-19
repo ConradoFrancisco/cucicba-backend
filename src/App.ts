@@ -17,6 +17,9 @@ import { RevistaRouter } from "./routes/servicios/RevistaRouter";
 import { FilesRouter } from "./routes/files/FilesRouter";
 import { NoticiaRouter } from "./routes/NoticiaRouter";
 import { PersonalRouter } from "./routes/institucional/PersonalRouter";
+import { AutoridadesRouter } from "./routes/institucional/AutoridadesRouter";
+import { AutoridadesEticaRouter } from "./routes/institucional/AutoridadEticaRouter";
+import { AutoridadesRevisoraRouter } from "./routes/institucional/AutoridadRevisoraRouter";
 class App {
   public app: express.Application;
   //public corsOptions: cors.CorsOptions;
@@ -71,6 +74,9 @@ class App {
     //institucional
     new AreasRouter().routes(this.router);
     new PersonalRouter().routes(this.router);
+    new AutoridadesRouter().routes(this.router);
+    new AutoridadesEticaRouter().routes(this.router);
+    new AutoridadesRevisoraRouter().routes(this.router);
   }
 
   private initializeDatabase() {

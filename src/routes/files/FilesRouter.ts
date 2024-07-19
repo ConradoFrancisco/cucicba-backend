@@ -9,7 +9,7 @@ export class FilesRouter {
       res.status(400).json({ error: "No file uploaded" });
     } else {
       const filePath = req.file.path;
-      res.json({ message: "Upload success", filePath: filePath });
+      res.json({ status: 200, message: "Upload success", filePath: filePath });
     }
   }
   private uploadMultipleFiles(req: Request, res: Response): void {

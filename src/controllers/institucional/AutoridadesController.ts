@@ -10,7 +10,7 @@ export class AutoridadController {
 
   // GET all authorities
   public async getAll(req: Request, res: Response): Promise<void> {
-    const paramsDto : ParamsDto = new ParamsDto(req.query)
+    const paramsDto: ParamsDto = new ParamsDto(req.query);
     try {
       const result = await AutoridadController.service.getAll(paramsDto);
       res.json(result);
@@ -19,15 +19,13 @@ export class AutoridadController {
       res.status(500).json({ error: e.message || "Internal Server Error" });
     }
   }
-
-  // GET authorities by area
-  public async getByAreas(req: Request, res: Response): Promise<void> {
+  public async getCargos(req: Request, res: Response): Promise<void> {
     try {
-      const result = await AutoridadController.service.getAutoridadByArea();
+      const result = await AutoridadController.service.getCargos();
       res.json(result);
     } catch (e) {
-      console.log(e);
-      res.status(500).json({ error: e.message || "Internal Server Error" });
+      console.error(e);
+      res.status(500).json({ error: e || "Error del servidor" });
     }
   }
 
@@ -64,7 +62,9 @@ export class AutoridadController {
     const activeParams: ActiveParamsDto = new ActiveParamsDto({ id, estado });
     try {
       await AutoridadController.service.setActive(activeParams);
-      res.status(200).send("Estado de autoridad modificado satisfactoriamente!");
+      res
+        .status(200)
+        .send("Estado de autoridad modificado satisfactoriamente!");
     } catch (e) {
       res.status(500).json({ error: e.message || "Internal Server Error" });
       console.error(e);

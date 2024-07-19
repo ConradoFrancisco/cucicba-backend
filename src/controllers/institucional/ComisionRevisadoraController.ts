@@ -1,120 +1,80 @@
 import { Request, Response } from "express";
-import AutoridadesModel from "../../models/institucional/autoridad/AutoridadesModel";
-import * as yup from 'yup'
-import ComisionRevisadoraModel from "../../models/ComisionRevisadoraModel";
-const AutoridadSchema = yup.object().shape({
-  nombre: yup.string().required(),
-  apellido: yup.string().required(),
-  orden: yup.number().required().integer().positive(),
-  posicion:yup.string().required(),
-});
-class ComisionRevisadora {
-  public async getAll(req: Request, res: Response) {
-    let params = {};
-    const input = req.query.input;
-    const orden = parseInt(req.query.orden as string)
-    const posicion = req.query.posicion
-    console.log(orden);
-    const orderDirection =
-    (req.query.orderDirection as "ASC" | "DESC") || "ASC";
-    const orderBy = (req.query.orderBy as string) || "id";
-    const estado = parseInt(req.query.estado as string);
-    const limit = parseInt(req.query.limit as string);
-    const offset = parseInt(req.query.offset as string);
-    
-    if (orderBy) {
-      params = Object.assign({ orderBy }, params);
-    }
-    if (orderDirection) {
-      params = Object.assign({ orderDirection }, params);
-    }
-    if (orden) {
-      params = Object.assign({ orden }, params);
-    }
-    if (posicion) {
-      params = Object.assign({ posicion }, params);
-    }
-    if (input) {
-      params = Object.assign({ input }, params);
-    }
-    console.log(input)
-    if (estado || estado === 0) {
-      params = Object.assign({ estado }, params);
-    }
-    if (limit) {
-      params = Object.assign({ limit }, params);
-    }
-    if (offset) {
-      params = Object.assign({ offset }, params);
-    }
+import { ActiveParamsDto } from "../../dtos/ActiveParamsDto";
+import { DeleteParamsDto } from "../../dtos/DeleteParamsDto";
+import { ParamsDto } from "../../dtos/ParamsDto";
+import { EticaDto } from "../../dtos/institucional/EticaDto";
+import AutoridadRevisoraService from "../../services/institucional/AutoridadRevisoraService";
+
+export class AutoridadRevisoraController {
+  private static service: AutoridadRevisoraService =
+    new AutoridadRevisoraService();
+
+  // GET all authorities
+  public async getAll(req: Request, res: Response): Promise<void> {
+    const paramsDto: ParamsDto = new ParamsDto(req.query);
     try {
-      const result = await ComisionRevisadoraModel.getAll(params);
+      const result = await AutoridadRevisoraController.service.getAll(
+        paramsDto
+      );
       res.json(result);
     } catch (e) {
-      console.error("error al obtener las autoridades", e);
-      res.status(500).send("error en el servidor");
+      console.log(e);
+      res.status(500).json({ error: e.message || "Internal Server Error" });
     }
   }
 
-  public async create(req: Request, res: Response) {
-    const { nombre,apellido,posicion } = req.body;
-    const puesto = parseInt(req.body.puesto as string);
-    const orden = parseInt(req.body.orden as string);
+  // Create a new authority
+  public async create(req: Request, res: Response): Promise<void> {
+    const autoridadDto: EticaDto = new EticaDto(req.body);
     try {
-      // Validar los datos usando `validate` que lanzará una excepción si los datos son inválidos
-      await AutoridadSchema.validate({ nombre,apellido,orden,posicion });
+      await AutoridadRevisoraController.service.createAutoridad(autoridadDto);
+      res.status(201).send("Autoridad creada satisfactoriamente!");
+    } catch (e) {
+      res.status(500).json({ error: e.message || "Internal Server Error" });
+      console.error(e);
+    }
+  }
 
-      // Si la validación pasa, crear el registro en la base de datos
-      await ComisionRevisadoraModel.create({ nombre,apellido,orden,posicion });
-      res.status(201).send("Registro creado satisfactoriamente!");
-    } catch (e: any) {
-      // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
-      if (e.name === "ValidationError") {
-        res.status(400).json({ error: e.errors });
-      } else {
-        res.status(500).json({ error: "Error del servidor" });
-      }
+  // Update an existing authority
+  public async update(req: Request, res: Response): Promise<void> {
+    const { id } = req.params;
+    const updateDto = Object.assign({ id }, req.body);
+    const autoridadDto = new EticaDto(updateDto);
+    try {
+      await AutoridadRevisoraController.service.updateAutoridad(autoridadDto);
+      res.status(200).send("Autoridad modificada satisfactoriamente!");
+    } catch (e) {
+      res.status(500).json({ error: e.message || "Internal Server Error" });
       console.error(e);
     }
   }
-  public async setActive(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string)
-    const estado = req.body.estado
+
+  // Set authority active/inactive
+  public async setActive(req: Request, res: Response): Promise<void> {
+    const { id } = req.params;
+    const estado = req.body.estado;
+    const activeParams: ActiveParamsDto = new ActiveParamsDto({ id, estado });
     try {
-      const result = await ComisionRevisadoraModel.setActive({id,estado})
-      res.status(200).send("Autoridad dada de alta!");
-    } catch (e :any) {
-        res.status(500).json({ error: "Error del servidor" });
+      await AutoridadRevisoraController.service.setActive(activeParams);
+      res
+        .status(200)
+        .send("Estado de autoridad modificado satisfactoriamente!");
+    } catch (e) {
+      res.status(500).json({ error: e.message || "Internal Server Error" });
       console.error(e);
     }
   }
-  public async delete(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string)
+
+  // Delete an authority
+  public async delete(req: Request, res: Response): Promise<void> {
+    const { id } = req.params;
+    const body: DeleteParamsDto = new DeleteParamsDto({ id });
     try {
-      const result = await ComisionRevisadoraModel.delete({id})
+      await AutoridadRevisoraController.service.delete(body);
       res.status(200).send("Autoridad eliminada satisfactoriamente!");
-    } catch (e :any) {
-        res.status(500).json({ error: "Error del servidor" });
-      console.error(e);
-    }
-  }
-  public async update(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string)
-    const { nombre,apellido,posicion } = req.body;
-    const puesto_id = parseInt(req.body.puesto as string);
-    const orden = parseInt(req.body.orden as string);
-    try {
-      await ComisionRevisadoraModel.update({ id,nombre,apellido,orden,posicion });
-      res.status(201).send("Registro Modificado correctamente!");
-    } catch (e: any) {
-      // Si hay un error de validación o cualquier otro error, enviar una respuesta de error
-      if (e.name === "ValidationError") {
-        res.status(400).json({ error: e.errors });
-      } else {
-        res.status(500).json({ error: "Error del servidor" });
-      }
+    } catch (e) {
+      res.status(500).json({ error: e.message || "Internal Server Error" });
       console.error(e);
     }
   }
 }
-export default new ComisionRevisadora();
