@@ -14,6 +14,7 @@ export class ParamsDto {
   public area?: any;
   constructor(body: any) {
     const inp: string = body.input || "";
+    this.setLimit(body);
     this.input = body.input !== null ? inp.trim() : null;
     this.direccion = body.direccion ? body.direccion : null;
     this.orden = body.orden ? parseInt(body.orden) : null;

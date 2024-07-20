@@ -20,6 +20,7 @@ export class PreguntaFrecuenteService {
   }
   public async getAll(p: ParamsDto) {
     const where: FindManyOptions<PreguntaFrecuente>["where"] = {};
+    console.log("servicio limit:", p.limit);
     where.deletedAt != null;
     if (p.input) {
       where.pregunta = Like(`%${p.input}%`);
@@ -29,7 +30,6 @@ export class PreguntaFrecuenteService {
       where.estado = p.estado;
     }
 
-    console.log(p.categoriaId);
     where.categoria = { id: p.categoriaId };
 
     const order: FindManyOptions<PreguntaFrecuente>["order"] = {};
