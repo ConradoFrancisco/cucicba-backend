@@ -28,34 +28,42 @@ export default class AutoridadService {
     this.cargosRepository = ds.manager.getRepository(Cargo);
   }
 
-  public async getAll(p: ParamsDto): Promise<{ data: any; total: number }> {
+  public async getAll(
+    p: ParamsDto
+  ): Promise<{ data: AutoridadDto[]; total: number }> {
+    console.log("aca", p.periodo);
     const query = this.repository
       .createQueryBuilder("autoridad_principal")
       .leftJoinAndSelect("autoridad_principal.cargo", "cargo")
       .leftJoinAndSelect("autoridad_principal.periodo", "periodo");
+
     if (p.puesto) {
-      query.where("autoridad_principal.cargoId = :puesto", {
+      query.andWhere("autoridad_principal.cargoId = :puesto", {
         puesto: p.puesto,
       });
     }
     if (p.periodo) {
-      query.where("autoridad_principal.periodoId = :periodo", {
+      query.andWhere("autoridad_principal.periodoId = :periodo", {
         periodo: p.periodo,
       });
     }
     if (p.input) {
       query
-        .where("autoridad_principal.nombre ILIKE :nombre", { nombre: p.input })
+        .andWhere("autoridad_principal.nombre ILIKE :nombre", {
+          nombre: p.input,
+        })
         .orWhere("autoridad_principal.apellido ILIKE :apellido", {
           apellido: p.input,
         });
     }
     if (p.estado !== null && p.estado !== undefined) {
-      query.where("autoridad_principal.estado = :estado", { estado: p.estado });
+      query.andWhere("autoridad_principal.estado = :estado", {
+        estado: p.estado,
+      });
     }
 
     if (p.orden !== null) {
-      query.where("autoridad_principal.orden = :orden", { orden: p.orden });
+      query.andWhere("autoridad_principal.orden = :orden", { orden: p.orden });
     }
 
     if (p.orderBy) {

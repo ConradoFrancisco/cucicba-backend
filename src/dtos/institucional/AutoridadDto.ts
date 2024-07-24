@@ -16,7 +16,6 @@ export class AutoridadDto {
   periodoId: number;
 
   constructor(autoridad: any, get?: boolean) {
-    console.log(autoridad);
     this.id = autoridad.id ? parseInt(autoridad.id.toString()) : null;
     (this.periodoId = autoridad.periodo),
       (this.nombre = autoridad.nombre),
