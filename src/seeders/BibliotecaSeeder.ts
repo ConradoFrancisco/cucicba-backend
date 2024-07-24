@@ -1,8 +1,8 @@
 import { DataSource } from "typeorm";
-import { Infractor } from "../entity/servicios/Infractor";
-import {} from "../entity/servicios/CategoriasPreguntasFrecuentes";
-import { CategoriaPost } from "../entity/servicios/CategoriaPost";
-import { PostBiblioteca } from "../entity/servicios/PostBiblioteca";
+import { Infractor } from "../entity/Infractor";
+
+import { PostBiblioteca } from "../entity/PostBiblioteca";
+import { CategoriaPost } from "../entity/CategoriaPost";
 
 class BibliotecaSeeder {
   public async run(cn: DataSource = null) {

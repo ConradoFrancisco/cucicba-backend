@@ -5,8 +5,9 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
 } from "typeorm";
-import { Persona } from "./Persona";
+
 import { IsBoolean, IsDate } from "class-validator";
+import { Persona } from "./Persona";
 
 @Entity({ name: "autoridad_etica" })
 export class AutoridadEtica extends Persona {

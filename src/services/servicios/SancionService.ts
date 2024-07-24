@@ -3,12 +3,13 @@ import { getDataSource } from "../../data-source";
 import { ParamsDto } from "../../dtos/ParamsDto";
 import { ActiveParamsDto } from "../../dtos/ActiveParamsDto";
 import { DeleteParamsDto } from "../../dtos/DeleteParamsDto";
-import { PreguntaFrecuente } from "../../entity/servicios/PreguntaFrecuente";
+import { PreguntaFrecuente } from "../../entity/PreguntaFrecuente";
 import { PreguntaFrecuenteDto } from "../../dtos/servicios/PreguntaFrecuenteDto";
-import { CategoriasPreguntasFrecuentes } from "../../entity/servicios/CategoriasPreguntasFrecuentes";
-import { Sancion } from "../../entity/servicios/Sancion";
-import { CategoriaSancion } from "../../entity/servicios/CategoriaSancion";
+
+import { Sancion } from "../../entity/Sancion";
+
 import { SancionDto } from "../../dtos/servicios/SancionDto";
+import { CategoriaSancion } from "../../entity/CategoriaSancion";
 
 export class SancionService {
   private repository: Repository<Sancion>;

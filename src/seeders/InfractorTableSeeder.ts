@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { Infractor } from "../entity/servicios/Infractor";
+import { Infractor } from "../entity/Infractor";
 
 class InfractorTableSeeder {
   public async run(cn: DataSource = null) {

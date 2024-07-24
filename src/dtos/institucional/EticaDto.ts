@@ -1,4 +1,4 @@
-import { AutoridadEtica } from "../../entity/institucional/AutoridadEtica";
+import { AutoridadEtica } from "../../entity/AutoridadEtica";
 
 export class EticaDto {
   id?: number;

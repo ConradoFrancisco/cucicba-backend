@@ -1,6 +1,7 @@
 import { DataSource } from "typeorm";
 import { Area } from "../../entity/Area";
-import { Personal } from "../../entity/institucional/Personal";
+import { Personal } from "../../entity/Personal";
+
 
 const personalData: any = [
   {

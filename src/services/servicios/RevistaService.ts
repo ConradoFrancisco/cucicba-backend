@@ -3,7 +3,7 @@ import { getDataSource } from "../../data-source";
 import { ParamsDto } from "../../dtos/ParamsDto";
 import { ActiveParamsDto } from "../../dtos/ActiveParamsDto";
 import { DeleteParamsDto } from "../../dtos/DeleteParamsDto";
-import { Revista } from "../../entity/servicios/Revista";
+import { Revista } from "../../entity/Revista";
 import { RevistaDto } from "../../dtos/servicios/RevistaDto";
 
 export default class RevistaService {

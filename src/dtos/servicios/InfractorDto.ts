@@ -1,4 +1,4 @@
-import { Infractor } from "../../entity/servicios/Infractor";
+import { Infractor } from "../../entity/Infractor";
 
 export class InfractorDto {
   id?: number;

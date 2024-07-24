@@ -1,5 +1,5 @@
 import { DataSource, Repository } from "typeorm";
-import { Periodo } from "../../entity/institucional/Periodo";
+import { Periodo } from "../../entity/Periodo";
 import { getDataSource } from "../../data-source";
 
 export default class AutoridadPeriodoService {

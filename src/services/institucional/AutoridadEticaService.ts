@@ -6,10 +6,10 @@ import { ParamsDto } from "../../dtos/ParamsDto";
 import { Area } from "../../entity/Area";
 import { ActiveParamsDto } from "../../dtos/ActiveParamsDto";
 import { DeleteParamsDto } from "../../dtos/DeleteParamsDto";
-import { AutoridadPrincipal } from "../../entity/institucional/AutoridadPrincipal";
+
 import { AutoridadDto } from "../../dtos/institucional/AutoridadDto";
-import { Cargo } from "../../entity/institucional/Cargo";
-import { AutoridadEtica } from "../../entity/institucional/AutoridadEtica";
+import { Cargo } from "../../entity/Cargo";
+import { AutoridadEtica } from "../../entity/AutoridadEtica";
 import { EticaDto } from "../../dtos/institucional/EticaDto";
 
 export default class AutoridadEticaService {

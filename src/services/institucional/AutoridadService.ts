@@ -13,10 +13,11 @@ import { ParamsDto } from "../../dtos/ParamsDto";
 import { Area } from "../../entity/Area";
 import { ActiveParamsDto } from "../../dtos/ActiveParamsDto";
 import { DeleteParamsDto } from "../../dtos/DeleteParamsDto";
-import { AutoridadPrincipal } from "../../entity/institucional/AutoridadPrincipal";
+
 import { AutoridadDto } from "../../dtos/institucional/AutoridadDto";
-import { Cargo } from "../../entity/institucional/Cargo";
-import { Periodo } from "../../entity/institucional/Periodo";
+import { Cargo } from "../../entity/Cargo";
+import { Periodo } from "../../entity/Periodo";
+import { AutoridadPrincipal } from "../../entity/AutoridadPrincipal";
 
 export default class AutoridadService {
   private repository: Repository<AutoridadPrincipal>;

@@ -4,7 +4,7 @@ import { AutoridadDto } from "../../dtos/institucional/AutoridadDto";
 import { ActiveParamsDto } from "../../dtos/ActiveParamsDto";
 import { DeleteParamsDto } from "../../dtos/DeleteParamsDto";
 import { ParamsDto } from "../../dtos/ParamsDto";
-import { AutoridadEtica } from "../../entity/institucional/AutoridadEtica";
+import { AutoridadEtica } from "../../entity/AutoridadEtica";
 import AutoridadEticaService from "../../services/institucional/AutoridadEticaService";
 import { EticaDto } from "../../dtos/institucional/EticaDto";
 

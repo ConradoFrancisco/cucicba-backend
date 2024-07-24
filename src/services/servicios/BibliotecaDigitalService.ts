@@ -3,12 +3,13 @@ import { getDataSource } from "../../data-source";
 import { ParamsDto } from "../../dtos/ParamsDto";
 import { ActiveParamsDto } from "../../dtos/ActiveParamsDto";
 import { DeleteParamsDto } from "../../dtos/DeleteParamsDto";
-import { PreguntaFrecuente } from "../../entity/servicios/PreguntaFrecuente";
+import { PreguntaFrecuente } from "../../entity/PreguntaFrecuente";
 import { PreguntaFrecuenteDto } from "../../dtos/servicios/PreguntaFrecuenteDto";
-import { CategoriasPreguntasFrecuentes } from "../../entity/servicios/CategoriasPreguntasFrecuentes";
-import { PostBiblioteca } from "../../entity/servicios/PostBiblioteca";
-import { CategoriaPost } from "../../entity/servicios/CategoriaPost";
+
+import { PostBiblioteca } from "../../entity/PostBiblioteca";
+
 import { PostDto } from "../../dtos/servicios/PostDto";
+import { CategoriaPost } from "../../entity/CategoriaPost";
 
 export class BibliotecaDigitalService {
   private repository: Repository<PostBiblioteca>;

@@ -1,5 +1,7 @@
 import { DataSource } from "typeorm";
-import { CategoriaSancion } from "../entity/servicios/CategoriaSancion";
+import { CategoriaSancion } from "../entity/CategoriaSancion";
+
+
 
 class CategoriaSancionSeeder {
   public async run(cn: DataSource = null) {

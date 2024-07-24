@@ -1,5 +1,5 @@
-import { PostBiblioteca } from "../../entity/servicios/PostBiblioteca";
-import { Revista } from "../../entity/servicios/Revista";
+import { PostBiblioteca } from "../../entity/PostBiblioteca";
+import { Revista } from "../../entity/Revista";
 
 export class RevistaDto {
   id?: number;

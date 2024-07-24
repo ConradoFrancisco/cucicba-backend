@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { Ilegal } from "../entity/servicios/Ilegal";
+import { Ilegal } from "../entity/Ilegal";
 
 class IlegalesTableSeeder {
   constructor() {

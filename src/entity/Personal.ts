@@ -14,7 +14,7 @@ import {
   IsString,
   IsDate,
 } from "class-validator";
-import { Area } from "../Area";
+import { Area } from "./Area";
 
 @Entity({ name: "personal" })
 export class Personal extends Persona {

@@ -1,6 +1,6 @@
 import { DataSource, FindManyOptions, ILike, Like, Repository } from "typeorm";
 import { getDataSource } from "../../data-source";
-import { Infractor } from "../../entity/servicios/Infractor";
+import { Infractor } from "../../entity/Infractor";
 import { ParamsDto } from "../../dtos/ParamsDto";
 import { InfractorDto } from "../../dtos/servicios/InfractorDto";
 import { ActiveParamsDto } from "../../dtos/ActiveParamsDto";

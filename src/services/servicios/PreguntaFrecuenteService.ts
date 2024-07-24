@@ -3,9 +3,10 @@ import { getDataSource } from "../../data-source";
 import { ParamsDto } from "../../dtos/ParamsDto";
 import { ActiveParamsDto } from "../../dtos/ActiveParamsDto";
 import { DeleteParamsDto } from "../../dtos/DeleteParamsDto";
-import { PreguntaFrecuente } from "../../entity/servicios/PreguntaFrecuente";
+import { PreguntaFrecuente } from "../../entity/PreguntaFrecuente";
 import { PreguntaFrecuenteDto } from "../../dtos/servicios/PreguntaFrecuenteDto";
-import { CategoriasPreguntasFrecuentes } from "../../entity/servicios/CategoriasPreguntasFrecuentes";
+import { CategoriasPreguntasFrecuentes } from "../../entity/CategoriasPreguntasFrecuentes";
+
 
 export class PreguntaFrecuenteService {
   private repository: Repository<PreguntaFrecuente>;

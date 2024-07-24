@@ -1,7 +1,7 @@
 import { Area } from "../../entity/Area";
-import { AutoridadPrincipal } from "../../entity/institucional/AutoridadPrincipal";
-import { Cargo } from "../../entity/institucional/Cargo";
-import { Personal } from "../../entity/institucional/Personal";
+
+import { Cargo } from "../../entity/Cargo";
+
 
 export class AutoridadDto {
   id?: number;

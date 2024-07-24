@@ -1,4 +1,4 @@
-import { PreguntaFrecuente } from "../../entity/servicios/PreguntaFrecuente";
+import { PreguntaFrecuente } from "../../entity/PreguntaFrecuente";
 
 export class PreguntaFrecuenteDto {
     id?: number;

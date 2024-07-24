@@ -3,6 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { IsNotEmpty, Max, Min } from "class-validator";
 import { Sancion } from "./Sancion";
 
+
 @Entity({ name: "categoria_sancion" })
 export class CategoriaSancion {
   @PrimaryGeneratedColumn()

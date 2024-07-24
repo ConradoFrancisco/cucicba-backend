@@ -1,11 +1,12 @@
 import { DataSource, FindManyOptions, Like, Repository } from "typeorm";
-import { Personal } from "../../entity/institucional/Personal";
+
 import { getDataSource } from "../../data-source";
 import { PersonalDto } from "../../dtos/institucional/PersonalDto";
 import { ParamsDto } from "../../dtos/ParamsDto";
 import { Area } from "../../entity/Area";
 import { ActiveParamsDto } from "../../dtos/ActiveParamsDto";
 import { DeleteParamsDto } from "../../dtos/DeleteParamsDto";
+import { Personal } from "../../entity/Personal";
 
 export default class PersonalService {
   private repository: Repository<Personal>;

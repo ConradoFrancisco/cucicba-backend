@@ -1,7 +1,8 @@
 import { DataSource } from "typeorm";
 
-import { AutoridadEtica } from "../../entity/institucional/AutoridadEtica";
-import { AutoridadRevisora } from "../../entity/institucional/AutoridadRevisadora";
+import { AutoridadEtica } from "../../entity/AutoridadEtica";
+import { AutoridadRevisora } from "../../entity/AutoridadRevisadora";
+
 
 class AutoridadRevisoraSeeder {
   public async run(cn: DataSource = null) {

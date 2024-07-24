@@ -1,4 +1,4 @@
-import { Sancion } from "../../entity/servicios/Sancion";
+import { Sancion } from "../../entity/Sancion";
 
 export class SancionDto {
   id?: number;

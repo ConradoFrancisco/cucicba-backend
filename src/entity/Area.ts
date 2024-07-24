@@ -9,7 +9,8 @@ import {
 } from "typeorm";
 
 import { IsBoolean, IsDate, IsNumber, IsPositive } from "class-validator";
-import { Personal } from "./institucional/Personal";
+import { Personal } from "./Personal";
+
 
 @Entity({ name: "area" })
 export class Area {

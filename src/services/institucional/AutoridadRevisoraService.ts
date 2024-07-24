@@ -6,12 +6,12 @@ import { ParamsDto } from "../../dtos/ParamsDto";
 import { Area } from "../../entity/Area";
 import { ActiveParamsDto } from "../../dtos/ActiveParamsDto";
 import { DeleteParamsDto } from "../../dtos/DeleteParamsDto";
-import { AutoridadPrincipal } from "../../entity/institucional/AutoridadPrincipal";
+
 import { AutoridadDto } from "../../dtos/institucional/AutoridadDto";
-import { Cargo } from "../../entity/institucional/Cargo";
-import { AutoridadEtica } from "../../entity/institucional/AutoridadEtica";
+import { Cargo } from "../../entity/Cargo";
+import { AutoridadEtica } from "../../entity/AutoridadEtica";
 import { EticaDto } from "../../dtos/institucional/EticaDto";
-import { AutoridadRevisora } from "../../entity/institucional/AutoridadRevisadora";
+import { AutoridadRevisora } from "../../entity/AutoridadRevisadora";
 
 export default class AutoridadRevisoraService {
   private repository: Repository<AutoridadRevisora>;
@@ -75,7 +75,7 @@ export default class AutoridadRevisoraService {
     }
 
     autoridadExistente.nombre = p.nombre;
-    autoridadExistente.orden = p.orden
+    autoridadExistente.orden = p.orden;
     autoridadExistente.apellido = p.apellido;
     autoridadExistente.estado = p.estado || false;
     autoridadExistente.titular = p.titular;

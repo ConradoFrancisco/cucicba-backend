@@ -2,6 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { IsNotEmpty, Max, Min } from "class-validator";
 import { PostBiblioteca } from "./PostBiblioteca";
 
+
 @Entity({ name: "categoria_post" })
 export class CategoriaPost {
   @PrimaryGeneratedColumn()

@@ -1,7 +1,8 @@
 import { DataSource } from "typeorm";
-import { PreguntaFrecuente } from "../entity/servicios/PreguntaFrecuente";
-import { CategoriasPreguntasFrecuentes } from "../entity/servicios/CategoriasPreguntasFrecuentes";
+import { PreguntaFrecuente } from "../entity/PreguntaFrecuente";
+
 import { preguntasFrecuentesArray } from "./objects/PreguntasFrecuentesObject";
+import { CategoriasPreguntasFrecuentes } from "../entity/CategoriasPreguntasFrecuentes";
 
 class PreguntasFrecuentesTableSeeder {
   public async run(cn: DataSource = null) {

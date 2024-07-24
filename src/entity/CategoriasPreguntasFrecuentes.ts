@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
-import { PreguntaFrecuente } from "./PreguntaFrecuente";
+
 import { IsNotEmpty, Max, Min } from "class-validator";
+import { PreguntaFrecuente } from "./PreguntaFrecuente";
 
 @Entity({ name: "categorias_preguntas_frecuentes" })
 export class CategoriasPreguntasFrecuentes {

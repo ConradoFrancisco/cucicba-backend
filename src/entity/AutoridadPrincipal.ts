@@ -6,11 +6,13 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
 } from "typeorm";
-import { Persona } from "./Persona";
-import { Cargo } from "./Cargo";
+
 
 import { IsDate, IsNotEmpty, Max, Min } from "class-validator";
 import { Periodo } from "./Periodo";
+import { Cargo } from "./Cargo";
+import { Persona } from "./Persona";
+
 
 @Entity({ name: "autoridad_principal" })
 export class AutoridadPrincipal extends Persona {

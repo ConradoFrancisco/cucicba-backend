@@ -1,7 +1,7 @@
 import { DataSource, FindManyOptions, ILike, Like, Repository } from "typeorm";
 import { getDataSource } from "../../data-source";
 import { ParamsDto } from "../../dtos/ParamsDto";
-import { Ilegal } from "../../entity/servicios/Ilegal";
+import { Ilegal } from "../../entity/Ilegal";
 import { InmobiliariaIlegalDto } from "../../dtos/servicios/InmobiliariaIlegal";
 import { ActiveParamsDto } from "../../dtos/ActiveParamsDto";
 import { DeleteParamsDto } from "../../dtos/DeleteParamsDto";

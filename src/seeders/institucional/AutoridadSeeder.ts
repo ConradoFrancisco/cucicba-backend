@@ -1,7 +1,8 @@
 import { DataSource } from "typeorm";
-import { Cargo } from "../../entity/institucional/Cargo";
-import { AutoridadPrincipal } from "../../entity/institucional/AutoridadPrincipal";
-import { Periodo } from "../../entity/institucional/Periodo";
+import { Cargo } from "../../entity/Cargo";
+
+import { Periodo } from "../../entity/Periodo";
+import { AutoridadPrincipal } from "../../entity/AutoridadPrincipal";
 
 class AutoridadSeeder {
   public async run(cn: DataSource = null) {

@@ -1,4 +1,4 @@
-import { PostBiblioteca } from "../../entity/servicios/PostBiblioteca";
+import { PostBiblioteca } from "../../entity/PostBiblioteca";
 
 export class PostDto {
   id?: number;

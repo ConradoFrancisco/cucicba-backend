@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { Cargo } from "../../entity/institucional/Cargo";
+import { Cargo } from "../../entity/Cargo";
 
 
 class CargoSeeder {
