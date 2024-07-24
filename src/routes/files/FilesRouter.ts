@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 import multer = require("multer");
 import path = require("path");
+import fs = require("fs");
 import { upload, uploadFiles } from "../../multerConfig";
 
 export class FilesRouter {
@@ -22,6 +23,24 @@ export class FilesRouter {
       res.json({ message: "Upload success", filePaths: filePaths });
     }
   }
+  private deleteFile(req: Request, res: Response): void {
+    const filePath = req.body.filePath;
+    if (!filePath) {
+      res.status(400).json({ error: "No file path provided" });
+      return;
+    }
+
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        res
+          .status(500)
+          .json({ error: "Failed to delete file", details: err.message });
+        return;
+      }
+      res.json({ status: 200, message: "File deleted successfully" });
+    });
+  }
+
   private prefix: string = "/files";
 
   public routes(router: Router): void {
@@ -31,5 +50,6 @@ export class FilesRouter {
       upload.array("files", 10),
       this.uploadMultipleFiles
     );
+    router.delete(`${this.prefix}`, this.deleteFile.bind(this));
   }
 }

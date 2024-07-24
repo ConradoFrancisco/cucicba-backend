@@ -1,11 +1,16 @@
 import { DataSource } from "typeorm";
 import { Cargo } from "../../entity/institucional/Cargo";
 import { AutoridadPrincipal } from "../../entity/institucional/AutoridadPrincipal";
+import { Periodo } from "../../entity/institucional/AutoridadPeriodo";
 
 class AutoridadSeeder {
   public async run(cn: DataSource = null) {
     const cargos = await cn.getRepository(Cargo).find();
     const cargoMap = new Map(cargos.map((cargo) => [cargo.nombre, cargo.id]));
+    const periodos = await cn.getRepository(Periodo).find();
+    const periodoMap = new Map(
+      periodos.map((periodo) => [periodo.nombre, periodo.id])
+    );
 
     const data = [
       {
@@ -130,6 +135,7 @@ class AutoridadSeeder {
     let orden: number = 1;
     for (const item of data) {
       const cargoId = cargoMap.get(item.position);
+      const periodoId = periodoMap.get("AUTORIDADES PERIODO 2023/2025");
       if (cargoId) {
         const autoridad = new AutoridadPrincipal();
         autoridad.nombre = item.name;
@@ -138,10 +144,21 @@ class AutoridadSeeder {
         autoridad.foto = item.picture;
         autoridad.cargo = { id: cargoId } as Cargo;
         autoridad.orden = orden;
+        autoridad.periodo = { id: 1 } as Periodo;
         await autoridadRepository.save(autoridad);
       }
+
       orden++;
     }
+    const autoridad = new AutoridadPrincipal();
+    autoridad.nombre = "item.name";
+    autoridad.estado = true;
+    autoridad.apellido = "yo aca";
+    autoridad.foto = "asdasd";
+    autoridad.cargo = { id: 1 } as Cargo;
+    autoridad.orden = orden;
+    autoridad.periodo = { id: 2 } as Periodo;
+    await autoridadRepository.save(autoridad);
   }
 }
 

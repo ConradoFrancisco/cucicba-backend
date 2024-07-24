@@ -27,7 +27,7 @@ class NoticiaSeeder {
       "El Colegio Inmobiliario se complace en anunciar el lanzamiento de su innovador programa de capacitación en bienes raíces diseñado para preparar a los estudiantes para el éxito en el mercado inmobiliario actual.";
     noticia2.fecha = new Date();
     noticia2.estado = true;
-    noticia2.orden = 1;
+    noticia2.orden = 2;
     noticia2.titulo =
       "Nuevo Programa de Capacitación en Bienes Raíces del Colegio Inmobiliario titulo 2";
     const noticia4 = new Noticia();
@@ -37,7 +37,7 @@ class NoticiaSeeder {
       "El Colegio Inmobiliario se complace en anunciar el lanzamiento de su innovador programa de capacitación en bienes raíces diseñado para preparar a los estudiantes para el éxito en el mercado inmobiliario actual.";
     noticia4.fecha = new Date();
     noticia4.estado = true;
-    noticia4.orden = 1;
+    noticia4.orden = 3;
     noticia4.titulo =
       "Nuevo Programa de Capacitación en Bienes Raíces del Colegio Inmobiliario titulo 3";
     const noticia5 = new Noticia();
@@ -45,9 +45,9 @@ class NoticiaSeeder {
       "<p>El Colegio Inmobiliario se complace en anunciar el lanzamiento de su innovador programa de capacitación en bienes raíces diseñado para preparar a los estudiantes para el éxito en el mercado inmobiliario actual. Este programa ha sido cuidadosamente desarrollado por expertos en el campo y se centra en proporcionar a los participantes las habilidades prácticas y el conocimiento necesario para sobresalir en la industria.</p><p>El programa abarcará una amplia gama de temas relevantes para el mercado inmobiliario, incluyendo:</p><ul><li>Fundamentos del Mercado Inmobiliario: Los estudiantes recibirán una sólida formación en los fundamentos del mercado inmobiliario, incluyendo conceptos clave como valoración de propiedades, financiamiento inmobiliario, y análisis de mercado.</li><li>Tecnología y Innovación: A medida que la tecnología continúa transformando la industria inmobiliaria, el programa incluirá módulos dedicados a la tecnología y la innovación en bienes raíces, incluyendo el uso de herramientas digitales para la búsqueda de propiedades, análisis de datos, y marketing inmobiliario.</li><li>Negociación y Comunicación: Los estudiantes aprenderán habilidades de negociación efectivas y técnicas de comunicación para interactuar con clientes, colegas y otras partes interesadas en transacciones inmobiliarias.</li><li>Aspectos Legales y Éticos: Se dedicará una parte del programa a abordar los aspectos legales y éticos de la industria inmobiliaria, asegurando que los estudiantes comprendan y cumplan con las regulaciones y estándares éticos en sus prácticas profesionales.</li></ul><p>El programa ofrecerá una combinación de clases teóricas, estudios de caso prácticos y sesiones de aprendizaje experiencial para brindar a los participantes una experiencia de aprendizaje integral y envolvente. Además, se ofrecerán oportunidades de pasantías y colocación laboral para los estudiantes graduados, proporcionándoles una plataforma para aplicar sus conocimientos en un entorno profesional.</p><p>&quot;Estamos emocionados de lanzar nuestro nuevo programa de capacitación en bienes raíces, que está diseñado para equipar a los estudiantes con las habilidades y el conocimiento necesarios para sobresalir en la industria inmobiliaria actual&quot;, dijo el director del Colegio Inmobiliario. &quot;Creemos que este programa preparará a nuestros estudiantes para enfrentar los desafíos y aprovechar las oportunidades en un mercado inmobiliario en constante cambio&quot;.</p><p>El programa de capacitación en bienes raíces del Colegio Inmobiliario está abierto a estudiantes de todos los niveles de experiencia, desde principiantes hasta profesionales establecidos que buscan mejorar sus habilidades. Las inscripciones ya están abiertas y se anima a todos los interesados a registrarse lo antes posible para asegurar su lugar en este emocionante programa.</p>";
     noticia5.descripcion =
       "El Colegio Inmobiliario se complace en anunciar el lanzamiento de su innovador programa de capacitación en bienes raíces diseñado para preparar a los estudiantes para el éxito en el mercado inmobiliario actual.";
-    noticia5.fecha = new Date();
+    noticia5.fecha = new Date("2022-07-04");
     noticia5.estado = true;
-    noticia5.orden = 1;
+    noticia5.orden = 4;
     noticia5.titulo =
       "Nuevo Programa de Capacitación en Bienes Raíces del Colegio Inmobiliario titulo 4";
     const noticia3 = new Noticia();
@@ -55,9 +55,9 @@ class NoticiaSeeder {
       "<p>El Colegio Inmobiliario se complace en anunciar el lanzamiento de su innovador programa de capacitación en bienes raíces diseñado para preparar a los estudiantes para el éxito en el mercado inmobiliario actual. Este programa ha sido cuidadosamente desarrollado por expertos en el campo y se centra en proporcionar a los participantes las habilidades prácticas y el conocimiento necesario para sobresalir en la industria.</p><p>El programa abarcará una amplia gama de temas relevantes para el mercado inmobiliario, incluyendo:</p><ul><li>Fundamentos del Mercado Inmobiliario: Los estudiantes recibirán una sólida formación en los fundamentos del mercado inmobiliario, incluyendo conceptos clave como valoración de propiedades, financiamiento inmobiliario, y análisis de mercado.</li><li>Tecnología y Innovación: A medida que la tecnología continúa transformando la industria inmobiliaria, el programa incluirá módulos dedicados a la tecnología y la innovación en bienes raíces, incluyendo el uso de herramientas digitales para la búsqueda de propiedades, análisis de datos, y marketing inmobiliario.</li><li>Negociación y Comunicación: Los estudiantes aprenderán habilidades de negociación efectivas y técnicas de comunicación para interactuar con clientes, colegas y otras partes interesadas en transacciones inmobiliarias.</li><li>Aspectos Legales y Éticos: Se dedicará una parte del programa a abordar los aspectos legales y éticos de la industria inmobiliaria, asegurando que los estudiantes comprendan y cumplan con las regulaciones y estándares éticos en sus prácticas profesionales.</li></ul><p>El programa ofrecerá una combinación de clases teóricas, estudios de caso prácticos y sesiones de aprendizaje experiencial para brindar a los participantes una experiencia de aprendizaje integral y envolvente. Además, se ofrecerán oportunidades de pasantías y colocación laboral para los estudiantes graduados, proporcionándoles una plataforma para aplicar sus conocimientos en un entorno profesional.</p><p>&quot;Estamos emocionados de lanzar nuestro nuevo programa de capacitación en bienes raíces, que está diseñado para equipar a los estudiantes con las habilidades y el conocimiento necesarios para sobresalir en la industria inmobiliaria actual&quot;, dijo el director del Colegio Inmobiliario. &quot;Creemos que este programa preparará a nuestros estudiantes para enfrentar los desafíos y aprovechar las oportunidades en un mercado inmobiliario en constante cambio&quot;.</p><p>El programa de capacitación en bienes raíces del Colegio Inmobiliario está abierto a estudiantes de todos los niveles de experiencia, desde principiantes hasta profesionales establecidos que buscan mejorar sus habilidades. Las inscripciones ya están abiertas y se anima a todos los interesados a registrarse lo antes posible para asegurar su lugar en este emocionante programa.</p>";
     noticia3.descripcion =
       "El Colegio Inmobiliario se complace en anunciar el lanzamiento de su innovador programa de capacitación en bienes raíces diseñado para preparar a los estudiantes para el éxito en el mercado inmobiliario actual.";
-    noticia3.fecha = new Date();
+    noticia3.fecha = new Date("2023-07-04");
     noticia3.estado = true;
-    noticia3.orden = 1;
+    noticia3.orden = 5;
     noticia3.titulo =
       "Nuevo Programa de Capacitación en Bienes Raíces del Colegio Inmobiliario 5";
 

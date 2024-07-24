@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import InmobiliariasIlegalesPenalModel from "../../../models/matriculados/servicios/inmobiliarias_ilegales/InmobiliariasIlegalesPenalModel";
 import { ParamsDto } from "../../../dtos/ParamsDto";
 import { InmobiliariaIlegalService } from "../../../services/servicios/InmobiliariaIlegalService";
 import { InmobiliariaIlegalDto } from "../../../dtos/servicios/InmobiliariaIlegal";

@@ -5,16 +5,25 @@ export class ParamsDto {
   public direccion?: string;
   public orden: number;
   public orderBy?: string;
-  public orderDirection: string;
+  public orderDirection: "ASC" | "DESC";
   public estado?: boolean;
   public limit: number;
   public offset: number;
   public penal?: boolean;
   public categoriaId?: number;
   public area?: any;
+  public puesto?: number;
+  public periodo?: number;
+  public startDate?: Date;
+  public endDate?: Date;
   constructor(body: any) {
+    console.log(body);
     const inp: string = body.input || "";
     this.setLimit(body);
+    this.startDate = body.fecha ? new Date(body.fecha) : null;
+    this.endDate = body.fechaEnd ? new Date(body.fechaEnd) : null;
+    this.puesto = body.puesto ? parseInt(body.puesto) : null;
+    this.periodo = body.periodo ? parseInt(body.periodo) : null;
     this.input = body.input !== null ? inp.trim() : null;
     this.direccion = body.direccion ? body.direccion : null;
     this.orden = body.orden ? parseInt(body.orden) : null;

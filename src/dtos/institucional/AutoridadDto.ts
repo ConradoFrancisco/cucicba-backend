@@ -13,10 +13,13 @@ export class AutoridadDto {
   foto: string;
   cargo?: Cargo;
   puesto?: string;
+  periodoId: number;
 
   constructor(autoridad: any, get?: boolean) {
+    console.log(autoridad);
     this.id = autoridad.id ? parseInt(autoridad.id.toString()) : null;
-    (this.nombre = autoridad.nombre),
+    (this.periodoId = autoridad.periodo),
+      (this.nombre = autoridad.nombre),
       (this.foto = autoridad.foto),
       (this.apellido = autoridad.apellido),
       (this.estado = autoridad.estado !== null ? autoridad.estado : null),

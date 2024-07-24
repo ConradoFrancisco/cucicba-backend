@@ -5,7 +5,6 @@ import bodyParser = require("body-parser");
 import path = require("path");
 import { DataSource } from "typeorm";
 import { getDataSource } from "./data-source";
-import { ServiciosRouter } from "./routes/ServiciosRouter";
 import DbSeed from "./seeders/DbSeed";
 import { AreasRouter } from "./routes/AreasRouter";
 import { InfractoresRouter } from "./routes/servicios/InfractoresRouter";
@@ -20,6 +19,7 @@ import { PersonalRouter } from "./routes/institucional/PersonalRouter";
 import { AutoridadesRouter } from "./routes/institucional/AutoridadesRouter";
 import { AutoridadesEticaRouter } from "./routes/institucional/AutoridadEticaRouter";
 import { AutoridadesRevisoraRouter } from "./routes/institucional/AutoridadRevisoraRouter";
+import { AutoridadPeriodoRouter } from "./routes/institucional/AutoridadPeriodoRouter";
 class App {
   public app: express.Application;
   //public corsOptions: cors.CorsOptions;
@@ -67,7 +67,6 @@ class App {
     new BibliotecaDigitalRouter().routes(this.router);
     new InmobiliariasRouter().routes(this.router);
     new InfractoresRouter().routes(this.router);
-    new ServiciosRouter().routes(this.router);
     new SancionesRouter().routes(this.router);
     //noticias
     new NoticiaRouter().routes(this.router);
@@ -77,6 +76,7 @@ class App {
     new AutoridadesRouter().routes(this.router);
     new AutoridadesEticaRouter().routes(this.router);
     new AutoridadesRevisoraRouter().routes(this.router);
+    new AutoridadPeriodoRouter().routes(this.router);
   }
 
   private initializeDatabase() {

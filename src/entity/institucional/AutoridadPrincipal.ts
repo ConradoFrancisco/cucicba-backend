@@ -8,12 +8,17 @@ import {
 } from "typeorm";
 import { Persona } from "./Persona";
 import { Cargo } from "./Cargo";
+
 import { IsDate, IsNotEmpty, Max, Min } from "class-validator";
+import { Periodo } from "./AutoridadPeriodo";
 
 @Entity({ name: "autoridad_principal" })
 export class AutoridadPrincipal extends Persona {
   @ManyToOne(() => Cargo, (cargo) => cargo.autoridades)
   cargo: Cargo;
+
+  @ManyToOne(() => Periodo, (periodo) => periodo.autoridades)
+  periodo: Periodo;
 
   @Column()
   @IsNotEmpty()

@@ -1,9 +1,11 @@
 import {
+  Between,
   DataSource,
   FindManyOptions,
   LessThan,
   Like,
   MoreThan,
+  MoreThanOrEqual,
   Repository,
 } from "typeorm";
 import { Noticia } from "../entity/Noticia";
@@ -28,12 +30,18 @@ export class NoticiaService {
   public async getAll(p: ParamsDto) {
     const where: FindManyOptions<Noticia>["where"] = {};
     where.deletedAt != null;
+    console.log("aca tengo: ", p.orderBy);
     if (p.input) {
       where.cuerpo = Like(`%${p.input}%`);
     }
 
     if (p.estado !== null) {
       where.estado = p.estado;
+    }
+    if (p.startDate && p.endDate) {
+      where.fecha = Between(p.startDate, p.endDate);
+    } else if (p.startDate) {
+      where.fecha = Between(p.startDate, new Date());
     }
 
     const order: FindManyOptions<Noticia>["order"] = {};
