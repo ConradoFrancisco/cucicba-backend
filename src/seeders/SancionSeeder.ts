@@ -1,8 +1,8 @@
 import { DataSource } from "typeorm";
 import { PreguntaFrecuente } from "../entity/servicios/PreguntaFrecuente";
-import { CategoriasPreguntasFrecuentes } from "../entity/servicios/Categoria_pregunta_frecuente";
+import { CategoriasPreguntasFrecuentes } from "../entity/servicios/CategoriasPreguntasFrecuentes";
 import { Sancion } from "../entity/servicios/Sancion";
-import { CategoriaSancion } from "../entity/servicios/Categoria_sancion";
+import { CategoriaSancion } from "../entity/servicios/CategoriaSancion";
 
 class SancionSeeder {
   public async run(cn: DataSource = null) {

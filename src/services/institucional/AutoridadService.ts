@@ -16,7 +16,7 @@ import { DeleteParamsDto } from "../../dtos/DeleteParamsDto";
 import { AutoridadPrincipal } from "../../entity/institucional/AutoridadPrincipal";
 import { AutoridadDto } from "../../dtos/institucional/AutoridadDto";
 import { Cargo } from "../../entity/institucional/Cargo";
-import { Periodo } from "../../entity/institucional/AutoridadPeriodo";
+import { Periodo } from "../../entity/institucional/Periodo";
 
 export default class AutoridadService {
   private repository: Repository<AutoridadPrincipal>;

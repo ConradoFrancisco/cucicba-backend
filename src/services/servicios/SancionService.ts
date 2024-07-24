@@ -5,9 +5,9 @@ import { ActiveParamsDto } from "../../dtos/ActiveParamsDto";
 import { DeleteParamsDto } from "../../dtos/DeleteParamsDto";
 import { PreguntaFrecuente } from "../../entity/servicios/PreguntaFrecuente";
 import { PreguntaFrecuenteDto } from "../../dtos/servicios/PreguntaFrecuenteDto";
-import { CategoriasPreguntasFrecuentes } from "../../entity/servicios/Categoria_pregunta_frecuente";
+import { CategoriasPreguntasFrecuentes } from "../../entity/servicios/CategoriasPreguntasFrecuentes";
 import { Sancion } from "../../entity/servicios/Sancion";
-import { CategoriaSancion } from "../../entity/servicios/Categoria_sancion";
+import { CategoriaSancion } from "../../entity/servicios/CategoriaSancion";
 import { SancionDto } from "../../dtos/servicios/SancionDto";
 
 export class SancionService {

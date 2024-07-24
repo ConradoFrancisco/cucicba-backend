@@ -5,7 +5,7 @@ import { ActiveParamsDto } from "../../dtos/ActiveParamsDto";
 import { DeleteParamsDto } from "../../dtos/DeleteParamsDto";
 import { PreguntaFrecuente } from "../../entity/servicios/PreguntaFrecuente";
 import { PreguntaFrecuenteDto } from "../../dtos/servicios/PreguntaFrecuenteDto";
-import { CategoriasPreguntasFrecuentes } from "../../entity/servicios/Categoria_pregunta_frecuente";
+import { CategoriasPreguntasFrecuentes } from "../../entity/servicios/CategoriasPreguntasFrecuentes";
 
 export class PreguntaFrecuenteService {
   private repository: Repository<PreguntaFrecuente>;

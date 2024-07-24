@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import { PreguntaFrecuente } from "../entity/servicios/PreguntaFrecuente";
-import { CategoriasPreguntasFrecuentes } from "../entity/servicios/Categoria_pregunta_frecuente";
+import { CategoriasPreguntasFrecuentes } from "../entity/servicios/CategoriasPreguntasFrecuentes";
 import { preguntasFrecuentesArray } from "./objects/PreguntasFrecuentesObject";
 
 class PreguntasFrecuentesTableSeeder {

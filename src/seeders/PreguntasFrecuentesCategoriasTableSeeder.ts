@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import { Infractor } from "../entity/servicios/Infractor";
-import { CategoriasPreguntasFrecuentes } from "../entity/servicios/Categoria_pregunta_frecuente";
+import { CategoriasPreguntasFrecuentes } from "../entity/servicios/CategoriasPreguntasFrecuentes";
 
 class PreguntasFrecuentesCategoriasTableSeeder {
     public async run(cn: DataSource = null) {

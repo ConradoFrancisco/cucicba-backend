@@ -5,9 +5,9 @@ import { ActiveParamsDto } from "../../dtos/ActiveParamsDto";
 import { DeleteParamsDto } from "../../dtos/DeleteParamsDto";
 import { PreguntaFrecuente } from "../../entity/servicios/PreguntaFrecuente";
 import { PreguntaFrecuenteDto } from "../../dtos/servicios/PreguntaFrecuenteDto";
-import { CategoriasPreguntasFrecuentes } from "../../entity/servicios/Categoria_pregunta_frecuente";
+import { CategoriasPreguntasFrecuentes } from "../../entity/servicios/CategoriasPreguntasFrecuentes";
 import { PostBiblioteca } from "../../entity/servicios/PostBiblioteca";
-import { CategoriaPost } from "../../entity/servicios/Categoria_post";
+import { CategoriaPost } from "../../entity/servicios/CategoriaPost";
 import { PostDto } from "../../dtos/servicios/PostDto";
 
 export class BibliotecaDigitalService {

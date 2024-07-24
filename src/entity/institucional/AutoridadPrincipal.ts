@@ -10,7 +10,7 @@ import { Persona } from "./Persona";
 import { Cargo } from "./Cargo";
 
 import { IsDate, IsNotEmpty, Max, Min } from "class-validator";
-import { Periodo } from "./AutoridadPeriodo";
+import { Periodo } from "./Periodo";
 
 @Entity({ name: "autoridad_principal" })
 export class AutoridadPrincipal extends Persona {

@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { IsBoolean, IsDate, IsNotEmpty, Length } from "class-validator";
-import { CategoriaSancion } from "./Categoria_sancion";
+import { CategoriaSancion } from "./CategoriaSancion";
 
 @Entity({ name: "sancion" })
 export class Sancion {

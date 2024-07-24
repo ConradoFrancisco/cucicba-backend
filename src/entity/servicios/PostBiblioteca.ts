@@ -8,8 +8,8 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { IsBoolean, IsDate, IsNotEmpty, Length } from "class-validator";
-import { CategoriaSancion } from "./Categoria_sancion";
-import { CategoriaPost } from "./Categoria_post";
+import { CategoriaSancion } from "./CategoriaSancion";
+import { CategoriaPost } from "./CategoriaPost";
 
 @Entity({ name: "post_biblioteca" })
 export class PostBiblioteca {
