@@ -1,4 +1,4 @@
-import { DataSource, FindManyOptions, Like, Repository } from "typeorm";
+import { DataSource, FindManyOptions, ILike, Like, Repository } from "typeorm";
 import { getDataSource } from "../../data-source";
 import { ParamsDto } from "../../dtos/ParamsDto";
 import { Ilegal } from "../../entity/servicios/Ilegal";
@@ -21,7 +21,7 @@ export class InmobiliariaIlegalService {
       where.penal = p.penal;
     }
     if (p.input) {
-      where.nombre = Like(`%${p.input}%`);
+      where.nombre = ILike(`%${p.input}%`);
     }
 
     if (p.estado !== null) {

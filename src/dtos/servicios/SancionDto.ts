@@ -6,12 +6,14 @@ export class SancionDto {
   archivo: string;
   created_at?: Date;
   estado: boolean;
+  fecha: Date;
   categoria: { id: number; nombre: string };
 
   constructor(sancion: Sancion) {
     this.id = sancion.id ? parseInt(sancion.id.toString()) : null;
     this.descripcion = sancion.descripcion;
     this.archivo = sancion.archivo;
+    this.fecha = sancion.fecha;
     this.created_at = sancion.createdAt ? sancion.createdAt : null;
     this.estado = sancion.estado;
     this.categoria = {

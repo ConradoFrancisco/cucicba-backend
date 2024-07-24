@@ -1,4 +1,4 @@
-import { DataSource, FindManyOptions, Like, Repository } from "typeorm";
+import { DataSource, FindManyOptions, ILike, Like, Repository } from "typeorm";
 import { getDataSource } from "../../data-source";
 import { ParamsDto } from "../../dtos/ParamsDto";
 import { ActiveParamsDto } from "../../dtos/ActiveParamsDto";
@@ -23,7 +23,7 @@ export class SancionService {
     const where: FindManyOptions<Sancion>["where"] = {};
     where.deletedAt != null;
     if (p.input) {
-      where.descripcion = Like(`%${p.input}%`);
+      where.descripcion = ILike(`%${p.input}%`);
     }
 
     if (p.estado !== null) {

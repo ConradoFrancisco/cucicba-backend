@@ -1,4 +1,4 @@
-import { DataSource, FindManyOptions, Like, Repository } from "typeorm";
+import { DataSource, FindManyOptions, ILike, Like, Repository } from "typeorm";
 import { getDataSource } from "../../data-source";
 import { ParamsDto } from "../../dtos/ParamsDto";
 import { ActiveParamsDto } from "../../dtos/ActiveParamsDto";
@@ -23,7 +23,7 @@ export class PreguntaFrecuenteService {
     console.log("servicio limit:", p.limit);
     where.deletedAt != null;
     if (p.input) {
-      where.pregunta = Like(`%${p.input}%`);
+      where.pregunta = ILike(`%${p.input}%`);
     }
 
     if (p.estado !== null) {

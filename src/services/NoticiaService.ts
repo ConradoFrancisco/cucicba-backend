@@ -2,6 +2,7 @@ import {
   Between,
   DataSource,
   FindManyOptions,
+  ILike,
   LessThan,
   Like,
   MoreThan,
@@ -32,7 +33,7 @@ export class NoticiaService {
     where.deletedAt != null;
     console.log("aca tengo: ", p.orderBy);
     if (p.input) {
-      where.cuerpo = Like(`%${p.input}%`);
+      where.cuerpo = ILike(`%${p.input}%`);
     }
 
     if (p.estado !== null) {

@@ -23,7 +23,9 @@ export class Sancion {
   @Column({ default: false })
   @IsBoolean()
   estado: boolean;
-
+  @Column()
+  @IsDate()
+  fecha: Date;
   @Column({ default: "" })
   @IsNotEmpty()
   @Length(2, 255)
